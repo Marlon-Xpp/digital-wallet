@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login  Page</title>
+    {% load static  %}
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    
+</head>
+<body>
+    <header class="encabezado">
+        <h1 class="titulo-principal">WOPY PAY</h1>
+        <img src="" alt="">
+        <img  class="imagen" src="https://www.ecured.cu/images/4/4c/Bandera_Peru.png" alt="" >
+    </header>
+    <main class="menu-principal">
+        <section class="seccion-formulario">
+            <h2 class="texto-principal">
+                Iniciar sesión
+            </h2>
+
+            <form action="" metho="POST" class="formulario">
+                <input class="entrada" type="number" id="number" name="number" placeholder="Telefono" required min="100000000" max="999999999">
+                <input class="entrada" type="email" id="email" name="email" placeholder="Correo electronico" required>
+                <input class="entrada" type="password" id="password" name="password" placeholder="Contraseña" required>
+
+                <span class="pregunta-restablecer-contra">
+                    <a href="">¿Olvidaste tu contraseña?</a>
+                </span>
+                <button type="submit" class="boton-iniciar-sesion">INICIAR SESION</button>
+            </form>
+            
+        </section>
+
+        <section class="seccion-otros-accesos">
+            <span class="consulta-otros-accesos">
+                Tambien puedes acceder con:
+            </span>
+            <button class="boton-google">
+                CONTINUAR CON GOOGLE
+            </button>
+            <button class="boton-facebook">
+                CONTINUAR CON FACEBOOK
+            </button>
+        </section>
+
+        <section class="seccion-crear-cuenta">
+            <span  class="pregunta-crear-cuenta">
+                ¿Aún no tienes una cuenta?
+            </span>
+            <button class="boton-crear-cuenta">
+                CREAR CUENTA
+            </button>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <p class="texto-pie-pagina">Hecho por MARLON</p>
+    </footer>
+
+</body>
+</html>

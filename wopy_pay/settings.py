@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    #"auth", # ya agregre la aplicacion de auth 
-    #"wallet" # ya agregre la aplicacion de wallet
+    "user_auth",
 ]
 
 MIDDLEWARE = [
