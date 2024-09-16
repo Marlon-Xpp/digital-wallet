@@ -19,16 +19,15 @@
             <h2 class="texto-principal">
                 Crear tu cuenta
             </h2>
-
-            <form action="" metho="POST" class="formulario">
+            <form action="" method="POST" class="formulario">
+                {% csrf_token %}
                 <input class="entrada" type="text" id="names" name="names" placeholder="Nombres" required>
                 <input class="entrada" type="text" id="lastname" name="lastname" placeholder="Apellidos" required>
                 <input class="entrada" type="text" id="username" name="username" placeholder="Username" required>
                 
-                <input class="entrada" type="number" id="number" name="number" placeholder="Telefono" required min="100000000" max="999999999">
+                <input class="entrada" type="number" id="phone" name="phone" placeholder="Telefono" required min="100000000" max="999999999">
                 <input class="entrada" type="email" id="email" name="email" placeholder="Correo electronico" required>
                 <input class="entrada" type="password" id="password" name="password" placeholder="Contraseña" required>
-
                 <button type="submit" class="boton-iniciar-sesion">CREAR TU CUENTA</button>
             </form>
             
@@ -50,6 +49,7 @@
             <span  class="pregunta-crear-cuenta">
                 ¿Tienes una cuenta?
             </span>
+            
             <button class="boton-crear-cuenta">
                 INICIA SESION
             </button>
