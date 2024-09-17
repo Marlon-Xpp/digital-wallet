@@ -3,3 +3,10 @@ from django.shortcuts import render
 
 #AQUI VA LA LOGICA  DE LA APLICACION WALLET
 
+#FUNCIONALIDADES
+#Gestión del saldo:
+#Envío de dinero:
+#Recepción de dinero:
+#Historial de transacciones:
+#Seguridad de las transacciones:
+#Integraciones con servicios de pago externos (opcional):

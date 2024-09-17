@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/index.css'%}">
+    <link rel="stylesheet" href="{% static 'css/footer.css'%}">
+
+    <title>Inicio</title>
+</head>
+<body>
+    <header class="encabezado">
+        <figure class="contenedor-imagen">
+            <h1 class="nombre-app">
+                WOPY PAY
+            </h1>
+            <img class="logo" src="https://www.ecured.cu/images/4/4c/Bandera_Peru.png" alt="">
+
+        </figure>
+
+        <nav class="navegacion">
+            <ul class="listado-navegacion">
+                <li class="lista">Inicio</li>
+                <li class="lista">Activity</li>
+                <li class="lista">Enviar y Obtener</li>
+                <li class="lista">Billetera</li>
+                <li class="lista">Portafolio</li>
+            </ul>
+        </nav>
+        <section class="seccion-boton-navegacion">
+            <button class= "boton-navegacion-logearse">
+                Inisiar Sesion
+            </button>
+            <button class= "boton-navegacion-registrarse">
+                Registrarse
+            </button>
+        </section>
+    </header>
+    <main class="menu-principal">
+        <article class="articulo-principal">
+
+            <section class="menu-seccion-izquierdo" >
+                <div class="contenedor-izquierdo">
+                    <h2 class= "titulo-principal">WOPY PAY</h2>
+                    <p class= "texto-principal">Lorem ipsum  tenetur iusto explicabo ad ab, sint laborum libero. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor, amet!</p>
+                    <button class="boton-empezar">
+                        EMPEZAR
+                    </button>
+                </div>
+                
+            </section>
+
+            <section class="menu-seccion-derecho">
+                <img class="imagen-seccion-derecho" src="https://www.welcometranslations.com/wp-content/uploads/2022/09/Financial.png" alt="">
+            </section>
+
+        </article>
+
+    </main>
+
+
+    {% include "footer.html" %}
+
+</body>
+</html>

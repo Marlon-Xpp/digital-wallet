@@ -1,9 +1,17 @@
 from django.shortcuts import render
 from django.contrib import messages
+
 import re
 # Create your views here.
 #AQUI VA LA LOGICA  DE LA APLICACION AUTH USER
 
+#FUNCIONALIDADES DEL AUTH_USER
+#Registro de usuarios:
+#Inicio de sesión y cierre de sesión:
+#Restablecimiento de contraseña(opcional)
+#Edición de perfil:
+#Cambio de contraseña(opcional)
+#Seguridad del perfil:
 
 def Home(reques):
     return render(reques, 'home.html')
@@ -20,14 +28,15 @@ def Signup(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         
+        
         print(f"""
-              Nombres: {names}
-              Apellidos: {lastname}
-              Username: {username}
-              Telefono: {phone}
-              Correo: {email}
-              Contraseña: {password}
-              """)
+                Nombres: {names.capitalize()}
+                Apellidos: {lastname.capitalize()}
+                Username: {username}
+                Telefono: {phone}
+                Correo: {email.capitalize()}
+                Contraseña: {password}
+                """)
         
         if len(password) <= 8:
             messages.error(request, 'La contraseña debe tener al menos 8 caracteres')
