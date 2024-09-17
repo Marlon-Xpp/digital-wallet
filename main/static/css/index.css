@@ -8,6 +8,7 @@
     font-size: 14px;
     
 }
+
 body{
     background-color: #f7f0f0;
 }
@@ -44,6 +45,9 @@ body{
 .lista{
     padding: 6px;
     cursor: default;
+    
+}
+.lista:hover{
     text-decoration: underline;
 }
 .seccion-boton-navegacion{
