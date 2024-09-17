@@ -8,7 +8,7 @@ def Index(request):
 def  About(request):
     return render(request, "about.html")
 
-def   Contact(request):
+def  Contact(request):
     return render(request, "contact.html")
 
 

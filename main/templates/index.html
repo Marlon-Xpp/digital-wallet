@@ -6,37 +6,15 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/index.css'%}">
     <link rel="stylesheet" href="{% static 'css/footer.css'%}">
+    <link rel="stylesheet" href="{% static 'css/header.css'%}">
+    
 
     <title>Inicio</title>
 </head>
 <body>
-    <header class="encabezado">
-        <figure class="contenedor-imagen">
-            <h1 class="nombre-app">
-                WOPY PAY
-            </h1>
-            <img class="logo" src="https://www.ecured.cu/images/4/4c/Bandera_Peru.png" alt="">
+    
+    {% include "header.html" %}
 
-        </figure>
-
-        <nav class="navegacion">
-            <ul class="listado-navegacion">
-                <li class="lista">Inicio</li>
-                <li class="lista">Activity</li>
-                <li class="lista">Enviar y Obtener</li>
-                <li class="lista">Billetera</li>
-                <li class="lista">Portafolio</li>
-            </ul>
-        </nav>
-        <section class="seccion-boton-navegacion">
-            <button class= "boton-navegacion-logearse">
-                Inisiar Sesion
-            </button>
-            <button class= "boton-navegacion-registrarse">
-                Registrarse
-            </button>
-        </section>
-    </header>
     <main class="menu-principal">
         <article class="articulo-principal">
 

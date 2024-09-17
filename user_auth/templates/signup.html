@@ -6,6 +6,7 @@
     <title>Signup  Page</title>
     {% load static  %}
     <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    <link rel="stylesheet" href="{% static "css/footer.css" %}">
     
 </head>
 <body>
@@ -56,9 +57,7 @@
         </section>
     </main>
 
-    <footer class="pie-pagina">
-        <p class="texto-pie-pagina">Hecho por MARLON</p>
-    </footer>
+    {% include "footer.html" %}
 
 </body>
 </html>

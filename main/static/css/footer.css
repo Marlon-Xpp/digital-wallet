@@ -1,13 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 /* Estilo general del footer */
 footer {
-    background-color: #ffffff;
-    color: #000000;
+    background-color: rgb(255, 255, 255);
+    width: 100%;
     padding: 20px;
     box-shadow: 0px -2px 5px rgba(88, 86, 86, 0.185);
-    font-family: "Montserrat", sans-serif;
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 35px;
 }
 
 /* Contenedor del footer */
@@ -15,12 +17,14 @@ footer {
     display: flex;
     justify-content: space-between;
     width: 100%;
+
 }
 
 /* Sección del footer */
 .footer-section {
     flex: 1;
     margin: 0 15px;
+
 }
 
 /* Títulos de las secciones del footer */
@@ -29,6 +33,7 @@ footer {
     padding-bottom: 10px;
     margin-bottom: 15px;
     font-size: 18px;
+  
 }
 
 /* Listas en el footer */
@@ -39,16 +44,19 @@ footer {
 
 .footer-section ul li {
     margin-bottom: 10px;
+   
 }
 
 .footer-section ul li a {
     color: #000000;
     text-decoration: none;
+  
 }
 
 .footer-section ul li a:hover {
     color: #302b2b;
     text-decoration: underline;
+    
 }
 
 /* Estilo de los íconos de redes sociales */
@@ -57,7 +65,7 @@ footer {
 }
 
 .social-icon {
-    margin-right: 10px;
+    margin-right: 10px; 
 }
 
 .social-icon img {
@@ -71,4 +79,5 @@ footer {
     text-align: center;
     padding: 10px;
     border-top: 1px solid #619063;
+    width: 100%;
 }

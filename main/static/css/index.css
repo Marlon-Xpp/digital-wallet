@@ -13,76 +13,13 @@ body{
     background-color: #f7f0f0;
 }
 
-.encabezado{
-    background-color: #ffffff;
-    display:flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    height: 70px;
-    box-shadow: 2px 2px 5px rgba(88, 86, 86, 0.185);
-}
-
-.contenedor-imagen{
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-.nombre-app{
-    font-size: 20px;
-}
-.logo{
-    width: 40px;
-}
-
-.listado-navegacion{
-    list-style: none;
-    display: flex;
-
-
-}
-
-.lista{
-    padding: 6px;
-    cursor: default;
-    
-}
-.lista:hover{
-    text-decoration: underline;
-}
-.seccion-boton-navegacion{
-
-    display: flex;
-    gap: 5px;
-}
-
-
 button{
     border: none;
     cursor: pointer;
 }
 
-.boton-navegacion-logearse{
-    background-color: #619063;  
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-
-.boton-navegacion-registrarse{
-    background-color: #ffffff;  
-    color: #619063;
-    padding: 10px;
-    border: 1px solid #619063; 
-    border-radius: 5px;
-}
-
-
-
 .articulo-principal{
     display: flex;
-    padding: 15px;
 }
 
 .menu-seccion-izquierdo{
