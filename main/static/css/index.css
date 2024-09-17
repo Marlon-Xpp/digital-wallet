@@ -60,4 +60,13 @@ button{
     border-radius: 5px;
     width: 120px;
     height: 40px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+
+}
+
+.boton-empezar:hover{
+    background-color: #ffffff;
+    border: 1px solid #619063; 
+    color: #619063; 
 }

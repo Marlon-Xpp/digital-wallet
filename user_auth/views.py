@@ -52,3 +52,10 @@ def Signup(request):
 def Login(request):
     return render(request, "login.html")
     # logica para el Registro de los usuarios
+    
+    
+    
+
+
+def User_profile(request):
+    return render(request, "user_profile.html")
