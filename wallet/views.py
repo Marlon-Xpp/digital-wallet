@@ -10,3 +10,6 @@ from django.shortcuts import render
 #Historial de transacciones:
 #Seguridad de las transacciones:
 #Integraciones con servicios de pago externos (opcional):
+
+def activity(request):
+    return render(request, "activity.html")
