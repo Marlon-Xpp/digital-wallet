@@ -13,10 +13,7 @@ import re
 #Cambio de contraseña(opcional)
 #Seguridad del perfil:
 
-def Home(reques):
-    return render(reques, 'home.html')
-
-def Signup(request):
+def signup(request):
     
     # logica para el Registro de los usuarios 
     if request.method ==  'POST':
@@ -49,13 +46,14 @@ def Signup(request):
     return render(request, "signup.html")
 
 
-def Login(request):
+def login(request):
     return render(request, "login.html")
     # logica para el Registro de los usuarios
     
     
     
 
-
-def User_profile(request):
+#para las funciones snake_case
+#para las clases CamelCase o PascalCase
+def user_profile(request):
     return render(request, "user_profile.html")

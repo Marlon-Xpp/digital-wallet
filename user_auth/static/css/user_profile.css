@@ -9,8 +9,11 @@
 }
 
 body{
-    background-color: #f7f0f0;
+    background-color: #f5f1f1;
+
 }
+
+
 .imagen-propia{
     width: 100%;
     height: 320px;
@@ -21,7 +24,6 @@ body{
 .main-principal {
     display: flex;
     flex-direction: row;
-   
     padding: 20px;
     gap: 20px;
     max-width: 800px; /* Ajusta el tamaño máximo del contenedor */

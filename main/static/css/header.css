@@ -1,4 +1,6 @@
 
+
+
 .encabezado{
     background-color: #ffffff;
     display:flex;
@@ -12,6 +14,13 @@
     top: 0;
     z-index: 1000; 
 }
+
+a {
+    color: inherit;        /* Elimina el color predeterminado del enlace */
+    text-decoration: none; /* Elimina el subrayado */
+    outline: none;         /* Elimina el contorno que algunos navegadores aplican */
+}
+
 
 .contenedor-imagen{
     display: flex;

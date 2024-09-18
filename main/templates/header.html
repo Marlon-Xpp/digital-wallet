@@ -1,28 +1,29 @@
 {% load static %}
 
 <header class="encabezado">
-    <figure class="contenedor-imagen">
-        <h1 class="nombre-app">
-            WOPY PAY
-        </h1>
-        <img class="logo" src="{% static "img/bandera.png" %}" alt="">
-
+    <figure>
+        <a href=" {% url "index" %} " class="contenedor-imagen">
+            <h1 class="nombre-app">
+                WOPY PAY
+            </h1>
+            <img class="logo" src="{% static "img/bandera.png" %}" alt="">
+        </a>
     </figure>
 
     <nav class="navegacion">
         <ul class="listado-navegacion">
-            <li class="lista">Inicio</li>
-            <li class="lista">Activity</li>
-            <li class="lista">Enviar & Recibir </li>
-            <li class="lista">Billetera</li>
-            <li class="lista">Perfil</li>
+            <li class="lista"> <a href="{% url "index" %} ">Inicio</a> </li>
+            <li class="lista"> <a href="">Activity</a> </li>
+            <li class="lista"> <a href="">Enviar & Recibir</a> </li>
+            <li class="lista"> <a href="">Billetera</a> </li>
+            <li class="lista"> <a href="{% url "user_profile" %} ">Perfil</a> </li>
         </ul>
     </nav>
     <section class="seccion-boton-navegacion">
-        <button class= "boton-navegacion-logearse">
+        <button class= "boton-navegacion-logearse" onclick="redirectLogin()">
             Iniciar Sesion
         </button>
-        <button class= "boton-navegacion-registrarse">
+        <button class= "boton-navegacion-registrarse" onclick="redirectSignup()">
             Registrarse
         </button>
     </section>

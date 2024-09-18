@@ -11,9 +11,11 @@
 </head>
 <body>
     <header class="encabezado">
-        <h1 class="titulo-principal">WOPY PAY</h1>
-        <img src="" alt="">
-        <img  class="imagen" src="https://www.ecured.cu/images/4/4c/Bandera_Peru.png" alt="" >
+        <a href=" {% url "index" %} ">
+            <h1 class="titulo-principal">WOPY PAY</h1>
+            <img src="" alt="">
+            <img  class="imagen" src="https://www.ecured.cu/images/4/4c/Bandera_Peru.png" alt="" >
+        </a>
     </header>
     <main class="menu-principal">
         <section class="seccion-formulario">
@@ -51,7 +53,7 @@
                 ¿Tienes una cuenta?
             </span>
             
-            <button class="boton-crear-cuenta">
+            <button class="boton-crear-cuenta" onclick="redirectLogin()">
                 INICIA SESION
             </button>
         </section>

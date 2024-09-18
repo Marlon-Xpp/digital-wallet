@@ -12,7 +12,7 @@
     <title>Inicio</title>
 </head>
 <body>
-    
+    {% load static %}
     {% include "header.html" %}
 
     <main class="menu-principal">
@@ -30,7 +30,7 @@
             </section>
 
             <section class="menu-seccion-derecho">
-                <img class="imagen-seccion-derecho" src="https://www.welcometranslations.com/wp-content/uploads/2022/09/Financial.png" alt="">
+                <img class="imagen-seccion-derecho" src="{% static "img/fondo_index.png" %}" alt="">
             </section>
 
         </article>
@@ -39,6 +39,8 @@
 
 
     {% include "footer.html" %}
+
+    
 
 </body>
 </html>
