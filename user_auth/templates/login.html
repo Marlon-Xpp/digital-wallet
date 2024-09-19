@@ -26,8 +26,8 @@
             </h2>
 
             <form action="" method="POST" class="formulario">
-                <input class="entrada" type="number" id="number" name="number" placeholder="Telefono" required min="100000000" max="999999999">
-                <input class="entrada" type="email" id="email" name="email" placeholder="Correo electronico" required>
+                {% csrf_token %}
+                <input class="entrada" type="text"  id="username" name="username" placeholder="Username" required>
                 <input class="entrada" type="password" id="password" name="password" placeholder="Contraseña" required>
 
                 <span class="pregunta-restablecer-contra">

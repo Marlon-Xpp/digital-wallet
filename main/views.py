@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
+from django.contrib.auth import logout
+
 
 # Create your views here.
 def index(request):
@@ -14,5 +16,9 @@ def contact(request):
 def services(request):
     return render(request, "services.html")
 
+def exit(request):
+    logout(request)
+    print("capturando la funcion")
+    return redirect("index")
 
 

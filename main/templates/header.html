@@ -13,18 +13,26 @@
     <nav class="navegacion">
         <ul class="listado-navegacion">
             <li class="lista"> <a href="{% url "index" %}">Inicio</a> </li>
+            {% if user.is_authenticated %}
             <li class="lista"> <a href="{% url "activity" %}">Activity</a> </li>
             <li class="lista"> <a href="{% url "index" %}">Enviar & Recibir</a> </li>
             <li class="lista"> <a href="{% url "index" %}">Billetera</a> </li>
             <li class="lista"> <a href="{% url "user_profile" %}">Perfil</a> </li>
+            {% endif %}
         </ul>
     </nav>
     <section class="seccion-boton-navegacion">
+        {% if user.is_authenticated %}
+        <button class= "boton-navegacion-logearse" onclick="exit()">
+            Salir
+        </button>
+        {% else %}
         <button class= "boton-navegacion-logearse" onclick="redirectLogin()">
             Iniciar Sesion
         </button>
         <button class= "boton-navegacion-registrarse" onclick="redirectSignup()">
             Registrarse
         </button>
+        {% endif %}
     </section>
 </header>

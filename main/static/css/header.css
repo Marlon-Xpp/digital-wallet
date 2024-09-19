@@ -63,7 +63,7 @@ button{
 .boton-navegacion-logearse{
     background-color: #619063;  
     color: #ffffff;
-    padding: 10px;
+    padding: 5px;
     border-radius: 5px;
     box-sizing: content-box;
     border: 1px solid transparent; /* Borde invisible inicialmente */

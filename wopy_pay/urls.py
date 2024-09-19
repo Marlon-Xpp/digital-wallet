@@ -23,5 +23,4 @@ urlpatterns = [
     path("", include("main.urls")),
     path("auth/", include("user_auth.urls")),
     path("wallet/", include("wallet.urls"), name="wallet"), 
-    #path("auth/", include("auth.urls"), name="auth"), #aqui incluimos todas las urls del archivo auth
 ]
