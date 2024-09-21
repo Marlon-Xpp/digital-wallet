@@ -18,6 +18,17 @@
         </a>
     </header>
     <main class="menu-principal">
+
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <div class="mensaje-alerta">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
         <section class="seccion-formulario">
             <h2 class="texto-principal">
                 Crear tu cuenta
@@ -58,6 +69,8 @@
             </button>
         </section>
     </main>
+
+
 
     {% include "footer.html" %}
 

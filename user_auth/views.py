@@ -102,11 +102,13 @@ def signup(request):
         #capturamos los errores que creamos para q se muestren x aqui
         except ValidationError as e:
             print(f"el error es el siguiente: {e}")
+            messages.error(request, f'La autenticación falló: {e}')
             return render(request, "signup.html", {'error': str(e)} )
         #capturamos un erro general dentro del codigo
         except Exception as e:
             #retornamos y imprimimos el msj de error general dentro del codigo
             print(f"el error es el siguiente: {e}")
+            
             return render(request, "signup.html", {"error": "eror inesperado. profavor intente de nuevo"})
     #retornamos la vista princiapl del signup y lo msotramos 
     return render(request, "signup.html")
@@ -164,4 +166,4 @@ def login(request):
 @login_required
 def user_profile(request):
     
-    return render(request, "user_profile.html")
+    return render(request, "user_profile.html", {"username": request.user.username})

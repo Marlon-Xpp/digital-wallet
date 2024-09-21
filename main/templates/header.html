@@ -23,6 +23,7 @@
     </nav>
     <section class="seccion-boton-navegacion">
         {% if user.is_authenticated %}
+        <p class="saludar-usuario"> Hola, <span class="nombre-usuario"> {{ username }} </span> </p>
         <button class= "boton-navegacion-logearse" onclick="exit()">
             Salir
         </button>

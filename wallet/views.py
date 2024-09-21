@@ -13,4 +13,4 @@ from django.contrib.auth.decorators import login_required
 #Integraciones con servicios de pago externos (opcional):
 @login_required
 def activity(request):
-    return render(request, "activity.html")
+    return render(request, "activity.html", {"username": request.user.username})
