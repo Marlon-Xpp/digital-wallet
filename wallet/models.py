@@ -1,25 +1,45 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 # Create your models here.
-class UsuarioPrueba(models.Model):
+#class UsuarioPrueba(models.Model):
+#    username = models.CharField(max_length=150, unique=True)  # Nombre de usuario único
+#    correo = models.EmailField(unique=True)  # Correo único
+#    contraseña = models.CharField(max_length=128)  # Contraseña encriptada o texto plano (mejor usar encriptación)#
+
+#    def __str__(self):
+#        return self.username
+    
+class User(models.Model):
+    name = models.CharField(max_length=255)
+    lastname = models.CharField(max_length=255)
+    #tenma de seguridad !los nombres y apellidos al hacer la transferencia
     username = models.CharField(max_length=150, unique=True)  # Nombre de usuario único
-    correo = models.EmailField(unique=True)  # Correo único
-    contraseña = models.CharField(max_length=128)  # Contraseña encriptada o texto plano (mejor usar encriptación)
+    email = models.EmailField(unique=True)  # Correo único
+    phone = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return self.username
     
+    
 class Wallet(models.Model):
-    user = models.ForeignKey(UsuarioPrueba, on_delete=models.CASCADE)  # Relación con el usuario
+    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Relación uno a uno con el usuario
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Saldo de la billetera
     currency = models.CharField(max_length=3, default='PEN')  # Moneda de la billetera
     status = models.CharField(max_length=20, default='active')  # Estado de la billetera
     created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
     updated_at = models.DateTimeField(auto_now=True)  # Fecha de última actualización
 
-    
+    #codigo QR    
+
     def __str__(self):
         return f'Wallet for {self.user.username} - Balance: {self.balance} {self.currency}'
+    def get_balance(self):
+        return self.balance
+    
+    def deposit(self, amount):
+        self.balance += amount
+        self.save()
 
     # Método para agregar fondos
     def add_funds(self, amount):
@@ -45,17 +65,22 @@ class Wallet(models.Model):
         return self.status == 'active'
 
     # Método para desactivar la billetera
-    def deactivate(self):
+    def desactivate(self):
         self.status = 'inactive'
         self.save()
 
 
 
 
+
     
 class PaymentMethod(models.Model):
+    description = models.CharField(max_length=250, default="")
     payment = models.OneToOneField(Wallet, on_delete=models.CASCADE)
     MethodName = models.CharField(max_length=100,default= "YAPE")
+    created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
+
+
 
     def __str__(self):
         return f'Method: {self.MethodName} for Wallet {self.payment.user.username}'
@@ -65,6 +90,7 @@ class PaymentMethod(models.Model):
         self.MethodName = new_method_name
         self.save()
     
+
 class Transference(models.Model):
     TRANSFERENCE_CHOICES = [
         ('SEND', 'send'),
@@ -108,3 +134,42 @@ class Transference(models.Model):
 #        # ensure that the database only stores 2 decimal places
 #        self.balance = round(self.balance, 2)
 #        super(Account, self).save(*args, **kwargs)
+
+#da quen envcio
+
+#monto
+#nombre de quien envio
+
+#numero usuario
+#nombre
+#descripcion
+
+
+
+
+#actividad
+#payment
+#deposit
+
+
+#fecha
+#hora mundial - hora zonal
+
+# settings - cambiar hora de zona 
+
+
+#los 3 utlimos numeros del telefono
+
+#billetera - un iq qr
+
+
+
+
+# numero indicar pais . : no ingresar letras y solo numeros : Tamaño de numero de acuerdo al indicador de pais
+#numero de celular
+
+
+
+#campo numero ya existe:  codigo postal pais
+#ingles
+
