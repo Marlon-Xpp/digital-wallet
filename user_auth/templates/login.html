@@ -27,6 +27,7 @@
 
             <form action="" method="POST" class="formulario">
                 {% csrf_token %}
+                {% comment %} arreglar el campo del email {% endcomment %}
                 <input class="entrada" type="text"  id="username" name="username" placeholder="Username" required>
                 <input class="entrada" type="password" id="password" name="password" placeholder="Contraseña" required>
 

@@ -62,7 +62,8 @@ def signup(request):
         names = request.POST.get("names","").strip()
         lastname = request.POST.get("lastname","").strip()
         username = request.POST.get("username","").strip()
-        phone = request.POST.get("phone","").strip()
+        phone = request.POST.get("phone","").strip() #modificas si es necesario
+        #codigo postal del pais
         email = request.POST.get("email","").strip()
         password = request.POST.get("password","").strip()
         # manejar alguna error que puede suceder dentro del codigo

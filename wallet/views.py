@@ -14,3 +14,4 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def activity(request):
     return render(request, "activity.html", {"username": request.user.username})
+
