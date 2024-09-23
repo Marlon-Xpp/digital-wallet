@@ -55,6 +55,7 @@ a {
     justify-content: center;
     align-items: center;
     gap: 10px;
+
 }
 
 button{
@@ -74,13 +75,24 @@ button{
 .boton-navegacion-logearse{
     background-color: #619063;  
     color: #ffffff;
-    padding: 5px;
+    padding: 7px;
     border-radius: 5px;
     box-sizing: content-box;
     border: 1px solid transparent; /* Borde invisible inicialmente */
     transition: all 0.3s ease;
     
 }
+
+.boton-navegacion-registrarse{
+    background-color: #ffffff;  
+    color: #619063;
+    padding: 7px;
+    border: 1px solid #619063; 
+    border-radius: 5px;
+    transition: all 0.3s ease;
+
+}
+
 .boton-navegacion-logearse:hover{
     background-color: #ffffff;
     border: 1px solid #619063; 
@@ -94,12 +106,4 @@ button{
 }
 
 
-.boton-navegacion-registrarse{
-    background-color: #ffffff;  
-    color: #619063;
-    padding: 10px;
-    border: 1px solid #619063; 
-    border-radius: 5px;
-    transition: all 0.3s ease;
 
-}
