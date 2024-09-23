@@ -1,0 +1,52 @@
+{% load static %}
+<!-- Contenido principal de la página -->
+<footer>
+    <div class="footer-container">
+        <!-- Sección de Información -->
+        <div class="footer-section">
+            <h3>Información</h3>
+            <ul>
+                <li><a href=" {% url "about" %} ">Sobre Nosotros</a></li>
+                <li><a href=" {% url "services" %} ">Servicios</a></li>
+                <li><a href=" {% url "contact" %} ">Contacto</a></li>
+            </ul>
+        </div>
+        <!-- Sección de Enlaces Útiles -->
+        <div class="footer-section">
+            <h3>Enlaces Útiles</h3>
+            <ul>
+                <li><a href="#">Política de Privacidad</a></li>
+                <li><a href="#">Términos de Servicio</a></li>
+                <li><a href="#">Soporte</a></li>
+            </ul>
+        </div>
+        <!-- Sección de Redes Sociales -->
+        <div class="footer-section">
+            <h3>Redes Sociales</h3>
+            <div class="social-media">
+                <a href="https://facebook.com" target="_blank" class="social-icon"><img src="{% static 'img/facebook.png' %}" alt="Facebook"></a>
+                <a href="https://twitter.com" target="_blank" class="social-icon"><img src="{% static 'img/twitter.png' %}" alt="Twitter"></a>
+                <a href="https://instagram.com" target="_blank" class="social-icon"><img src="{% static 'img/instagram.png' %}" alt="Instagram"></a>
+                <a href="https://youtube.com" target="_blank" class="social-icon"><img src="{% static 'img/youtube.png' %}" alt="YouTube"></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 WOPY PAY. Todos los derechos reservados a Marlon Pillaca.</p>
+    </div>
+    
+</footer>
+
+<script>
+    function redirectLogin() {
+        window.location.href = "{% url "login" %}";
+    }
+
+    function redirectSignup() {
+        window.location.href = "{% url "signup" %}";
+    }
+
+    function exit() {
+        window.location.href = "{% url "exit" %}";
+    }
+</script>

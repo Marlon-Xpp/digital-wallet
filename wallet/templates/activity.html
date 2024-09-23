@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href=" {% static "css/header.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/footer.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/activity.css" %} ">
+    <title>Activity</title>
+</head>
+<body>
+    {% include "header.html" %}
+    <img src="https://static.vecteezy.com/system/resources/previews/004/941/962/non_2x/abstract-technology-with-global-world-network-and-telecommunication-on-earth-digital-data-visualization-illustration-design-vector.jpg" alt="" class="imagen-propia">
+    <main>
+        <article class="transaction-section">
+            <div class="transaction-header">
+                <span>ENVIAR</span>
+            </div>
+            <div class="transaction-content">
+                <div class="transaction-row">
+                    <div class="transaction-item">Fecha</div>
+                    <div class="transaction-item">Acticidad</div>
+                    <div class="transaction-item">Categoria</div>
+                    <div class="transaction-item">Enviar a</div>
+                    <div class="transaction-item">Monto</div>
+                </div>
+                <div class="transaction-row">
+                    <div class="transaction-data">2024-09-15</div>
+                    <div class="transaction-data">Payment</div>
+                    <div class="transaction-data">Food</div>
+                    <div class="transaction-data">John Doe</div>
+                    <div class="transaction-data">S/50</div>
+                </div>
+                <!-- Repeat similar .transaction-row for other transactions -->
+            </div>
+        </article>
+
+        <article class="transaction-section">
+            <div class="transaction-header">
+                <span>RECIBIDO</span>
+            </div>
+            <div class="transaction-content">
+                <div class="transaction-row">
+                    <div class="transaction-item">Fecha</div>
+                    <div class="transaction-item">Actividad</div>
+                    <div class="transaction-item">Categoria</div>
+                    <div class="transaction-item">Recibido de</div>
+                    <div class="transaction-item">Monto</div>
+                </div>
+                <div class="transaction-row">
+                    <div class="transaction-data">2024-09-16</div>
+                    <div class="transaction-data">Deposit</div>
+                    <div class="transaction-data">Salary</div>
+                    <div class="transaction-data">Alice Smith</div>
+                    <div class="transaction-data">S/500</div>
+                </div>
+                <!-- Repeat similar .transaction-row for other transactions -->
+            </div>
+        </article>
+
+
+    </main>
+
+    {% include "footer.html" %}
+</body>
+</html>

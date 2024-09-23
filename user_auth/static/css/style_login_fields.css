@@ -1,0 +1,41 @@
+.custom-select {
+    position: relative;
+    display: inline-block;
+}
+.select-selected {
+    width: 350px;
+    height: 60px;
+    
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 7px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.select-items {
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    z-index: 99;
+    display: none;
+    width: 100%;
+}
+.select-items div {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.select-items div:hover {
+    background-color: #ddd;
+}
+.flag-img {
+    width: 20px;
+    height: auto;
+    margin-right: 8px;
+}
+
+
+.show { display: block; }

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/header.css'%}">
+    <link rel="stylesheet" href="{% static 'css/footer.css'%}">
+    <link rel="stylesheet" href="{% static 'css/user_profile.css'%}">
+
+    <title>User Profile</title>
+</head>
+<body>
+
+    <img src="https://static.vecteezy.com/system/resources/previews/004/941/962/non_2x/abstract-technology-with-global-world-network-and-telecommunication-on-earth-digital-data-visualization-illustration-design-vector.jpg" alt="" class="imagen-propia">
+
+    {% include "header.html" %}
+
+    <main class="main-principal">
+        <aside class="lateral-izquierdo">
+            <h3 class="texto-cuenta-usuario">
+                CUENTA DE USURIO
+            </h3>
+            <ul class="listado-cuenta">
+                <li class="lista-cuenta">Ver cuenta bancaria</li>
+                <li class="lista-cuenta">Ver actividad</li>
+                <li class="lista-cuenta">Cambiar contraseña</li>
+            </ul>
+        </aside>
+        <article class="contenedor-derecho">
+            <section class="seccion-derecho">
+                <figure class="figura-info">
+                    <img src="https://th.bing.com/th/id/R.8e2c571ff125b3531705198a15d3103c?rik=gzhbzBpXBa%2bxMA&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-big-image-png-2240.png&ehk=VeWsrun%2fvDy5QDv2Z6Xm8XnIMXyeaz2fhR3AgxlvxAc%3d&risl=&pid=ImgRaw&r=0" alt="">
+                    <p class="parrafo-info">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Mollitia dicta ipsum impedit officia unde necessitatibus!
+                    </p>
+                </figure>
+            </section>
+
+            <section class="seccion-info-usuario">
+                <h2 class="titulo-info-usuario">INFORMACION DEL USUARIO</h2>
+            
+                <div class="contenedor-info-usuario">
+                    <div class="campo-usuario">
+                        <label for="nombre" class="etiqueta-usuario">Nombre:</label>
+                        <p id="nombre" class="valor-usuario">Juan</p>
+                    </div>
+            
+                    <div class="campo-usuario">
+                        <label for="apellido" class="etiqueta-usuario">Apellido:</label>
+                        <p id="apellido" class="valor-usuario">Pérez</p>
+                    </div>
+            
+                    <div class="campo-usuario">
+                        <label for="nombre-usuario" class="etiqueta-usuario">Nombre de Usuario:</label>
+                        <p id="nombre-usuario" class="valor-usuario">juanperez123</p>
+                    </div>
+            
+                    <div class="campo-usuario">
+                        <label for="email" class="etiqueta-usuario">Correo Electrónico:</label>
+                        <p id="email" class="valor-usuario">juanperez@example.com</p>
+                    </div>
+            
+                    <div class="campo-usuario">
+                        <label for="telefono" class="etiqueta-usuario">Teléfono:</label>
+                        <p id="telefono" class="valor-usuario">+51 123456789</p>
+                    </div>
+                </div>
+            
+                <div class="contenedor-boton-actualizar">
+                    <button class="boton-actualizar">Actualizar Perfil</button>
+                </div>
+            </section>
+            
+        </article>
+    </main>
+
+    {% include "footer.html" %}
+</body>
+</html>

@@ -1,0 +1,105 @@
+
+
+
+.encabezado{
+    background-color: #ffffff;
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+    box-shadow: 2px 2px 5px rgba(88, 86, 86, 0.185);
+
+    position: sticky;
+    top: 0;
+    z-index: 1000; 
+}
+
+a {
+    color: inherit;        /* Elimina el color predeterminado del enlace */
+    text-decoration: none; /* Elimina el subrayado */
+    outline: none;         /* Elimina el contorno que algunos navegadores aplican */
+}
+
+
+.contenedor-imagen{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nombre-app{
+    font-size: 20px;
+}
+
+.logo{
+    width: 40px;
+}
+
+.listado-navegacion{
+    list-style: none;
+    display: flex;
+}
+
+.lista{
+    padding: 6px;
+    cursor: default;
+}
+
+.lista:hover{
+    text-decoration: underline;
+}
+
+.seccion-boton-navegacion{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+button{
+    border: none;
+    cursor: pointer;
+}
+.nombre-usuario{
+   
+    font-size: 15px;
+}
+.saludar-usuario{
+    color:#0c358a;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.boton-navegacion-logearse{
+    background-color: #619063;  
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 5px;
+    box-sizing: content-box;
+    border: 1px solid transparent; /* Borde invisible inicialmente */
+    transition: all 0.3s ease;
+    
+}
+.boton-navegacion-logearse:hover{
+    background-color: #ffffff;
+    border: 1px solid #619063; 
+    color: #619063; 
+}
+
+
+.boton-navegacion-registrarse:hover{
+    background-color: #619063; 
+    color: #ffffff;
+}
+
+
+.boton-navegacion-registrarse{
+    background-color: #ffffff;  
+    color: #619063;
+    padding: 10px;
+    border: 1px solid #619063; 
+    border-radius: 5px;
+    transition: all 0.3s ease;
+
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Teléfono</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .phone-input {
+            display: flex;
+            align-items: center;
+            border: 1px solid #d9d9d9;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #fff;
+            width: 100%;
+            position: relative;
+        }
+
+        .flag-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 10px;
+        }
+
+        .flag-container img {
+            width: 25px;
+            height: 18px;
+        }
+
+        .dial-code {
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .phone-input input {
+            border: none;
+            outline: none;
+            font-size: 16px;
+            flex: 1;
+            color: #333;
+        }
+
+        .phone-input input::placeholder {
+            color: #bbb;
+        }
+
+        .valid-icon {
+            display: flex;
+            align-items: center;
+            color: green;
+            gap: 5px;
+            position: absolute;
+            right: 10px;
+        }
+
+        .valid-icon span {
+            font-size: 20px;
+        }
+
+        .valid-icon p {
+            font-size: 14px;
+            margin: 0;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <label for="phone">Phone Number</label>
+        <div class="phone-input">
+            <div class="flag-container">
+                <img src="https://flagsapi.com/US/shiny/64.png" alt="US">
+
+                    <select class="dial-code" id="country" onchange="updateCountry()">
+                        <option value="US" data-dial-code="+1" data-flag="https://flagsapi.com/US/shiny/64.png">+1</option>
+                        <option value="PE" data-dial-code="+51" data-flag="https://flagsapi.com/PE/shiny/64.png">+51</option>
+                        <option value="GB" data-dial-code="+44" data-flag="https://flagsapi.com/GB/shiny/64.png">+44</option>
+                    <!-- Agrega más países aquí -->
+                </select>
+            </div>
+            <input type="text" id="phone" placeholder="646 555 3890">
+            <div class="valid-icon">
+                <span>&#10004;</span>
+                <p>is valid</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

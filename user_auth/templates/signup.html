@@ -7,14 +7,31 @@
     {% load static  %}
     <link rel="stylesheet" href="{% static "css/styles.css" %}">
     
+    <link rel="stylesheet" href="{% static "css/style_login_fields.css" %}">
+    <link rel="stylesheet" href="{% static "css/footer.css" %}">
+    
+
 </head>
 <body>
     <header class="encabezado">
-        <h1 class="titulo-principal">WOPY PAY</h1>
-        <img src="" alt="">
-        <img  class="imagen" src="https://www.ecured.cu/images/4/4c/Bandera_Peru.png" alt="" >
+        <a href=" {% url "index" %} ">
+            <h1 class="titulo-principal">WOPY PAY</h1>
+            <img src="" alt="">
+            <img  class="imagen" src="https://www.ecured.cu/images/4/4c/Bandera_Peru.png" alt="" >
+        </a>
     </header>
     <main class="menu-principal">
+
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <div class="mensaje-alerta">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
         <section class="seccion-formulario">
             <h2 class="texto-principal">
                 Crear tu cuenta
@@ -25,7 +42,37 @@
                 <input class="entrada" type="text" id="lastname" name="lastname" placeholder="Apellidos" required>
                 <input class="entrada" type="text" id="username" name="username" placeholder="Username" required>
                 
-                <input class="entrada" type="number" id="phone" name="phone" placeholder="Telefono" required min="100000000" max="999999999">
+                {% comment %} agregar el campo codigo postal y telefono le pones la misma clase para q los estilos no afecte{% endcomment %}
+
+                
+                    
+                
+                
+                <input class= "entrada" type="hidden" id="country_code" name="country_code" required> 
+                <input class= "entrada" type="text" id="phone_number" name="phone_number" placeholder="Número de teléfono" required>
+
+                <div class="custom-select" id="country_select">
+                    <div class="select-selected">Seleccionar país</div>
+                    
+
+                   
+                   
+                    <div class="select-items">
+                        <div data-country-code="US" data-dial-code="+1">
+                            <img class="flag-img" src="https://flagsapi.com/US/shiny/64.png" alt="US">
+                                 Estados Unidos (+1)
+                        </div>
+                        <div data-country-code="PE" data-dial-code="+51">
+                            <img class="flag-img" src="https://flagsapi.com/PE/shiny/64.png" alt="PE"> Perú (+51)
+                        </div>
+                        <div data-country-code="GB" data-dial-code="+44">
+                            <img class="flag-img" src="https://flagsapi.com/GB/shiny/64.png" alt="GB"> Reino Unido (+44)
+                        </div>
+                        <!-- Agrega más países aquí -->
+                    </div>
+                </div>
+
+
                 <input class="entrada" type="email" id="email" name="email" placeholder="Correo electronico" required>
                 <input class="entrada" type="password" id="password" name="password" placeholder="Contraseña" required>
                 <button type="submit" class="boton-iniciar-sesion">CREAR TU CUENTA</button>
@@ -50,15 +97,49 @@
                 ¿Tienes una cuenta?
             </span>
             
-            <button class="boton-crear-cuenta">
+            <button class="boton-crear-cuenta" onclick="redirectLogin()">
                 INICIA SESION
             </button>
         </section>
     </main>
 
-    <footer class="pie-pagina">
-        <p class="texto-pie-pagina">Hecho por MARLON</p>
-    </footer>
+
+
+
+
+
+
+
+
+
+    <script>
+        document.querySelector('.select-selected').addEventListener('click', function() {
+            this.nextElementSibling.classList.toggle('show');
+        });
+
+        document.querySelectorAll('.select-items div').forEach(function(item) {
+            item.addEventListener('click', function() {
+                var selectedDialCode = this.getAttribute('data-dial-code');
+                var selectedCountryCode = this.getAttribute('data-country-code');
+
+                document.querySelector('.select-selected').textContent = this.textContent;
+                document.getElementById("country_code").value = selectedDialCode; // Guarda el prefijo
+                document.getElementById("flag_img").src = `https://flagsapi.com/${selectedCountryCode}/shiny/64.png`;
+                document.getElementById("flag_img").style.display = "inline";
+
+                this.parentElement.classList.remove('show');
+            });
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.select-selected')) {
+                document.querySelector('.select-items').classList.remove('show');
+            }
+        });
+    </script>
+
+    {% include "footer.html" %}
 
 </body>
+
 </html>

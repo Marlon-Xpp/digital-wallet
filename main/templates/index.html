@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/index.css'%}">
+    <link rel="stylesheet" href="{% static 'css/footer.css'%}">
+    <link rel="stylesheet" href="{% static 'css/header.css'%}">
+    
+
+    <title>Inicio</title>
+</head>
+<body>
+    {% load static %}
+    {% include "header.html" %}
+
+    <main class="menu-principal">
+        <article class="articulo-principal">
+
+            <section class="menu-seccion-izquierdo" >
+                <div class="contenedor-izquierdo">
+                    <h2 class= "titulo-principal">WOPY PAY</h2>
+                    <p class= "texto-principal">Lorem ipsum  tenetur iusto explicabo ad ab, sint laborum libero. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor, amet!</p>
+                    <button class="boton-empezar" onclick="redirectLogin()">
+                        EMPEZAR
+                    </button>
+                </div>
+
+            </section>
+
+            <section class="menu-seccion-derecho">
+                <img class="imagen-seccion-derecho" src="{% static "img/fondo_index.png" %}" alt="">
+            </section>
+
+        </article>
+
+    </main>
+
+
+    {% include "footer.html" %}
+
+    
+
+</body>
+</html>
