@@ -2,17 +2,23 @@
 
 
 .encabezado{
-    background-color: #ffffff;
-    display:flex;
-    justify-content: space-around;
-    align-items: center;
     width: 100%;
-    height: 70px;
-    box-shadow: 2px 2px 5px rgba(88, 86, 86, 0.185);
-
+    background-color: #ffffff;
     position: sticky;
     top: 0;
     z-index: 1000; 
+    
+    height: 70px;
+    box-shadow: 2px 2px 5px rgba(88, 86, 86, 0.185);
+}
+.contenedor-principal-encabezado{
+    max-width: 1200px;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+    margin: 0 auto;
+    
 }
 
 a {
