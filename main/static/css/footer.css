@@ -12,6 +12,14 @@ footer {
     margin-top: 35px;
 }
 
+
+
+
+
+main {
+    flex: 1; /* Hace que el contenido principal crezca y empuje el footer hacia abajo */
+}
+
 /* Contenedor del footer */
 .footer-container {
     display: flex;
