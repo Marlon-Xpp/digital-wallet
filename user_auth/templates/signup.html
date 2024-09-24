@@ -19,15 +19,17 @@
     </header>
     <main class="contenedor-centrado">
         <div class="menu-principal">
-                {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <div class="mensaje-alerta">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </ul>
+
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <div class="mensaje-alerta">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </ul>
             {% endif %}
+
 
             <section class="seccion-formulario">
                 <h2 class="texto-principal">

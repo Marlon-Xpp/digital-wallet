@@ -2,14 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from user_auth.models import CustomUser
 from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
 import re
+
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
-
+import random
 from .models import LoginAttempt
 from django.utils import timezone
 from datetime import timedelta
+
 # Create your views here.
 #AQUI VA LA LOGICA  DE LA APLICACION AUTH USER
 
@@ -56,20 +60,31 @@ def validate_fields(*fields):
             #se detentra el codigo y mostrar el error con el msj 
             raise ValidationError("no puede dejar los campos vacios")
 # para ahcer ocmentario es el sigueinte comando crlt y la tecla arriba de entender 
+
+#funcion para notificar al usaurio 
+# def notification_user(request):
+#     print pass
+
+#funcion para generar codigo de verificacion del usuario
+def generate_verification_code():
+    return random.randint(10000, 99999)
+
+
 def signup(request):
     if request.method == "POST":
         #Obtener los datos de entrada y limpiamos los espacios en blaco del incio y del final del texto
         names = request.POST.get("names","").strip()
         lastname = request.POST.get("lastname","").strip()
         username = request.POST.get("username","").strip()
-        phone = request.POST.get("phone","").strip() #modificas si es necesario
+        # phone = request.POST.get("phone","").strip() #modificas si es necesario
         #codigo postal del pais
         email = request.POST.get("email","").strip()
         password = request.POST.get("password","").strip()
+        
         # manejar alguna error que puede suceder dentro del codigo
         try:
             #validar que los campos ingresado por el usaurio no esten vacios
-            validate_fields(names, lastname, username, phone, email, password)
+            validate_fields(names, lastname, username, email, password)
             validate_email(email)
             validate_password(password)
             
@@ -79,6 +94,7 @@ def signup(request):
                 print("el username ya existe intenta con otro")
                 #aqui detrendra la ejecucion del cdoigo y mostrara el error 
                 raise ValidationError("el username ya existe intenta con otro")
+            
             #validacion para ver si el correo ya es existente
             if CustomUser.objects.filter(email=email).exists():
                 #si el correo ya existe imprimira el siguiente msj
@@ -91,15 +107,39 @@ def signup(request):
                 last_name = lastname,
                 username = username,
                 email = email,
-                phone= phone,
-                password = make_password(password) # es mucho mas seguro q usar hash siempre y mas recomndable usar make_password para hacear contraseñas a nivel de seguridad
+                # phone= phone,
+                password = make_password(password), # es mucho mas seguro q usar hash siempre y mas recomndable usar make_password para hacear contraseñas a nivel de seguridad
+                is_active = False,
             )
             #aqui se guardara los datos obtenidos ala base de datos
             user.save()
             #imprimimos un msj de exito
-            print("Usuario guardado correctamente.")
+            print("Usuario guardado correctamente. pero esta inactivo")
+            
+            #generamos el codigo de verificacion
+            verification_code = generate_verification_code()
+            
+            #Guardar el código en la sesión para la verificación posterior
+            request.session["verification_code"] = verification_code 
+            request.session["email"] = email
+            
+            #Enviamos el correo con el codigo de verificacion
+            # Enviamos el correo con el código de verificación
+            send_mail(
+                "Código de verificación",
+                f"Tu código de verificación es: {verification_code}",
+                settings.DEFAULT_FROM_EMAIL,
+                [email],  # Asegúrate de que `email` sea una dirección válida
+                fail_silently=False,
+            )
+            
+            print("Se ha enviado un codigo de verificacion a tu correo")
+            messages.success(request, "Se ha enviado un codigo de verificacion a tu correo ")
+            
             #retornamos y redirigimos a la vista de login
-            return redirect("login")
+            return redirect("verify_email")
+        
+        
         #capturamos los errores que creamos para q se muestren x aqui
         except ValidationError as e:
             print(f"el error es el siguiente: {e}")
@@ -108,11 +148,40 @@ def signup(request):
         #capturamos un erro general dentro del codigo
         except Exception as e:
             #retornamos y imprimimos el msj de error general dentro del codigo
-            print(f"el error es el siguiente: {e}")
+            print(f"el error es el siguiente global dentro del codigo: {e}")
             
             return render(request, "signup.html", {"error": "eror inesperado. profavor intente de nuevo"})
     #retornamos la vista princiapl del signup y lo msotramos 
     return render(request, "signup.html")
+
+
+
+
+# Fncion para verificar el codigo y la activacion de su cuenta
+def verify_email(request):
+    if request.method == 'POST':
+        input_code = request.POST.get('verification_code')
+        session_code = request.session.get('verification_code')
+        email = request.session.get('email')
+
+        if str(input_code) == str(session_code):
+            # Activar la cuenta del usuario
+            user = CustomUser.objects.get(email=email)
+            user.is_active = True
+            user.save()
+
+            # Limpiar la sesión después de la verificación
+            del request.session['verification_code']
+            del request.session['email']
+
+            messages.success(request, '¡Tu cuenta ha sido activada!')
+            return redirect('login')
+        else:
+            messages.error(request, 'El código de verificación es incorrecto.')
+    
+    return render(request, 'verify_email.html')
+
+
 
 
 
@@ -164,7 +233,12 @@ def login(request):
 
 #para las funciones snake_case
 #para las clases CamelCase o PascalCase
+
+
+
+
+
+
 @login_required
 def user_profile(request):
-    
     return render(request, "user_profile.html", {"username": request.user.username})
