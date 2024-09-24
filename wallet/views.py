@@ -1,13 +1,23 @@
 from django.shortcuts import render
-from .models import User
+
 
 from django.contrib.auth.decorators import login_required
+
+
+from wallet import models
+
 # Create your views here.
 
 #AQUI VA LA LOGICA  DE LA APLICACION WALLET
 
 #Gestion del saldo
 class Account():
+    def Create_Wallet(user,currency):
+        wallet = models.Wallet(user = user, balance=0.0,currency=currency,status='abierto')
+        wallet.save()
+
+        
+
     def recharge_sldo():
         pass
     
@@ -40,8 +50,8 @@ class SendSearchUser():
 #Send
 class SendMoney():
     def get_username(self,name):
-            
-            Users = User.objects.get(username = name)
+            pass
+            #Users = User.objects.get(username = name)
             
     def form_valid(self, form):
         pass

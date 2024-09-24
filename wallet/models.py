@@ -1,32 +1,26 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-# Create your models here.
-#class UsuarioPrueba(models.Model):
-#    username = models.CharField(max_length=150, unique=True)  # Nombre de usuario único
-#    correo = models.EmailField(unique=True)  # Correo único
-#    contraseña = models.CharField(max_length=128)  # Contraseña encriptada o texto plano (mejor usar encriptación)#
-
-#    def __str__(self):
-#        return self.username
+from user_auth import models as md
     
-class User(models.Model):
-    name = models.CharField(max_length=255)
-    lastname = models.CharField(max_length=255)
+#class User(models.Model):
+    #name = models.CharField(max_length=255)
+    #lastname = models.CharField(max_length=255)
     #tenma de seguridad !los nombres y apellidos al hacer la transferencia
-    username = models.CharField(max_length=150, unique=True)  # Nombre de usuario único
-    email = models.EmailField(unique=True)  # Correo único
-    phone = models.CharField(max_length=10, blank=True, null=True)
+    #username = models.CharField(max_length=150, unique=True)  # Nombre de usuario único
+    #email = models.EmailField(unique=True)  # Correo único
+    #hone_number = models.CharField(max_length=10, blank=True, null=True)
 
-    def __str__(self):
-        return self.username
+    #def __str__(self):
+    #    return self.username
     
     
 class Wallet(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Relación uno a uno con el usuario
+    user = models.OneToOneField(md.CustomUser, on_delete=models.CASCADE)  # Relación uno a uno con el usuario
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Saldo de la billetera
     currency = models.CharField(max_length=3, default='PEN')  # Moneda de la billetera
     status = models.CharField(max_length=20, default='active')  # Estado de la billetera
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
     updated_at = models.DateTimeField(auto_now=True)  # Fecha de última actualización
 
