@@ -71,11 +71,17 @@ body{
 }
 
 .entrada{
-    width: 350px;
+    width: 100%;
     height: 60px;
     border: 1px solid #E5E5E5;
     border-radius: 7px;
     background-color: #ffffff;
+}
+
+#phone_number.entrada {
+    border-bottom-left-radius: 0; /* Elimina el borde redondeado */
+
+    border-top-left-radius: 0;
 }
 .pregunta-restablecer-contra{
   

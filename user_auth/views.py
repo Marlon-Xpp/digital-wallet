@@ -14,6 +14,8 @@ from django.utils import timezone
 from datetime import timedelta
 import requests
 
+#clases importadas
+
 # Create your views here.
 #AQUI VA LA LOGICA  DE LA APLICACION AUTH USER
 
@@ -131,6 +133,12 @@ def signup(request):
             #aqui se guardara los datos obtenidos ala base de datos
             user.save()
             #imprimimos un msj de exito
+
+            #creamos el wallet principal del usuario
+
+
+
+
             print("Usuario guardado correctamente.")
             #retornamos y redirigimos a la vista de login
             return redirect("login")

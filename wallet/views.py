@@ -1,9 +1,5 @@
 from django.shortcuts import render
-
-
 from django.contrib.auth.decorators import login_required
-
-
 from wallet import models
 
 # Create your views here.
@@ -12,11 +8,32 @@ from wallet import models
 
 #Gestion del saldo
 class Account():
-    def Create_Wallet(user,currency):
-        wallet = models.Wallet(user = user, balance=0.0,currency=currency,status='abierto')
-        wallet.save()
+
+    @login_required
+    def __init__(self,request):
+        self.user = request.user.name
+        
+
+    def first_wallet_create(self,currency):
+        print(self.user)
+    
+        #wallet.save()
+        return True
+
+    def first_wallet_create(request):
+        if request.method == "POST":
+            currency = request.POST.get('currency')  # Obtener la moneda del formulario
+ 
+            user_instance = connectionModel.user_instance(request.user.username) # Cambia por el nombre de usuario adecuado
+            
+            wallet = models.Wallet(user = user_instance,currency=currency)
+
+            wallet.save()
 
         
+        return render(request,"wallet.html",{})
+        
+   # def change_type_cell    
 
     def recharge_sldo():
         pass

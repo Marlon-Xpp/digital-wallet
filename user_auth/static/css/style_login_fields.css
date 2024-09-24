@@ -1,15 +1,21 @@
 .custom-select {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    width: 100%;
 }
+
+
 .select-selected {
-    width: 350px;
+    width: 40%;      
     height: 60px;
+    
     
     background-color: #f1f1f1;
     padding: 10px;
-    border-radius: 7px;
+    border-radius: 7px 0px 0px 7px;
     border: 1px solid #ccc;
+    border-right: none;
+
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -18,9 +24,8 @@
     position: absolute;
     background-color: #f9f9f9;
     border: 1px solid #ccc;
-    z-index: 99;
     display: none;
-    width: 100%;
+    width: 30%;
 }
 .select-items div {
     padding: 10px;
