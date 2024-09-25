@@ -20,21 +20,23 @@
     <main class="contenedor-centrado">
         <div class="menu-principal">
 
-            {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <div class="mensaje-alerta">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-
-
             <section class="seccion-formulario">
                 <h2 class="texto-principal">
                     Crear tu cuenta
                 </h2>
+
+                {% comment %} mensaje de error {% endcomment %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <div class="mensaje-alerta">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% comment %} termina el mensaje de error {% endcomment %}
+
                 <form action="" method="POST" class="formulario">
                     {% csrf_token %}
                     <input class="entrada" type="text" id="names" name="names" placeholder="Nombres" required>
@@ -74,7 +76,6 @@
         </div>
         
     </main>
-
 
 
     {% include "footer.html" %}

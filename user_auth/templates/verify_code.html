@@ -11,7 +11,7 @@
     <h2>Verificar tu correo electrónico</h2>
     <p>Te hemos enviado un código de verificación a tu correo.</p>
     
-    <form action="{% url 'verify_email' %}" method="POST">
+    <form action="{% url 'verify_code' %}" method="POST">
         {% csrf_token %}
         <label for="verification_code">Ingresa tu código de verificación:</label><br>
         <input type="text" id="verification_code" name="verification_code" required><br><br>
@@ -26,5 +26,6 @@
         {% endfor %}
     </ul>
     {% endif %}
+    
 </body>
 </html>
