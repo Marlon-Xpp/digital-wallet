@@ -69,7 +69,7 @@ def generate_verification_code():
 #     print pass
 
 
-#verificar si existen los datos ne la abse de datos
+#verificar si existen los datos en la base de datos
 def verify_exists(**fields):
     # Iterar sobre los campos proporcionados
     for field_name, field_value in fields.items():
