@@ -6,8 +6,11 @@
     <title>Signup  Page</title>
     {% load static  %}
     <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    
+    <link rel="stylesheet" href="{% static "css/style_login_fields.css" %}">
     <link rel="stylesheet" href="{% static "css/footer.css" %}">
     
+
 </head>
 <body>
     <header class="encabezado">
@@ -44,6 +47,27 @@
                     <input class="entrada" type="text" id="username" name="username" placeholder="Username" required>
                     
                     {% comment %} agregar el campo codigo postal y telefono le pones la misma clase para q los estilos no afecte{% endcomment %}
+                    <input class= "entrada" type="hidden" id="country_code" name="country_code" required> 
+                
+                    <div class="custom-select" id="country_select">
+                        <div class="select-selected">Seleccionar país</div>
+
+                        <div class="select-items">
+                            <div data-country-code="US" data-dial-code="+1">
+                                <img class="flag-img" src="https://flagsapi.com/US/shiny/64.png" alt="US">
+                                Estados Unidos (+1)
+                            </div>
+                            <div data-country-code="PE" data-dial-code="+51">
+                                <img class="flag-img" src="https://flagsapi.com/PE/shiny/64.png" alt="PE"> Perú (+51)
+                            </div>
+                            <div data-country-code="GB" data-dial-code="+44">
+                                <img class="flag-img" src="https://flagsapi.com/GB/shiny/64.png" alt="GB"> Reino Unido (+44)
+                            </div>
+                            <!-- Agrega más países aquí -->
+                        </div>
+                        <input class= "entrada" type="text" id="phone_number" name="phone_number" placeholder="Número de teléfono" required>
+                    </div>
+
 
                     <input class="entrada" type="email" id="email" name="email" placeholder="Correo electronico" required>
                     <input class="entrada" type="password" id="password" name="password" placeholder="Contraseña" required>
@@ -52,17 +76,17 @@
                 
             </section>
 
-            <section class="seccion-otros-accesos">
-                <span class="consulta-otros-accesos">
-                    Tambien puedes acceder con:
-                </span>
-                <button class="boton-google">
-                    CONTINUAR CON GOOGLE
-                </button>
-                <button class="boton-facebook">
-                    CONTINUAR CON FACEBOOK
-                </button>
-            </section>
+        <section class="seccion-otros-accesos">
+            <span class="consulta-otros-accesos">
+                Tambien puedes acceder con:
+            </span>
+            <button class="boton-google">
+                CONTINUAR CON GOOGLE
+            </button>
+            <button class="boton-facebook">
+                CONTINUAR CON FACEBOOK
+            </button>
+        </section>
 
             <section class="seccion-crear-cuenta">
                 <span  class="pregunta-crear-cuenta">
@@ -78,7 +102,42 @@
     </main>
 
 
+
+
+
+
+
+
+
+
+    <script>
+        document.querySelector('.select-selected').addEventListener('click', function() {
+            this.nextElementSibling.classList.toggle('show');
+        });
+
+        document.querySelectorAll('.select-items div').forEach(function(item) {
+            item.addEventListener('click', function() {
+                var selectedDialCode = this.getAttribute('data-dial-code');
+                var selectedCountryCode = this.getAttribute('data-country-code');
+
+                document.querySelector('.select-selected').textContent = this.textContent;
+                document.getElementById("country_code").value = selectedDialCode; // Guarda el prefijo
+                document.getElementById("flag_img").src = `https://flagsapi.com/${selectedCountryCode}/shiny/64.png`;
+                document.getElementById("flag_img").style.display = "inline";
+
+                this.parentElement.classList.remove('show');
+            });
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.select-selected')) {
+                document.querySelector('.select-items').classList.remove('show');
+            }
+        });
+    </script>
+
     {% include "footer.html" %}
 
 </body>
+
 </html>

@@ -3,8 +3,10 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class CustomUser(AbstractUser):
+    #phone_number
     phone = models.CharField(max_length=15, blank=True, null=True)
-    
+    #code_pais
+    country_code = models.CharField(max_length=4,blank= True,null=True)
     def __str__(self):
         return self.username
     

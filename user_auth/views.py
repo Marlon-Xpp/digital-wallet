@@ -13,6 +13,16 @@ import random
 from .models import LoginAttempt
 from django.utils import timezone
 from datetime import timedelta
+from django.http import JsonResponse
+
+
+from .models import LoginAttempt
+from django.utils import timezone
+from datetime import timedelta
+
+import requests
+
+#clases importadas
 
 # Create your views here.
 #AQUI VA LA LOGICA  DE LA APLICACION AUTH USER
@@ -111,10 +121,13 @@ def verify_code(request):
                 return redirect('login')
 
             else:
+                print("el codigo de verificacion es incorecto")
+                messages.error(request, 'El codigo de verificacion es incorrecto')
                 raise ValidationError('El código de verificación es incorrecto.')
                 
                 
         except ValidationError as e:
+            messages.error(request, str(e))
             return render(request, "verify_code.html", {"error": str(e)})
         
         except Exception as e:
@@ -125,6 +138,25 @@ def verify_code(request):
 
 
 
+APIKEYCOUNTRY = 'num_live_EUGXAxGMNzGUyImA1Ck1OP6d9vEVzohR5vj3taIp'  # Número máximo de intentos permitidos
+
+def validate_phone_number(phone_number,country_code,api_key):
+    url = f"https://api.numlookupapi.com/v1/validate/{country_code}{phone_number}?apikey={api_key}"
+    headers = {
+        'Authorization': f'Bearer {api_key}'
+    }
+    try:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200: 
+            data  = response.json()
+            valid = data.get('valid')
+            if valid != True :
+                raise ValidationError("el numero no existe, intenta con otro")
+        else:
+            return {'error': f"Error: {response.status_code} - {response.text}"}
+    except Exception as e:
+        return JsonResponse({'error': 'error behind the method', 'details': str(e),'number': phone_number,'api': api_key}, status=500)
+
 
 def signup(request):
     if request.method == "POST":
@@ -133,29 +165,34 @@ def signup(request):
         names = request.POST.get("names","").strip()
         lastname = request.POST.get("lastname","").strip()
         username = request.POST.get("username","").strip()
-        # phone = request.POST.get("phone","").strip() #modificas si es necesario
-        #codigo postal del pais
+        phone_number = request.POST.get("phone_number","").strip() #modificas si es necesario
+        country_code = request.POST.get("country_code","").strip()
         email = request.POST.get("email","").strip()
         password = request.POST.get("password","").strip()
         
         # manejar alguna error que puede suceder dentro del codigo
         try:
             #validar que los campos ingresado por el usaurio no esten vacios
-            validate_fields(names=names, lastname=lastname, username=username, email=email, password=password)
+            validate_fields(names=names, lastname=lastname, username=username, email=email, password=password, phone=phone_number, country_code=country_code)
             #verificacion del formato del correo
             validate_email(email)
             #validacion de la contraseña
             validate_password(password)
             #validacion para corrobar si ya existen
             verify_exists(username=username, email=email)
-            # corchetes parentesis y llave
+            if CustomUser.objects.filter(phone = phone_number).exists():
+                print("el numero telefonico ya esta registrado")
+                raise ValidationError("ingresa otro numero telefonico")
+            
+            validate_phone_number(phone_number,country_code,APIKEYCOUNTRY)
             
             user = CustomUser(
                 first_name = names,
                 last_name = lastname,
                 username = username,
                 email = email,
-                # phone= phone,
+                phone= phone_number,
+                country_code = country_code,
                 password = make_password(password), # es mucho mas seguro q usar hash siempre y mas recomndable usar make_password para hacear contraseñas a nivel de seguridad
                 is_active = False,
             )
@@ -256,9 +293,42 @@ def login(request):
 
 
 
-
-
-
 @login_required
 def user_profile(request):
+    
     return render(request, "user_profile.html", {"username": request.user.username})
+
+
+
+# Función que consulta el API
+def lookup_phone_number(api_key, phone_number,country_code):
+    url = f"https://api.numlookupapi.com/v1/validate/{country_code}{phone_number}?apikey={api_key}"
+    headers = {
+        'Authorization': f'Bearer {api_key}'
+    }
+    try:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200: 
+            return response.json()
+        else:
+            return {'error': f"Error: {response.status_code} - {response.text}"}
+    except Exception as e:
+        return JsonResponse({'error': 'error behind the method', 'details': str(e),'number': phone_number,'api': api_key}, status=500)
+    
+# Vista para recibir el número y mostrar el resultado
+def phone_lookup_view(request):
+    if request.method == 'POST':
+        phone_number = request.POST.get('phone_number')
+        country_code = request.POST.get('country_code')
+        api_key = APIKEYCOUNTRY  # Sustituir con tu API Key
+        print(type(phone_number))
+        try:
+            # Consultar el API
+            result = lookup_phone_number(api_key, phone_number,country_code)
+            # Devolver los resultados en formato JSON
+            return JsonResponse(result)
+        except Exception as e:
+            # Captura cualquier otro tipo de excepción
+            return JsonResponse({'error': 'number null', 'details': str(e),'number': phone_number, 'country_code':country_code}, status=500)
+    # En caso de GET, muestra la página con el formulario
+    return render(request, 'prueba.html')
