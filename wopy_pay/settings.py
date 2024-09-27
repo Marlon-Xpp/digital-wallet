@@ -42,7 +42,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'mpillacap@autonoma.edu.pe'  # Correo
 EMAIL_HOST_PASSWORD = '10216530'  # contra
-DEFAULT_FROM_EMAIL = 'mpillacap@autonoma.edu.pe'
+DEFAULT_FROM_EMAIL = 'mpillacap@autonoma.edu.pe' # Correo x defecto
 
 
 
