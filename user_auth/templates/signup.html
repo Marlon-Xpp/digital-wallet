@@ -9,6 +9,7 @@
     
     <link rel="stylesheet" href="{% static "css/style_login_fields.css" %}">
     <link rel="stylesheet" href="{% static "css/footer.css" %}">
+    <link rel="stylesheet" href="{% static "css/verify_code.css" %}">
     
 
 </head>
@@ -71,6 +72,7 @@
 
                     <input class="entrada" type="email" id="email" name="email" placeholder="Correo electronico" required>
                     <input class="entrada" type="password" id="password" name="password" placeholder="Contraseña" required>
+                    
                     <button type="submit" class="boton-iniciar-sesion">CREAR TU CUENTA</button>
                 </form>
                 
@@ -101,15 +103,13 @@
         
     </main>
 
+    {% comment %} incluimos el archivo verify_code.html que es un modal {% endcomment %}
+    {% if verification_sent %}  {% comment %} hacemos una condicion de q si verification_set es true  {% endcomment %}
+        {% comment %} entonces muestrame lo q hay en verify_code.html {% endcomment %}
+        {% include "verify_code.html" %} 
+    {% endif %}
 
-
-
-
-
-
-
-
-
+    
     <script>
         document.querySelector('.select-selected').addEventListener('click', function() {
             this.nextElementSibling.classList.toggle('show');
@@ -135,6 +135,10 @@
             }
         });
     </script>
+
+
+
+
 
     {% include "footer.html" %}
 

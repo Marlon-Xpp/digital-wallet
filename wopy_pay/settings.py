@@ -35,7 +35,6 @@ AUTH_USER_MODEL = 'user_auth.CustomUser'
 # API Key para el servicio de validación de números de teléfono
 NUMLOOKUP_API_KEY = 'num_live_EUGXAxGMNzGUyImA1Ck1OP6d9vEVzohR5vj3taIp'
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -43,8 +42,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'mpillacap@autonoma.edu.pe'  # Correo
 EMAIL_HOST_PASSWORD = '10216530'  # contra
 DEFAULT_FROM_EMAIL = 'mpillacap@autonoma.edu.pe' # Correo x defecto
-
-
 
 # Configuraciones de autenticación
 MAX_ATTEMPTS = 5  # Número máximo de intentos permitidos

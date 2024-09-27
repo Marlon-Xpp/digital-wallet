@@ -2,6 +2,7 @@
 import random
 import re
 import requests
+import json
 
 # Importaciones de terceros
 from email_validator import validate_email as email_validator, EmailNotValidError
@@ -92,19 +93,24 @@ def verify_exists(**fields):
 
 # Funcion para verificar el codigo y la activacion de su cuenta
 def verify_code(request):
+    print("Entrando a la función verify_code")
+    print("Método recibido:", request.method)
     if request.method == 'POST':
-        input_code = request.POST.get('verification_code')
+        # Obtener los datos de la solicitud JSON
+        try:
+            data = json.loads(request.body)
+            input_code = data.get('verification_code')
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Error en el formato de los datos enviados.'})
+
         session_code = request.session.get('verification_code')
         email = request.session.get('email')
         
-        
         # Verificar si el código de sesión existe
         if session_code is None:
-            messages.error(request, "No se encontró el código de verificación en la sesión.")
-            return render(request, "verify_code.html")
+            return JsonResponse({'success': False, 'error': 'No se encontró el código de verificación en la sesión.'})
 
         try:
-            
             if str(input_code) == str(session_code):
                 # Activar la cuenta del usuario
                 user = CustomUser.objects.get(email=email)
@@ -114,26 +120,19 @@ def verify_code(request):
                 # Limpiar la sesión después de la verificación
                 del request.session['verification_code']
                 del request.session['email']
-                
-                print("se elimino los datos de la sesion anterior, y tu cuenta se activo")
-                messages.success(request, '¡Tu cuenta ha sido activada!')
-                return redirect('login')
 
+                return JsonResponse({'success': True})
             else:
-                print("el codigo de verificacion es incorecto")
-                messages.error(request, 'El codigo de verificacion es incorrecto')
-                raise ValidationError('El código de verificación es incorrecto.')
-                
-                
-        except ValidationError as e:
-            messages.error(request, str(e))
-            return render(request, "verify_code.html", {"error": str(e)})
-        
+                return JsonResponse({'success': False, 'error': 'El código de verificación es incorrecto.'})
+
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Usuario no encontrado.'})
+
         except Exception as e:
-            print(f"el error global es: {e}")
-            return render(request, "verify_code.html", {"error": "el error inesperado dentro del codigo"} )
-            
-    return render(request, 'verify_code.html')
+            return JsonResponse({'success': False, 'error': 'Ocurrió un error inesperado. Por favor, inténtelo de nuevo.'})
+    
+    print("Método recibido:", request.method)
+    return JsonResponse({'success': False, 'error': 'Método no permitido.'})
 
 
 
@@ -252,7 +251,10 @@ def signup(request):
             messages.success(request, "Se ha enviado un codigo de verificacion a tu correo")
             
             #retornamos y redirigimos a la vista de login
-            return redirect("verify_code")
+            return render(request, "signup.html", {
+                'verification_sent': True, #le pasamos true para q pueda seguir con su flujo
+                'email': email  #le pasamos el email capturado
+            })
         
         
         #capturamos los errores que creamos para q se muestren x aqui
