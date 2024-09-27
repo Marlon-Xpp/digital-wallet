@@ -13,145 +13,188 @@ body{
 
 }
 
-
 .imagen-propia{
     width: 100%;
     height: 320px;
     object-fit: cover;
 }
 
-/* Main layout */
-.main-principal {
-    display: flex;
-    flex-direction: row;
-    padding: 20px;
-    gap: 20px;
-    max-width: 800px; /* Ajusta el tamaño máximo del contenedor */
-    margin: 0 auto; /* Centra horizontalmente */
 
+.container {
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Lado izquierdo (menú de usuario) */
-.lateral-izquierdo {
-    width: 30%;
-    background-color: #ffffff;
-    height: 250px;
+.container h1 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* Imagen de perfil */
+.profile-image {
+
     display: flex;
     flex-direction: column;
-    
-}
-
-.texto-cuenta-usuario {
-    font-size: 16;
-    font-weight: 500;
     margin-bottom: 20px;
-    padding: 20px 20px 5px 20px;
-    
-    background-color: #a1a1a13a;
-
-}
-
-.listado-cuenta {
-    list-style: none;
-    padding: 0px 20px;
-}
-
-.lista-cuenta {
-    font-size: 1em;
-    cursor: pointer;
-    margin: 10px 0px;
-    transition:  0.3s;
-}
-
-.lista-cuenta:hover {
-    text-decoration: underline;
-}
-
-/* Lado derecho (información del usuario) */
-.contenedor-derecho {
-    flex: 1;
-   background-color: #ffffff;
-}
-
-.seccion-derecho {
-    background-color: #a1a1a13a;
-    padding: 20px;
-
-}
-
-.figura-info {
-    display: flex;
     align-items: center;
-
+    justify-content: center;
 }
 
-.figura-info img {
+.profile-image img {
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
     object-fit: cover;
+    border: 2px solid #28a745;
 }
 
-.parrafo-info {
-    flex: 1;
-    margin-left: 20px;
-    font-size: 13px;
+#change-picture {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
-/* Sección de información del usuario */
-.seccion-info-usuario {
-    padding: 15px;
-    background-color: #ffffff;
+#change-picture:hover {
+    background-color: #0056b3;
 }
 
-.titulo-info-usuario {
-    
+/* Información del usuario */
+.user-info {
     margin-bottom: 20px;
-    font-size: 16;
-    font-weight: 500;
 }
 
-.contenedor-info-usuario {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+.info-item {
+    padding: 10px 0;
 }
-
-.campo-usuario {
+.info-item p{
     display: flex;
-    flex-direction: column;
+    gap: 5px;
+    align-items: center;
     
 }
 
-.etiqueta-usuario {
-    font-size: 16;
-    font-weight: 500;
-    margin-bottom: 5px;
+
+/* Mantener el mismo ancho para los spans e inputs */
+.info-item span, 
+.info-item input {
+    width: 100%; 
+    max-width: 300px;
+    display: inline-block;
+    font-size: 14px;
+    padding: 5px 0;
 }
 
-.valor-usuario {
-    font-size: 1.1em;
-    color: #333;
+.span-input{
+    border: 1px solid transparent;
 }
 
-/* Botón actualizar perfil */
-.contenedor-boton-actualizar {
+/* Estilo inicial del input, pero con borde transparente */
+.info-item input {
+    border: 1px solid transparent;
+    background-color: transparent;
+    padding: 5px 0;
+}
+
+
+hr {
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Botón Editar Perfil */
+.edit-profile {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#edit-profile {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#edit-profile:hover {
+    background-color: #218838;
+}
+
+/* Verificación de contraseña */
+.password-verification {
     margin-top: 20px;
     text-align: center;
+    padding: 0px 20px;
+
 }
 
-.boton-actualizar {
-    padding: 10px 20px;
-    font-size: 1em;
-    color: #ffffff;
-    background-color: #619063;
+.password-verification label {
+    display: block;
+
+    margin-bottom: 10px;
+    color: #555;
+}
+
+input[type="password"] {
+    padding: 12px;
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="password"]:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+button {
+    padding: 12px 20px;
+    background-color: #007BFF;
+    color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
+    font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
-.boton-actualizar:hover {
-    background-color: #4a704a;
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Detalles adicionales */
+.additional-info {
+    margin-top: 30px;
+    display: none;
+    padding: 20px;
+    background-color: #f1f3f5;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.additional-info h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #007BFF;
+}
+
+.additional-info p {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #555;
 }
 

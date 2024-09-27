@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
-
+from datetime import timedelta  # Asegúrate de importar timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -32,6 +32,8 @@ LOGIN_URL = 'login'
 
 AUTH_USER_MODEL = 'user_auth.CustomUser'
 
+# API Key para el servicio de validación de números de teléfono
+NUMLOOKUP_API_KEY = 'num_live_EUGXAxGMNzGUyImA1Ck1OP6d9vEVzohR5vj3taIp'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -43,6 +45,10 @@ EMAIL_HOST_PASSWORD = '10216530'  # contra
 DEFAULT_FROM_EMAIL = 'mpillacap@autonoma.edu.pe'
 
 
+
+# Configuraciones de autenticación
+MAX_ATTEMPTS = 5  # Número máximo de intentos permitidos
+BLOCK_TIME = timedelta(seconds=15)  # Tiempo de bloqueo de 15 segundos
 
 # Application definition
 INSTALLED_APPS = [

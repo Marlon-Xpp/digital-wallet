@@ -18,10 +18,10 @@ def user_instance(username):
     except:
        raise ""
     
-def first_wallet_create():
-   try:
+# def first_wallet_create():
+#    try:
 
-   except:    
+#    except:    
 
 
 

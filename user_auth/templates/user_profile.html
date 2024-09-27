@@ -17,64 +17,175 @@
 
     {% include "header.html" %}
 
-    <main class="main-principal">
-        <aside class="lateral-izquierdo">
-            <h3 class="texto-cuenta-usuario">
-                CUENTA DE USURIO
-            </h3>
-            <ul class="listado-cuenta">
-                <li class="lista-cuenta">Ver cuenta bancaria</li>
-                <li class="lista-cuenta">Ver actividad</li>
-                <li class="lista-cuenta">Cambiar contraseña</li>
-            </ul>
-        </aside>
-        <article class="contenedor-derecho">
-            <section class="seccion-derecho">
-                <figure class="figura-info">
-                    <img src="https://th.bing.com/th/id/R.8e2c571ff125b3531705198a15d3103c?rik=gzhbzBpXBa%2bxMA&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-big-image-png-2240.png&ehk=VeWsrun%2fvDy5QDv2Z6Xm8XnIMXyeaz2fhR3AgxlvxAc%3d&risl=&pid=ImgRaw&r=0" alt="">
-                    <p class="parrafo-info">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Mollitia dicta ipsum impedit officia unde necessitatibus!
+    <main>
+        <div class="container">
+            <h1>PERFIL DE USUARIO</h1>
+            
+            <!-- Imagen de perfil -->
+            <div class="profile-image">
+                <img src="https://via.placeholder.com/150" alt="Imagen de perfil" id="profile-picture">
+                <button id="change-picture">Cambiar Imagen</button>
+            </div>
+    
+            <!-- Información del usuario -->
+            <div class="user-info">
+                <div class="info-item">
+                    <p>
+                        <strong>Username: </strong>
+                        <span class="span-input" id="username">{{ user.username }}</span>
+                        <input type="text" id="username-input" value="{{ user.username }}" style="display:none;">
                     </p>
-                </figure>
-            </section>
-
-            <section class="seccion-info-usuario">
-                <h2 class="titulo-info-usuario">INFORMACION DEL USUARIO</h2>
-            
-                <div class="contenedor-info-usuario">
-                    <div class="campo-usuario">
-                        <label for="nombre" class="etiqueta-usuario">Nombre:</label>
-                        <p id="nombre" class="valor-usuario">Juan</p>
-                    </div>
-            
-                    <div class="campo-usuario">
-                        <label for="apellido" class="etiqueta-usuario">Apellido:</label>
-                        <p id="apellido" class="valor-usuario">Pérez</p>
-                    </div>
-            
-                    <div class="campo-usuario">
-                        <label for="nombre-usuario" class="etiqueta-usuario">Nombre de Usuario:</label>
-                        <p id="nombre-usuario" class="valor-usuario">juanperez123</p>
-                    </div>
-            
-                    <div class="campo-usuario">
-                        <label for="email" class="etiqueta-usuario">Correo Electrónico:</label>
-                        <p id="email" class="valor-usuario">juanperez@example.com</p>
-                    </div>
-            
-                    <div class="campo-usuario">
-                        <label for="telefono" class="etiqueta-usuario">Teléfono:</label>
-                        <p id="telefono" class="valor-usuario">+51 123456789</p>
-                    </div>
                 </div>
-            
-                <div class="contenedor-boton-actualizar">
-                    <button class="boton-actualizar">Actualizar Perfil</button>
+                <hr>
+                <div class="info-item">
+                    <p>
+                        <strong>Email: </strong>
+                        <span class="span-input" id="email">{{ user.email }}</span>
+                        <input type="email" id="email-input" value="{{ user.email }}" style="display:none;">
+                    </p>
                 </div>
-            </section>
-            
-        </article>
+                <hr>
+                <div class="info-item">
+                    <p>
+                        <strong>Teléfono: </strong>
+                        <span class="span-input" id="phone">{{ user.phone }}</span>
+                        <input type="text" id="phone-input" value="{{ user.phone }}" style="display:none;">
+                    </p>
+                </div>
+            </div>
+    
+            <!-- Botón Editar Perfil -->
+            <div class="edit-profile">
+                <button id="edit-profile">Editar Perfil</button>
+                <button id="save-profile" style="display:none;">Guardar Cambios</button>
+            </div>
+    
+            <!-- Verificación de contraseña -->
+            <div class="password-verification">
+                <label for="password" class="password-text">Ingresa tu contraseña para ver más detalles:</label>
+                <input type="password" id="password" placeholder="Contraseña">
+                <button id="show-details">Ver Detalles</button>
+            </div>
+    
+            <!-- Detalles adicionales -->
+            <div class="additional-info" id="additional-info" style="display:none;">
+                <h2>Detalles Adicionales</h2>
+                <p><strong>Nombres: </strong> 
+                    <span id="first-name">{{ user.first_name }}</span>
+                    <input type="text" id="first-name-input" value="{{ user.first_name }}" style="display:none;">
+                </p>
+                <p><strong>Apellidos: </strong> 
+                    <span id="last-name">{{ user.last_name }}</span>
+                    <input type="text" id="last-name-input" value="{{ user.last_name }}" style="display:none;">
+                </p>
+            </div>
+        </div>
     </main>
+    
+    {% comment %} <script src="script.js"></script> {% endcomment %}
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const editButton = document.getElementById('edit-profile');
+            const saveButton = document.getElementById('save-profile');
+            
+            // Campos a editar
+            const usernameSpan = document.getElementById('username');
+            const usernameInput = document.getElementById('username-input');
+            
+            const emailSpan = document.getElementById('email');
+            const emailInput = document.getElementById('email-input');
+            
+            const phoneSpan = document.getElementById('phone');
+            const phoneInput = document.getElementById('phone-input');
+        
+            // Habilitar edición
+            editButton.addEventListener('click', function() {
+                // Mostrar inputs y ocultar spans
+                usernameSpan.style.display = 'none';
+                usernameInput.style.display = 'block';
+                
+                emailSpan.style.display = 'none';
+                emailInput.style.display = 'block';
+                
+                phoneSpan.style.display = 'none';
+                phoneInput.style.display = 'block';
+        
+                // Mostrar botón de guardar
+                saveButton.style.display = 'inline-block';
+                editButton.style.display = 'none';
+            });
+        
+            // Guardar cambios
+            saveButton.addEventListener('click', function() {
+                const formData = new FormData();
+                formData.append('username', usernameInput.value);
+                formData.append('email', emailInput.value);
+                formData.append('phone', phoneInput.value);
+        
+                // Enviar datos al servidor usando Fetch API
+                fetch("{% url 'edit_profile' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Actualizar los valores visibles
+                        usernameSpan.textContent = usernameInput.value;
+                        emailSpan.textContent = emailInput.value;
+                        phoneSpan.textContent = phoneInput.value;
+        
+                        // Ocultar inputs y mostrar los spans
+                        usernameInput.style.display = 'none';
+                        usernameSpan.style.display = 'block';
+                        
+                        emailInput.style.display = 'none';
+                        emailSpan.style.display = 'block';
+                        
+                        phoneInput.style.display = 'none';
+                        phoneSpan.style.display = 'block';
+        
+                        // Mostrar botón de editar nuevamente
+                        saveButton.style.display = 'none';
+                        editButton.style.display = 'inline-block';
+                    } else {
+                        alert('Error al guardar los cambios');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al actualizar:', error);
+                });
+            });
+        
+            // Mostrar detalles adicionales
+            document.getElementById('show-details').addEventListener('click', function() {
+                const password = document.getElementById('password').value;
+        
+                fetch("{% url 'verify_password' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `password=${encodeURIComponent(password)}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('additional-info').style.display = 'block';
+                    } else {
+                        alert('Contraseña incorrecta');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+
 
     {% include "footer.html" %}
 </body>

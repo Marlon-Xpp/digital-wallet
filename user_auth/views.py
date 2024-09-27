@@ -1,28 +1,30 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from user_auth.models import CustomUser
-from django.contrib.auth.hashers import make_password
-from django.core.mail import send_mail
-import re
-
-from django.conf import settings
-from django.core.exceptions import ValidationError
-from django.contrib.auth import authenticate, login as auth_login
-from django.contrib.auth.decorators import login_required
+# Importaciones estándar
 import random
-from .models import LoginAttempt
-from django.utils import timezone
-from datetime import timedelta
-from django.http import JsonResponse
-
-
-from .models import LoginAttempt
-from django.utils import timezone
-from datetime import timedelta
-
+import re
 import requests
 
-#clases importadas
+# Importaciones de terceros
+from email_validator import validate_email as email_validator, EmailNotValidError
+
+
+# Importaciones de Django
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.utils import timezone
+
+
+# Importaciones de tu aplicación
+from user_auth.models import CustomUser
+from .models import LoginAttempt
+
+
 
 # Create your views here.
 #AQUI VA LA LOGICA  DE LA APLICACION AUTH USER
@@ -37,13 +39,16 @@ import requests
 #Seguridad del perfil:
 
 
-
-
 def validate_email(email):
-    """Verifica que el correo electrónico tenga un formato válido."""
-    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    if not re.match(pattern, email):
-        raise ValidationError("El correo electrónico no tiene un formato válido.")
+    """Verifica que el correo electrónico tenga un formato válido y exista."""
+    try:
+        # Validar el correo electrónico y obtener un diccionario con el formato validado
+        valid = email_validator(email)
+        # Si necesitas acceder a la dirección válida:
+        return valid['email']  # Esto te da el correo validado y corregido
+    except EmailNotValidError as e:
+        # La dirección de correo no es válida
+        raise ValidationError(f"El correo electrónico no tiene un formato válido: {str(e)}")
 
 def validate_password(password):
     """Verifica que la contraseña cumpla con ciertos criterios de complejidad."""
@@ -74,10 +79,6 @@ def validate_fields(**fields):
 def generate_verification_code():
     return random.randint(10000, 99999)
 
-#funcion para notificar al usaurio 
-# def notification_user(request):
-#     print pass
-
 
 #verificar si existen los datos en la base de datos
 def verify_exists(**fields):
@@ -87,8 +88,6 @@ def verify_exists(**fields):
         if CustomUser.objects.filter(**{field_name: field_value}).exists():
             # Lanza una excepción inmediatamente con un mensaje específico
             raise ValidationError(f"El {field_name} ya existe, intenta con otro.")
-
-
 
 
 # Funcion para verificar el codigo y la activacion de su cuenta
@@ -138,26 +137,56 @@ def verify_code(request):
 
 
 
-APIKEYCOUNTRY = 'num_live_EUGXAxGMNzGUyImA1Ck1OP6d9vEVzohR5vj3taIp'  # Número máximo de intentos permitidos
-
-def validate_phone_number(phone_number,country_code,api_key):
+def lookup_phone_number(phone_number, country_code):
+    api_key = settings.NUMLOOKUP_API_KEY  # Acceder a la clave desde settings
     url = f"https://api.numlookupapi.com/v1/validate/{country_code}{phone_number}?apikey={api_key}"
     headers = {
         'Authorization': f'Bearer {api_key}'
     }
     try:
         response = requests.get(url, headers=headers)
-        if response.status_code == 200: 
-            data  = response.json()
-            valid = data.get('valid')
-            if valid != True :
-                raise ValidationError("el numero no existe, intenta con otro")
+        if response.status_code == 200:
+            return response.json()
         else:
             return {'error': f"Error: {response.status_code} - {response.text}"}
     except Exception as e:
-        return JsonResponse({'error': 'error behind the method', 'details': str(e),'number': phone_number,'api': api_key}, status=500)
+        return {'error': 'error behind the method', 'details': str(e), 'number': phone_number, 'api': api_key}
 
 
+def validate_phone_number(phone_number, country_code):
+    api_key = settings.NUMLOOKUP_API_KEY  # Acceder a la clave desde settings
+    url = f"https://api.numlookupapi.com/v1/validate/{country_code}{phone_number}?apikey={api_key}"
+    headers = {
+        'Authorization': f'Bearer {api_key}'
+    }
+    try:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            valid = data.get('valid')
+            if not valid:
+                raise ValidationError("El número no existe, intenta con otro")
+        else:
+            return {'error': f"Error: {response.status_code} - {response.text}"}
+    except Exception as e:
+        return {'error': 'error behind the method', 'details': str(e), 'number': phone_number, 'api': api_key}
+
+
+def phone_lookup_view(request):
+    if request.method == 'POST':
+        phone_number = request.POST.get('phone_number')
+        country_code = request.POST.get('country_code')
+        try:
+            # Consultar el API usando la función que ahora accede al API Key directamente
+            result = lookup_phone_number(phone_number, country_code)
+            return JsonResponse(result)
+        except Exception as e:
+            return JsonResponse({'error': 'number null', 'details': str(e), 'number': phone_number, 'country_code': country_code}, status=500)
+    return render(request, 'prueba.html')
+
+
+
+#funcion para registrar a los usuarios
 def signup(request):
     if request.method == "POST":
         #Obtener los datos de entrada y limpiamos los espacios en blaco del incio y del final del texto
@@ -178,13 +207,14 @@ def signup(request):
             validate_email(email)
             #validacion de la contraseña
             validate_password(password)
+            
             #validacion para corrobar si ya existen
             verify_exists(username=username, email=email)
             if CustomUser.objects.filter(phone = phone_number).exists():
                 print("el numero telefonico ya esta registrado")
                 raise ValidationError("ingresa otro numero telefonico")
             
-            validate_phone_number(phone_number,country_code,APIKEYCOUNTRY)
+            validate_phone_number(phone_number,country_code)
             
             user = CustomUser(
                 first_name = names,
@@ -240,12 +270,7 @@ def signup(request):
     return render(request, "signup.html")
 
 
-
-
-
-MAX_ATTEMPTS = 5  # Número máximo de intentos permitidos
-BLOCK_TIME = timedelta(seconds=15)  # Tiempo de bloqueo de 15 segundos se cambiara el tiempo
-
+#funcion para logear al usuario
 def login(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -258,9 +283,9 @@ def login(request):
             attempts = LoginAttempt.objects.filter(username=username, ip_address=ip_address)
             
             # Verificar si se han superado los intentos permitidos
-            if attempts.count() >= MAX_ATTEMPTS:
+            if attempts.count() >= settings.MAX_ATTEMPTS:
                 last_attempt = attempts.order_by('-timestamp').first()
-                if last_attempt and last_attempt.timestamp + BLOCK_TIME > timezone.now():
+                if last_attempt and last_attempt.timestamp + settings.BLOCK_TIME > timezone.now():
                     print("Demasiados intentos. Por favor, inténtalo más tarde.")
                     return render(request, "login.html", {"error": "Demasiados intentos. Por favor, inténtalo más tarde."})
 
@@ -288,47 +313,73 @@ def login(request):
     return render(request, "login.html")
 
 
-#para las funciones snake_case
-#para las clases CamelCase o PascalCase
+
+
+#Funcion para mostrar los datos del usuario
+
+@login_required
+def user_profile(request):
+    user = request.user  
+
+    # if request.method == 'POST':
+    #     new_email = request.POST.get('email')
+
+    #     # Validar el nuevo correo
+    #     try:
+    #         validated_email = validate_email(new_email)
+    #     except ValidationError as e:
+    #         messages.error(request, str(e))
+    #         return JsonResponse({'success': False, 'message': str(e)}, status=400)  # Devuelve error
+
+    #     verification_code = generate_verification_code()
+
+    #     try:
+    #         send_mail(
+    #             'Código de verificación',
+    #             f'Tu código de verificación es: {verification_code}',
+    #             settings.DEFAULT_FROM_EMAIL,
+    #             [validated_email],
+    #             fail_silently=False,
+    #         )
+    #         request.session['verification_code'] = verification_code
+    #         request.session['new_email'] = validated_email
+            
+    #         messages.success(request, 'Se ha enviado un código de verificación a tu nuevo correo. Por favor, verifica tu correo.')
+    #         return JsonResponse({'success': True, 'redirect': 'verify/code'})  # Devuelve la redirección
+    #     except Exception as e:
+    #         messages.error(request, f'Error al enviar el correo: {str(e)}')
+    #         return JsonResponse({'success': False, 'message': str(e)}, status=400)  # Devuelve error
+    
+    return render(request, "user_profile.html", {"user": user})
+
 
 
 
 @login_required
-def user_profile(request):
-    
-    return render(request, "user_profile.html", {"username": request.user.username})
+def verify_password(request):
+    if request.method == "POST":
+        password = request.POST.get('password')
+        user = authenticate(username=request.user.username, password=password)
 
-
-
-# Función que consulta el API
-def lookup_phone_number(api_key, phone_number,country_code):
-    url = f"https://api.numlookupapi.com/v1/validate/{country_code}{phone_number}?apikey={api_key}"
-    headers = {
-        'Authorization': f'Bearer {api_key}'
-    }
-    try:
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200: 
-            return response.json()
+        if user is not None:
+            return JsonResponse({'success': True})
         else:
-            return {'error': f"Error: {response.status_code} - {response.text}"}
-    except Exception as e:
-        return JsonResponse({'error': 'error behind the method', 'details': str(e),'number': phone_number,'api': api_key}, status=500)
-    
-# Vista para recibir el número y mostrar el resultado
-def phone_lookup_view(request):
+            return JsonResponse({'success': False})
+
+    return JsonResponse({'success': False})
+
+
+#FALTA IMPLEMENTAR LOGICA PARA LA VERIFICACION DE UN 
+#CORREO VALIDO Y NO REISTREN UN CORREO Q NO SEA VALIDO O Q NO EXISTA
+@login_required
+def edit_profile(request):
     if request.method == 'POST':
-        phone_number = request.POST.get('phone_number')
-        country_code = request.POST.get('country_code')
-        api_key = APIKEYCOUNTRY  # Sustituir con tu API Key
-        print(type(phone_number))
-        try:
-            # Consultar el API
-            result = lookup_phone_number(api_key, phone_number,country_code)
-            # Devolver los resultados en formato JSON
-            return JsonResponse(result)
-        except Exception as e:
-            # Captura cualquier otro tipo de excepción
-            return JsonResponse({'error': 'number null', 'details': str(e),'number': phone_number, 'country_code':country_code}, status=500)
-    # En caso de GET, muestra la página con el formulario
-    return render(request, 'prueba.html')
+        user = request.user
+        user.username = request.POST.get('username')
+        user.email = request.POST.get('email')
+        user.phone = request.POST.get('phone')
+        user.save()  # Guardamos los cambios
+
+        return redirect('user_profile')  # Redirigimos al perfil una vez actualizado
+
+    return redirect('user_profile')
