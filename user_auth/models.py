@@ -8,7 +8,7 @@ class CustomUser(AbstractUser):
     #code_pais
     country_code = models.CharField(max_length=4,blank= True,null=True)
     def __str__(self):
-        return self.username
+        return f"Mi username: {self.username}" 
     
 class LoginAttempt(models.Model):
     username = models.CharField(max_length=10)

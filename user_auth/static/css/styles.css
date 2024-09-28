@@ -78,11 +78,6 @@ body{
     background-color: #ffffff;
 }
 
-#phone_number.entrada {
-    border-bottom-left-radius: 0; /* Elimina el borde redondeado */
-
-    border-top-left-radius: 0;
-}
 .pregunta-restablecer-contra{
   
     justify-items: flex-end;

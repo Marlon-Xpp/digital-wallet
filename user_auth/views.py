@@ -14,6 +14,10 @@ from django.utils import timezone
 from datetime import timedelta
 import requests
 
+
+
+from share.views import *
+
 #clases importadas
 
 # Create your views here.
@@ -27,6 +31,10 @@ import requests
 #Edición de perfil:
 #Cambio de contraseña(opcional)
 #Seguridad del perfil:
+
+
+
+
 
 
 
@@ -136,7 +144,11 @@ def signup(request):
 
             #creamos el wallet principal del usuario
 
+            if (first_wallet_created(user)):
+                print("Billetera creada correctamente")
 
+
+            
 
 
             print("Usuario guardado correctamente.")

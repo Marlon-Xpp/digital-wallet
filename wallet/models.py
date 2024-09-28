@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from decimal import Decimal
 
 from user_auth import models as md
     
@@ -31,6 +32,9 @@ class Wallet(models.Model):
     def get_balance(self):
         return self.balance
     
+    def get_status(self):
+        return self.status
+    
     def deposit(self, amount):
         self.balance += amount
         self.save()
@@ -38,10 +42,15 @@ class Wallet(models.Model):
     # Método para agregar fondos
     def add_funds(self, amount):
         if amount > 0:
-            self.balance += amount
+            self.balance += Decimal(amount)
             self.save()
         else:
             raise ValueError("El monto debe ser positivo.")
+    
+    def transference_funds(self, amount):
+        if amount > 0:
+            self.balance -= Decimal(amount)
+            self.save()
 
     # Método para retirar fondos
     def withdraw_funds(self, amount):
@@ -85,17 +94,34 @@ class PaymentMethod(models.Model):
         self.save()
     
 
+
+
+
+
 class Transference(models.Model):
+    "solo lo ve el usuario : username , monto , tipo "  
+    "solo la base de datos : nombre apellido , username, monto, tipo , estado "
+
     TRANSFERENCE_CHOICES = [
         ('SEND', 'send'),
         ('REQUEST', 'request'),
     ]
     idWallet = models.ForeignKey(Wallet,on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=250,null=False,blank=False)
+    lastname = models.CharField(max_length=250,null=False,blank=False)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    username = models.CharField(max_length=250, null=False, blank=False)
+
+    description = models.CharField(max_length=250, default="")
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00) 
     type_transference = models.CharField(max_length=100, choices= TRANSFERENCE_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
 
     def __str__(self):
         return f'Transference: {self.get_type_transference_display()} - Amount: {self.amount}'
+
+
 
     # Método para realizar una transferencia
     def execute_transference(self, target_wallet):
@@ -110,6 +136,7 @@ class Transference(models.Model):
             # Se podría implementar la lógica de solicitud aquí
             pass
         
+
     #def history_transference(self, target_wallet):
         #
 
