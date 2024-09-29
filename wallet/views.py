@@ -170,6 +170,9 @@ class IncompleteRequestDelete():
 
     def get_context_data(self,):
         pass
+    
+    
+
 #FUNCIONALIDADES
 #Gestión del saldo:
 #Envío de dinero:

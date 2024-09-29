@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/send_receive.css" %}">
+    <link rel="stylesheet" href="{% static "css/footer.css" %}">
+    <link rel="stylesheet" href="{% static "css/header.css" %}">
+
+
+    <title>Document</title>
+</head>
+<body>
+    {% include "header.html" %}
+
+
+    <main class="send-receive">
+
+        <div class="card qr-code-card">
+            <h2 class="card-title">Código QR para Enviar/Recibir</h2>
+            <p class="qr-description">Genera tu código QR para facilitar las transacciones. Escanea el código QR de otros usuarios para enviarles dinero rápidamente.</p>
+            <button id="generateQRCode" class="form-button qr-button">Generar Código QR</button>
+            <div id="qrCodeContainer" class="qr-code-container">
+                <!-- Aquí se mostrará el código QR generado -->
+            </div>
+        </div>
+        
+        <div class="card send-money-card">
+            <h2 class="card-title">Enviar Dinero</h2>
+            <form id="sendMoneyForm" class="money-form">
+                <label class="form-label" for="recipient">Destinatario:</label>
+                <input class="form-input" type="text" id="recipient" placeholder="Ingrese el correo o número de teléfono" required>
+                
+                <label class="form-label" for="amount">Monto:</label>
+                <input class="form-input" type="number" id="amount" placeholder="Ingrese el monto" required>
+                
+                <label class="form-label" for="message">Mensaje (opcional):</label>
+                <textarea class="form-textarea" id="message" placeholder="Escriba un mensaje..."></textarea>
+                
+                <button class="form-button send-button" type="submit">Enviar Dinero</button>
+            </form>
+        </div>
+    
+        <div class="card request-money-card">
+            <h2 class="card-title">Solicitar Dinero</h2>
+            <form id="requestMoneyForm" class="money-form">
+                <label class="form-label" for="requester">Solicitante:</label>
+                <input class="form-input" type="text" id="requester" placeholder="Ingrese su correo o número de teléfono" required>
+                
+                <label class="form-label" for="requestAmount">Monto:</label>
+                <input class="form-input" type="number" id="requestAmount" placeholder="Ingrese el monto" required>
+                
+                <label class="form-label" for="requestMessage">Mensaje (opcional):</label>
+                <textarea class="form-textarea" id="requestMessage" placeholder="Escriba un mensaje..."></textarea>
+                
+                <button class="form-button request-button" type="submit">Solicitar Dinero</button>
+            </form>
+        </div>
+    
+        <div class="card history-card">
+            <h2 class="card-title">Historial de Envíos y Recepciones</h2>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th class="table-header">Fecha</th>
+                        <th class="table-header">Tipo</th>
+                        <th class="table-header">Monto</th>
+                        <th class="table-header">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-row">
+                        <td class="table-data">2024-09-29</td>
+                        <td class="table-data">Envío</td>
+                        <td class="table-data">$50.00</td>
+                        <td class="table-data">Completado</td>
+                    </tr>
+                    <tr class="table-row">
+                        <td class="table-data">2024-09-28</td>
+                        <td class="table-data">Recepción</td>
+                        <td class="table-data">$75.00</td>
+                        <td class="table-data">Completado</td>
+                    </tr>
+                    <!-- Más filas de historial pueden ser añadidas aquí -->
+                </tbody>
+            </table>
+        </div>
+    
+        
+    </main>
+
+
+
+    {% include "footer.html" %}
+</body>
+</html>

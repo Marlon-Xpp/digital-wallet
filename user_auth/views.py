@@ -295,6 +295,7 @@ def login(request):
             
             if user is not None:
                 attempts.delete()# Eliminar registros de intentos fallidos
+                #inciar sesion a nivel de backend para avisarles a las funciones que el usaurio esta logeado
                 auth_login(request, user)
                 print("la autentificacion fue exitosa")
                 return redirect("index")  # Redirigir a la vista deseada

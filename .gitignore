@@ -1,2 +1,2 @@
 # Ignorar el entorno virtual
-venv/
+.venv/
