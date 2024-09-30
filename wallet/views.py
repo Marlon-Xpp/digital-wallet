@@ -7,6 +7,12 @@ from wallet import models
 #AQUI VA LA LOGICA  DE LA APLICACION WALLET
 
 #Gestion del saldo
+#Mostrar saldo
+#pasarela de pago (marlon)
+#recargar dinero
+#crear tarjeta virtuales(marlon)
+
+
 class Account():
 
     @login_required
