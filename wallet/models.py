@@ -1,21 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from decimal import Decimal
-
 from user_auth import models as md
-    
-#class User(models.Model):
-    #name = models.CharField(max_length=255)
-    #lastname = models.CharField(max_length=255)
-    #tenma de seguridad !los nombres y apellidos al hacer la transferencia
-    #username = models.CharField(max_length=150, unique=True)  # Nombre de usuario único
-    #email = models.EmailField(unique=True)  # Correo único
-    #hone_number = models.CharField(max_length=10, blank=True, null=True)
 
-    #def __str__(self):
-    #    return self.username
-    
-    
+
 class Wallet(models.Model):
     user = models.OneToOneField(md.CustomUser, on_delete=models.CASCADE)  # Relación uno a uno con el usuario
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Saldo de la billetera
@@ -135,61 +122,16 @@ class Transference(models.Model):
         elif self.type_transference == 'REQUEST':
             # Se podría implementar la lógica de solicitud aquí
             pass
-        
 
-    #def history_transference(self, target_wallet):
-        #
-
-
-
-#class Account(models.Model):
-#    balance = models.FloatField(default=0.00)#
-
-#    def __str__(self):
-#        return 'Account: %s' % self.payment.user.username
-
-#    def get_update_url(self):
-#        return reverse('account_transfer', kwargs={'pk': self.pk})
-
-#    def save(self, *args, **kwargs):
-#        # ensure that the database only stores 2 decimal places
-#        self.balance = round(self.balance, 2)
-#        super(Account, self).save(*args, **kwargs)
-
-#da quen envcio
-
-#monto
-#nombre de quien envio
 
 #numero usuario
 #nombre
 #descripcion
-
-
-
-
 #actividad
 #payment
 #deposit
-
-
 #fecha
-#hora mundial - hora zonal
-
-# settings - cambiar hora de zona 
-
-
-#los 3 utlimos numeros del telefono
-
 #billetera - un iq qr
-
-
-
-
-# numero indicar pais . : no ingresar letras y solo numeros : Tamaño de numero de acuerdo al indicador de pais
-#numero de celular
-
-
 
 #campo numero ya existe:  codigo postal pais
 #ingles

@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
+
 from wallet.models import Wallet ,Transference
 from django.core.exceptions import ObjectDoesNotExist
+
+
 from share import models as ShareMD
 
 # Create your views here.
@@ -11,8 +15,6 @@ from share import models as ShareMD
 #Gestion del saldo
 class Account():
     
-
-    @login_required
     def __init__(self):
         self.user = ""
         
@@ -33,12 +35,7 @@ class Account():
          #  wallet.save()
         return render(request,"wallet.html",{})
         
-   # def change_type_cell    
-
-    def recharge_sldo():
-        pass
-    
-    
+    @login_required 
     #Informacion sobre la Wallet
     def PersonWallet(request):
     # Obtener el usuario actual
@@ -50,13 +47,6 @@ class Account():
 
         return render(request,'wallet.html',{'wallet_currency' : wallet_currency })
 
-    #Informacion sobre el balance
-    def ViewBalance(Request):
-        data= {"Nuevo": "hola"}
-
-        return render(Request,'viewBalance.html',data)
-        pass
-
 
 #Envío de dinero:
 
@@ -64,14 +54,7 @@ class Send(Account):
     
     def __init__(self,):
         pass
-
-    
-    #Busca al usuario
-    def getQueryUsername(self,):
         
-        pass
-    
-
     #Metodo para verificar si el usuario existe, no puede ser el mismo usuario
     @classmethod
     def VerifyUser(cls,usernameUser, requestuser):
@@ -103,6 +86,7 @@ class Send(Account):
             return False
 
 
+    @login_required 
     def sendUser(request):
         if request.method == 'POST':
             
@@ -151,17 +135,6 @@ class Send(Account):
 
 
 
-    def sendMoney(request):
-        
-        pass
-
-    
-    #Obtiene al usuario
-    def get_context_data():
-        pass
-
-
-
 #Send
 class SendMoney(Account):
     def get_username(self,name):
@@ -181,48 +154,32 @@ class SendError():
         return render(request, '',{'nbar':'error'})
     
 
-
-#Recepción de dinero:
-
-
-#Request
-
-#class RequestSearchUser():
-
-    def get_context_data(self, **kwargs):
-       pass
-
-#class RequestMoney():
-
-    def get_context_data(self, **kwargs):
-
+class paymethod():
+    def __init__(self) -> None:
         pass
-    def form_valid(self, form):
 
-
-       pass #return HttpResponseRedirect(reverse_lazy('request_success'))
-
-
-class RequestSuccess():
-    def get(self, request):
+    def get_api():
+        #Utilizancion del api de metodo pago, para obtener el pago directo a la app
         pass
-        #return render(request, 'app/request_success_page.html', {'nbar': 'request'})
 
-
-#Recieve
- 
-class Recieve():
-
-    def get(self):
-
+    def get_method():
         pass
 
 
+class Recharge():    
+    def get_recharge_view(request):
+        
 
+        render(request,"",{})
 
+    def get(self,amount):
+        return amount
+        pass
 
 #Historial de transacciones:
 class Activity(Account):
+    @login_required
+    @transaction.atomic
 
     def getHistory(request):
         message = ""
@@ -245,53 +202,24 @@ class Activity(Account):
             'history_send': history_send,
             'history_request': history_request,
             'message': message,
-            'username': request.user.username,
-        })
-    #Historial de transferencias Envio
-    def HistoryTransferSend():
-        pass
-
-    def HistoryTransferRecive():
-        pass
-
-
-#Seguridad de las transacciones:
-
+            'username': request.user.username})
         
-        
-#Integraciones con servicios de pago externos (opcional):
-
-class IncompletePayment():
-
-    def get(self, request, pk):
-        pass
-
-class IncompletePaymentConfirm():
     
-    def get_context_data(self, **kwargs):
-        pass
-
-    def form_valid(self, form):
-       pass
-
-class PaymentComplete():
-    def get(self, request):
-        return render(request, 'app/payment_success.html', {'nbar': 'incomplete'})
-
-class IncompleteRequest():
-    permission_required = 'app.view_transaction'
-
-    def get(self, request):
-        pass
+    def NotificationUser(UserSend):
+        #Mostrar la ultima transferencia realizada al usuario
+        NotifyPush = Transference.objects.get(user=UserSend)
         
-class IncompleteRequestDelete():
-    #model = Transaction
-    #template_name = 'app/request_delete.html'
-    #success_url = reverse_lazy('incomplete')
-    #permission_required = 'app.delete_transaction'
+        
+        
+#Integraciones con servicios de pago externos (opcional) Api:
 
-    def get_context_data(self,):
+
+class ValidationError():
+    def __init__(self) -> None:
         pass
+
+    
+
 #FUNCIONALIDADES
 #Gestión del saldo:
 #Envío de dinero:
@@ -299,7 +227,7 @@ class IncompleteRequestDelete():
 #Historial de transacciones:
 #Seguridad de las transacciones:
 #Integraciones con servicios de pago externos (opcional):
+
 @login_required
 def activity(request):
     return render(request, "activity.html", {"username": request.user.username})
-
