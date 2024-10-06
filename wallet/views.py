@@ -1,12 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 
-from wallet.models import Wallet ,Transference
-from django.core.exceptions import ObjectDoesNotExist
+import stripe.webhook
 
+from wallet.models import Wallet 
+from django.core.exceptions import ObjectDoesNotExist
+from transactions.models import Transference
 
 from share import models as ShareMD
+import stripe
+
+
 
 # Create your views here.
 
@@ -135,6 +140,7 @@ class Send(Account):
 
 
 
+
 #Send
 class SendMoney(Account):
     def get_username(self,name):
@@ -168,13 +174,59 @@ class paymethod():
 
 class Recharge():    
     def get_recharge_view(request):
-        
+        #api
 
         render(request,"",{})
 
-    def get(self,amount):
+    def get_api(self,amount):
+
+
+        customer = stripe.Customer.create()
+        try:
+            event = stripe.Webhook.construct_event()
+        except:
+            print("exit")
         return amount
         pass
+
+
+@login_required(login_url='login')
+def product_page(request):
+    stripe.api_key = "sk_test_51Q5b4iP8KIphw2lwjcmTKTdk8aZFJyCbtlspd7Po4TQMDMt6h0HVBB0xuHZGm1U3u5pnM4Y2X22BIoZPz2YEJDHH00Ec49KdAI"
+    
+    if request.method == 'POST':
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': 2.00,
+                    'quantity': 1,
+                }
+            ],
+            mode='payment',
+            customer_creation= 'always',
+            success_url='/paymente_successful?session_id={}',
+            cancel_url='/payment_cancelled',
+        
+        ),
+        return redirect(checkout_session.url, code =303)
+    return Jso
+
+def a():
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[{
+            'price': 'precio_id',  # Reemplaza con el ID del precio creado
+            'quantity': 1,
+        }],
+        mode='payment',
+        success_url='https://tu_sitio.com/exito?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url='https://tu_sitio.com/cancelar',
+    )
+    return redirect(session.url, code=303)
+
+
+
 
 #Historial de transacciones:
 class Activity(Account):
@@ -227,7 +279,6 @@ class ValidationError():
 #Historial de transacciones:
 #Seguridad de las transacciones:
 #Integraciones con servicios de pago externos (opcional):
-
 @login_required
 def activity(request):
     return render(request, "activity.html", {"username": request.user.username})

@@ -1,7 +1,8 @@
 from django.db import models
 from decimal import Decimal
 from user_auth import models as md
-
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 class Wallet(models.Model):
     user = models.OneToOneField(md.CustomUser, on_delete=models.CASCADE)  # Relación uno a uno con el usuario
@@ -60,10 +61,6 @@ class Wallet(models.Model):
         self.save()
 
 
-
-
-
-    
 class PaymentMethod(models.Model):
     description = models.CharField(max_length=250, default="")
     payment = models.OneToOneField(Wallet, on_delete=models.CASCADE)
@@ -79,49 +76,21 @@ class PaymentMethod(models.Model):
     def change_method(self, new_method_name):
         self.MethodName = new_method_name
         self.save()
-    
 
 
 
 
 
-class Transference(models.Model):
-    "solo lo ve el usuario : username , monto , tipo "  
-    "solo la base de datos : nombre apellido , username, monto, tipo , estado "
+class UserPayment(models.Model):
+    app_user = models.ForeignKey(Wallet,on_delete=models.CASCADE)
+    payment_bool = models.BooleanField(default=False)
+    stripe_checkout_id = models.CharField(max_length=500)
 
-    TRANSFERENCE_CHOICES = [
-        ('SEND', 'send'),
-        ('REQUEST', 'request'),
-    ]
-    idWallet = models.ForeignKey(Wallet,on_delete=models.CASCADE)
-
-    name = models.CharField(max_length=250,null=False,blank=False)
-    lastname = models.CharField(max_length=250,null=False,blank=False)
-    phone = models.CharField(max_length=15, blank=True, null=True)
-    username = models.CharField(max_length=250, null=False, blank=False)
-
-    description = models.CharField(max_length=250, default="")
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00) 
-    type_transference = models.CharField(max_length=100, choices= TRANSFERENCE_CHOICES)
-    created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
-
-    def __str__(self):
-        return f'Transference: {self.get_type_transference_display()} - Amount: {self.amount}'
-
-
-
-    # Método para realizar una transferencia
-    def execute_transference(self, target_wallet):
-        if self.type_transference == 'SEND':
-            # Verifica si la billetera tiene fondos suficientes
-            if self.idWallet.balance >= self.amount:
-                self.idWallet.withdraw_funds(self.amount)
-                target_wallet.add_funds(self.amount)
-            else:
-                raise ValueError("Fondos insuficientes en la billetera de origen.")
-        elif self.type_transference == 'REQUEST':
-            # Se podría implementar la lógica de solicitud aquí
-            pass
+@receiver(post_save,sender=Wallet)
+def create_user_payment(sender, instance,created, **kwargs):
+    if created:
+        UserPayment.objects.create(app_user = instance)
+    pass
 
 
 #numero usuario

@@ -1,5 +1,6 @@
 from wallet import views as wv
 from user_auth.models import CustomUser 
+from transactions.models import Transference
 from wallet.models import Wallet
 
 
@@ -11,9 +12,13 @@ from wallet.models import Wallet
 #        return False
 
 
+def get_instance_Wallet():
+  wallet = Wallet()
+
+  return wallet
+
 def user_query(usernameUser,method_get):
     try:
-
       user = CustomUser.objects
 
       match method_get:

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import Account,Transference , Send
+from .views import Account, Send
 from wallet import views
 urlpatterns = [
 #    path('', views.), #agregas las rutas desde el archivo views y la funcion que creaste
@@ -32,5 +32,6 @@ urlpatterns = [
 
     #path('history/',Transference.HistoryTransferSend, name="history"),
 
-    path('activity/',  views.Activity.getHistory, name="activity")
+    path('product_page',views.product_page, name='product_page')
+
 ]

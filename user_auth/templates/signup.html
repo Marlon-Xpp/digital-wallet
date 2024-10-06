@@ -6,9 +6,9 @@
     <title>Signup  Page</title>
     {% load static  %}
     <link rel="stylesheet" href="{% static "css/styles.css" %}">
-    
-    <link rel="stylesheet" href="{% static "css/style_login_fields.css" %}">
+
     <link rel="stylesheet" href="{% static "css/footer.css" %}">
+    <link rel="stylesheet" href="{% static "css/verify_code.css" %}">
     
 
 </head>
@@ -20,68 +20,62 @@
             <img  class="imagen" src="https://www.ecured.cu/images/4/4c/Bandera_Peru.png" alt="" >
         </a>
     </header>
-    <main class="menu-principal">
+    <main class="contenedor-centrado">
+        <div class="menu-principal">
 
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <div class="mensaje-alerta">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </ul>
-        {% endif %}
+            <section class="seccion-formulario">
+                <h2 class="texto-principal">
+                    Crear tu cuenta
+                </h2>
 
-        <section class="seccion-formulario">
-            <h2 class="texto-principal">
-                Crear tu cuenta
-            </h2>
-            <form action="" method="POST" class="formulario">
-                {% csrf_token %}
-                <input class="entrada" type="text" id="names" name="names" placeholder="Nombres" required>
-                <input class="entrada" type="text" id="lastname" name="lastname" placeholder="Apellidos" required>
-                <input class="entrada" type="text" id="username" name="username" placeholder="Username" required>
-                
-                {% comment %} agregar el campo codigo postal y telefono le pones la misma clase para q los estilos no afecte{% endcomment %}
+                {% comment %} mensaje de error {% endcomment %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <div class="mensaje-alerta">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% comment %} termina el mensaje de error {% endcomment %}
 
-                
+                <form action="" method="POST" class="formulario">
+                    {% csrf_token %}
+                    <input class="entrada" type="text" id="names" name="names" placeholder="Nombres" required>
+                    <input class="entrada" type="text" id="lastname" name="lastname" placeholder="Apellidos" required>
+                    <input class="entrada" type="text" id="username" name="username" placeholder="Username" required>
                     
+                    {% comment %} agregar el campo codigo postal y telefono le pones la misma clase para q los estilos no afecte{% endcomment %}
+                    <input class= "entrada" type="hidden" id="country_code" name="country_code" required> 
                 
-                <input class= "entrada" type="hidden" id="country_code" name="country_code" required> 
-                
-                
-                <div class="custom-select" id="country_select">
-                    <div class="select-selected">Seleccionar país</div>
-                    
-                    
-                    
-                    <div class="select-items">
-                        <div data-country-code="US" data-dial-code="+1">
-                            <img class="flag-img" src="https://flagsapi.com/US/shiny/64.png" alt="US">
-                            Estados Unidos (+1)
+                    <div class="custom-select" id="country_select">
+                        <div class="select-selected">Seleccionar país</div>
+
+                        <div class="select-items">
+                            <div data-country-code="US" data-dial-code="+1">
+                                <img class="flag-img" src="https://flagsapi.com/US/shiny/64.png" alt="US">
+                                Estados Unidos (+1)
+                            </div>
+                            <div data-country-code="PE" data-dial-code="+51">
+                                <img class="flag-img" src="https://flagsapi.com/PE/shiny/64.png" alt="PE"> Perú (+51)
+                            </div>
+                            <div data-country-code="GB" data-dial-code="+44">
+                                <img class="flag-img" src="https://flagsapi.com/GB/shiny/64.png" alt="GB"> Reino Unido (+44)
+                            </div>
+                            <!-- Agrega más países aquí -->
                         </div>
-                        <div data-country-code="PE" data-dial-code="+51">
-                            <img class="flag-img" src="https://flagsapi.com/PE/shiny/64.png" alt="PE"> Perú (+51)
-                        </div>
-                        <div data-country-code="GB" data-dial-code="+44">
-                            <img class="flag-img" src="https://flagsapi.com/GB/shiny/64.png" alt="GB"> Reino Unido (+44)
-                        </div>
-                        <!-- Agrega más países aquí -->
+                        <input class= "entrada" type="text" id="phone_number" name="phone_number" placeholder="Número de teléfono" required>
                     </div>
 
 
-
+                    <input class="entrada" type="email" id="email" name="email" placeholder="Correo electronico" required>
+                    <input class="entrada" type="password" id="password" name="password" placeholder="Contraseña" required>
                     
-                    <input class= "entrada" type="text" id="phone_number" name="phone_number" placeholder="Número de teléfono" required>
-                </div>
-
-
-                <input class="entrada" type="email" id="email" name="email" placeholder="Correo electronico" required>
-                <input class="entrada" type="password" id="password" name="password" placeholder="Contraseña" required>
-                <button type="submit" class="boton-iniciar-sesion">CREAR TU CUENTA</button>
-            </form>
-            
-        </section>
+                    <button type="submit" class="boton-iniciar-sesion">CREAR TU CUENTA</button>
+                </form>
+                
+            </section>
 
         <section class="seccion-otros-accesos">
             <span class="consulta-otros-accesos">
@@ -95,26 +89,26 @@
             </button>
         </section>
 
-        <section class="seccion-crear-cuenta">
-            <span  class="pregunta-crear-cuenta">
-                ¿Tienes una cuenta?
-            </span>
-            
-            <button class="boton-crear-cuenta" onclick="redirectLogin()">
-                INICIA SESION
-            </button>
-        </section>
+            <section class="seccion-crear-cuenta">
+                <span  class="pregunta-crear-cuenta">
+                    ¿Tienes una cuenta?
+                </span>
+                
+                <button class="boton-crear-cuenta" onclick="redirectLogin()">
+                    INICIA SESION
+                </button>
+            </section>
+        </div>
+        
     </main>
 
+    {% comment %} incluimos el archivo verify_code.html que es un modal {% endcomment %}
+    {% if verification_sent %}  {% comment %} hacemos una condicion de q si verification_set es true  {% endcomment %}
+        {% comment %} entonces muestrame lo q hay en verify_code.html {% endcomment %}
+        {% include "verify_code.html" %} 
+    {% endif %}
 
-
-
-
-
-
-
-
-
+    
     <script>
         document.querySelector('.select-selected').addEventListener('click', function() {
             this.nextElementSibling.classList.toggle('show');
@@ -140,6 +134,10 @@
             }
         });
     </script>
+
+
+
+
 
     {% include "footer.html" %}
 

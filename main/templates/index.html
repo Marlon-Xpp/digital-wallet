@@ -17,25 +17,194 @@
 
     <main class="menu-principal">
         <article class="articulo-principal">
-
-            <section class="menu-seccion-izquierdo" >
+            <section class="menu-seccion-izquierdo">
                 <div class="contenedor-izquierdo">
-                    <h2 class= "titulo-principal">WOPY PAY</h2>
-                    <p class= "texto-principal">Lorem ipsum  tenetur iusto explicabo ad ab, sint laborum libero. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor, amet!</p>
-                    <button class="boton-empezar" onclick="redirectLogin()">
-                        EMPEZAR
-                    </button>
+                    <h2 class="titulo-principal">WOPY PAY</h2>
+                    <p class="texto-principal">Lorem ipsum tenetur iusto explicabo ad ab, sint laborum libero. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor, amet!</p>
+                    <button class="boton-empezar" onclick="redirectLogin()">EMPEZAR</button>
                 </div>
-
             </section>
-
+    
             <section class="menu-seccion-derecho">
-                <img class="imagen-seccion-derecho" src="{% static "img/fondo_index.png" %}" alt="">
+                <img class="imagen-seccion-derecho" src="{% static 'img/fondo.png' %}" alt="Fondo principal">
             </section>
-
         </article>
 
+
+        <section class="seccion-servicios">
+            <h2 class="subtitulo">Nuestros Servicios</h2>
+            <div class="servicios">
+                <div class="servicio">
+                    <h3>Pagos en Línea</h3>
+                    <p>Procesa tus pagos en línea de manera segura y rápida con nuestro sistema encriptado.</p>
+                </div>
+                <div class="servicio">
+                    <h3>Pagos en Establecimientos</h3>
+                    <p>Aceptamos pagos en tiendas físicas a través de códigos QR o tarjetas.</p>
+                </div>
+                <div class="servicio">
+                    <h3>Seguridad de Datos</h3>
+                    <p>Tu información financiera está protegida bajo los más altos estándares de seguridad.</p>
+                </div>
+            </div>
+        </section>
+
+
+        {% comment %} aqui va la seccion {% endcomment %}
+
+        <section class="sobre-nosotros">
+            <div class="contenido-sobre-nosotros">
+                <div class="texto-sobre-nosotros">
+                    <h2 class="titulo-sobre-nosotros">Sobre Nosotros</h2>
+                    <p class="parrafo-sobre-nosotros">
+                        Somos una empresa dedicada a ofrecer soluciones financieras innovadoras. Nuestro objetivo es facilitar los pagos y hacer que las transacciones sean seguras y rápidas para todos nuestros clientes.
+                    </p>
+        
+                    <p class="parrafo-sobre-nosotros">
+                        <strong class="titulo-grande">Valores:</strong> Innovación, Seguridad, Transparencia y Atención al Cliente son los pilares que guían nuestro trabajo diario.
+                    </p>
+            
+                    <button class="btn-leer-mas">Leer más</button>
+                </div>
+                
+                <div class="contenedores">
+                    <div class="contenedor">
+                        <div class="icono">
+                            <div class="circulo">
+                                <img src=" {% static "img/icon-1.png" %} " alt="Icono 1">
+                            </div>
+                        </div>
+                        <h3>Titulo 1</h3>
+                        <p class="texto-parrafo-servicios"> quidem culpa a!emo laudantium quam praesentium unde que </p>
+                    </div>
+                    <div class="contenedor">
+                        <div class="icono">
+                            <div class="circulo">
+                                <img src="{% static "img/icon-2.png" %} " alt="Icono 2">
+                            </div>
+                        </div>
+                        <h3>Título 2</h3>
+                        <p class="texto-parrafo-servicios"> quidem culpa a!emo laudantium quam praesentium unde que</p>
+                    </div>
+                    <div class="contenedor">
+                        <div class="icono">
+                            <div class="circulo">
+                                <img src="{% static "img/icon-3.png" %} " alt="Icono 3">
+                            </div>
+                        </div>
+                        <h3>Título 3</h3>
+                        <p class="texto-parrafo-servicios" > quidem culpa a!emo laudantium quam praesentium unde que</p>
+                    </div>
+                    <div class="contenedor">
+                        <div class="icono">
+                            <div class="circulo">
+                                <img src="{% static "img/icon-4.png" %} " alt="Icono 4">
+                            </div>
+                        </div>
+                        <h3>Título 4</h3>
+                        <p class="texto-parrafo-servicios"> quidem culpa a!emo laudantium quam praesentium unde que</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        
+        
+    
+        <section class="informacion-empresa">
+            <div class="contenedor-imagen-fondo">
+                <img class="imagen-contenedor" src="{% static "img/fondo-contenedor.jpg" %} " alt="">
+            </div>
+            <div class="contenedor-informacion-empresa">
+                <h2 class="subtitulo">¿Qué es WOPY PAY?</h2>
+                <p class="descripcion">WOPY PAY es una empresa que ofrece soluciones financieras de pago rápido y seguro para negocios y consumidores. Facilitamos transacciones digitales a través de diversas plataformas para garantizar la mejor experiencia.</p>
+                
+            </div>
+            
+            
+        </section>
+    
+        
+    
+        <section class="seccion-cardview">
+            <h2 class="subtitulo">¿Cómo Funciona?</h2>
+            <div class="cardview-horizontal">
+                <div class="card-horizontal">
+                    <img src="{% static "img/icon-5.png" %} " alt="Función 1">
+                    <div class="card-texto">
+                        <h3>Registro Rápido</h3>
+                        <p>Regístrate en minutos y comienza a disfrutar de nuestros servicios.</p>
+                    </div>
+                </div>
+    
+                <div class="card-horizontal">
+                    <img src="{% static "img/icon-6.png" %}" alt="Función 2">
+                    <div class="card-texto">
+                        <h3>Pagos Instantáneos</h3>
+                        <p>Realiza pagos en segundos, de manera fácil y segura.</p>
+                    </div>
+                </div>
+    
+                <div class="card-horizontal">
+                    <img src="{% static "img/icon-7.png" %}" alt="Función 3">
+                    <div class="card-texto">
+                        <h3>Control Total</h3>
+                        <p>Mantén el control de todas tus transacciones desde una única plataforma.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        {% comment %} <section class="seccion-testimonios">
+            <h2 class="subtitulo">Lo que Dicen Nuestros Clientes</h2>
+            <div class="testimonios">
+                <div class="testimonio">
+                    <p>"WOPY PAY ha transformado la forma en que manejo mi negocio. ¡Muy recomendado!"</p>
+                    <h4>- Juan Pérez, Emprendedor</h4>
+                </div>
+    
+                <div class="testimonio">
+                    <p>"La rapidez y seguridad de WOPY PAY me da la tranquilidad que necesito en cada transacción."</p>
+                    <h4>- María López, Comerciante</h4>
+                </div>
+    
+                <div class="testimonio">
+                    <p>"El mejor sistema de pagos que he probado. Fácil de usar y con atención al cliente de calidad."</p>
+                    <h4>- Carlos Ramírez, Freelancer</h4>
+                </div>
+            </div>
+        </section>
+    
+        <section class="seccion-blog">
+            <h2 class="subtitulo">Últimas Noticias</h2>
+            <div class="blog-posts">
+                <div class="post">
+                    <img src="https://via.placeholder.com/150" alt="Noticia 1">
+                    <h3>Nuevas Funcionalidades en WOPY PAY</h3>
+                    <p>Descubre las nuevas herramientas que hemos lanzado para mejorar tu experiencia.</p>
+                </div>
+    
+                <div class="post">
+                    <img src="https://via.placeholder.com/150" alt="Noticia 2">
+                    <h3>WOPY PAY en el Evento Tech 2024</h3>
+                    <p>Participamos en uno de los eventos tecnológicos más importantes del año. Conoce más detalles.</p>
+                </div>
+    
+                <div class="post">
+                    <img src="https://via.placeholder.com/150" alt="Noticia 3">
+                    <h3>Pagos Internacionales en Tiempo Real</h3>
+                    <p>Ahora puedes hacer transferencias internacionales de manera instantánea y segura.</p>
+                </div>
+            </div>
+        </section> {% endcomment %}
+    
+        <section class="seccion-contacto">
+            <h2 class="subtitulo">Contáctanos</h2>
+            <p class="descripcion">¿Tienes alguna pregunta? ¡Estamos aquí para ayudarte! Envía un mensaje a nuestro equipo de atención al cliente.</p>
+            <button class="boton-contacto">Contáctanos</button>
+        </section>
     </main>
+    
 
 
     {% include "footer.html" %}
