@@ -3,7 +3,6 @@ import qrcode
 
 
 
-
 # Create your views here.
 # Enviar Dinero
 # Solicitar Dinero
@@ -11,7 +10,6 @@ import qrcode
 # Código QR para Enviar/Recibir (marlon)
 
 # def scan_qr_code():
-    
 #     print("se escaneara el cdogio qr")
 
 def transfer_qr(request):

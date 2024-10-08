@@ -28,5 +28,4 @@ urlpatterns = [
 
     path('history/',Transference.HistoryTransferSend, name="history"),
 
-    path('activity/', views.activity, name="activity")
 ]
