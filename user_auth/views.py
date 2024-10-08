@@ -188,29 +188,68 @@ def phone_lookup_view(request):
     return render(request, 'prueba.html')
 
 
-#CODIGO EN REVISION FALTA CORREGIR Y MODIFICAR COSAS
-def generate_user_qr_code(user):
-    # Crear datos para el código QR (puedes incluir información sensible aquí)
-    qr_data = f"user_id:{user.id}"
 
-    
+def generate_emvco_qr_code(user, amount=None, currency="604", country="PE", city="Lima"):
+    # Crear datos estructurados según el estándar EMVCo QR
+    emvco_data = [
+        "00", "01",  # Payload format indicator
+        "01", "12",  # Point of Initiation Method (QR dinámico)
+        "39", f"user_{user.username}",  # Username del usuario
+        "52", "0000",  # Merchant Category Code (0000 es genérico)
+        "53", currency,  # Código de la moneda (ISO 4217: 604 para Soles)
+        "58", country,  # Código del país (PE para Perú)
+        "59", "WopyPay",  # Nombre de la plataforma
+        "60", city,  # Ciudad del comercio o usuario
+        # Monto se puede agregar después
+        # AQUI FALTA AGREGAR EL CHECKSUM (lo agregaremos al final)
+    ]
+
+    # Si se proporciona un monto, añadirlo
+    if amount is not None:
+        emvco_data.append("54")
+        emvco_data.append(f"{amount:.2f}")  # Monto a transferir
+
+    # Unir los datos en el formato correcto EMVCo (ejemplo: tag+length+value)
+    qr_data = "".join([f"{tag}{len(value):02}{value}" for tag, value in zip(emvco_data[::2], emvco_data[1::2])])
+
+    # Calcular CRC y añadir al final
+    crc = calculate_crc(qr_data)
+    qr_data += crc  # Añadir el CRC al final de los datos
+
     # Generar el código QR
     qr = qrcode.QRCode(
         version=5,
         error_correction=qrcode.constants.ERROR_CORRECT_H,
         box_size=10,
-        border=4,
+        border=2,
     )
+    
     qr.add_data(qr_data)
     qr.make(fit=True)
 
     img = qr.make_image(fill_color="black", back_color="white")
     buffer = io.BytesIO()
     img.save(buffer, format="PNG")
-    
+
     # Guardar la imagen en el campo qr_code del usuario
     user.qr_code.save(f"user_{user.username}_qr.png", File(buffer), save=False)
     user.save()
+
+def calculate_crc(data):
+    # Usamos el algoritmo CRC-CCITT (XModem) para el cálculo
+    crc = 0xFFFF
+    polynomial = 0x1021
+
+    for byte in bytearray(data, 'utf-8'):
+        crc ^= (byte << 8)
+        for _ in range(8):
+            if crc & 0x8000:
+                crc = (crc << 1) ^ polynomial
+            else:
+                crc <<= 1
+            crc &= 0xFFFF  # Asegurarnos de que el CRC sigue siendo de 16 bits
+
+    return format(crc, '04X')
 
 
 #funcion para registrar a los usuarios
@@ -261,7 +300,7 @@ def signup(request):
             # user.save()
             
             # #generamos el código QR para el usuario
-            # generate_user_qr_code(user)
+            generate_emvco_qr_code(user)
             
             #imprimimos un msj de exito
             print("Usuario guardado correctamente. pero esta inactivo")

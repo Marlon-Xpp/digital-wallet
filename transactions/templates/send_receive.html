@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="{% static "css/send_receive.css" %}">
     <link rel="stylesheet" href="{% static "css/footer.css" %}">
     <link rel="stylesheet" href="{% static "css/header.css" %}">
-
-
     <title>Document</title>
 </head>
 <body>
@@ -21,8 +19,20 @@
             <h2 class="card-title">Código QR para Enviar/Recibir</h2>
             <p class="qr-description">Genera tu código QR para facilitar las transacciones. Escanea el código QR de otros usuarios para enviarles dinero rápidamente.</p>
             <button id="generateQRCode" class="form-button qr-button">Generar Código QR</button>
+            <button id="scanQRCode" class="form-button qr-button">Escanear Código QR</button>
+            
+
             <div id="qrCodeContainer" class="qr-code-container">
-                <!-- Aquí se mostrará el código QR generado -->
+                <span>TU CODIGO QR</span>
+                <div>
+                    <!-- Aquí se mostrará el código QR generado -->
+                    {% if qr_code_url %}
+                        <img src="{{ qr_code_url }}" alt="Código QR" style="max-width: 200px; max-height: 200px;"/>
+                    {% else %}
+                        <p>No se ha generado un código QR aún.</p>
+                    {% endif %}
+                    
+                </div>
             </div>
         </div>
         
@@ -90,8 +100,7 @@
         
     </main>
 
-
-
     {% include "footer.html" %}
+
 </body>
 </html>

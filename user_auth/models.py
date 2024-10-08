@@ -14,8 +14,6 @@ class CustomUser(AbstractUser):
     # -------------------FALTA CORREGIR ESTE CODIGO -------------------
     # Código QR
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
-    # Clave de encriptación
-    encryption_key = models.BinaryField(blank=True, null=True)
 
     def __str__(self):
         return self.username
