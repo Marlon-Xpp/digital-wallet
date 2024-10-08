@@ -9,13 +9,13 @@
 
     <div class="card qr-code-card">
         <h2 class="card-title">Pagar a {{ user_to_pay.username }}</h2>
-        
         <form method="POST">
             {% csrf_token %}
             <div class="form-group">
                 <label for="amount">Monto a transferir</label>
                 <input type="number" step="0.01" min="0" id="amount" name="amount" class="form-control" required>
             </div>
+
             <button type="submit" class="form-button qr-button">Transferir</button>
         </form>
     </div>
