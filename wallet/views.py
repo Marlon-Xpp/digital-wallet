@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.http import JsonResponse
 
 import stripe.webhook
+from django.conf import settings
 
 from wallet.models import Wallet 
 from django.core.exceptions import ObjectDoesNotExist
@@ -19,12 +21,9 @@ import stripe
 
 #Gestion del saldo
 class Account():
-    
     def __init__(self):
         self.user = ""
         
-
-
     def first_wallet(user):
     
         wallet = Wallet(user = user)
@@ -55,109 +54,6 @@ class Account():
 
 #Envío de dinero:
 
-class Send(Account):
-    
-    def __init__(self,):
-        pass
-        
-    #Metodo para verificar si el usuario existe, no puede ser el mismo usuario
-    @classmethod
-    def VerifyUser(cls,usernameUser, requestuser):
-        #username = ShareMD.user_query(username=usernameUser,"get_query_username")
-        #print(username)
-        try:
-             if requestuser != usernameUser:
-                user = ShareMD.user_query(usernameUser,"get_exits_user")
-                return user
-            
-        except: 
-            print("EL USUARIO NO EXISTE")
-            return False
-    
-    @classmethod       
-    def VerifyAmount(cls, user , amount):
-        try:
-            balance = Wallet.objects.get(user=user)
-            print(balance)
-            
-            if balance.get_balance() > 0 and balance.get_balance() >= amount :
-                print("Monto suficiente")
-                return True
-            else :
-                print("no hay saldo sufiente")
-                return False
-        except:
-            print("Error al ejecutar")
-            return False
-
-
-    @login_required 
-    def sendUser(request):
-        if request.method == 'POST':
-            
-            usernameUser = request.POST.get("username","").strip()
-            send_money = float(request.POST.get("send_money","").strip())
-
-
-            if Send.VerifyUser(usernameUser,request.user.username) and Send.VerifyAmount(request.user,send_money):
-
-                try:
-                
-                    user_wallet_send = ShareMD.user_query(usernameUser,"get_query_username")
-                    print(user_wallet_send)
-                    wallet_send = Wallet.objects.get(user=user_wallet_send)
-                    wallet_user = Wallet.objects.get(user=request.user)
-                    print(wallet_send)
-
-                    #Funcion de deposito
-                    Transference.objects.create(
-                        idWallet=wallet_user,
-                        name=request.user.name,
-                        lastname=request.user.last_name,
-                        phone=request.user.phone,
-                        username=request.user.username,
-                        amount=send_money,
-                        type_transference='SEND'
-                    )
-
-                    Transference.objects.create(
-                        idWallet=wallet_send,
-                        name=user_wallet_send.name,
-                        lastname=user_wallet_send.last_name,
-                        phone=user_wallet_send.phone,
-                        username=user_wallet_send.username,
-                        amount=send_money,
-                        type_transference='REQUEST'
-)
-
-                    print("Deposito realizado")
-                except:
-                    print("Error al realizar deposito")
-
-                    
-
-        return render(request,'send.html',{})
-
-
-
-
-#Send
-class SendMoney(Account):
-    def get_username(self,name):
-            pass
-            #Users = User.objects.get(username = name)
-            
-    def form_valid(self, form):
-        pass
-       # return HttpResponseRedirect(reverse_lazy('send_success'))
-
-class SendSuccess():
-    def get(self, request):
-        return render(request, 'app/send_success_page.html', {'nbar': 'send'})
-
-class SendError():
-    def get(self, request):
-        return render(request, '',{'nbar':'error'})
     
 
 class paymethod():
@@ -190,9 +86,55 @@ class Recharge():
         pass
 
 
+
+
+
+
 @login_required(login_url='login')
+def donation(request):
+    stripe.api_key = settings.STRIPE_TEST_API_KEY
+    
+    user = request.user
+
+    if request.method == 'POST':
+        #daots del usuario lgueado
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        amount = int(request.POST.get('amount'))  # Convertir a entero (centavos)
+        payment_method_id = request.POST.get('payment_method_id')
+
+        #creacion del customer
+        customer = stripe.Customer.create(
+            name=name,
+            email=email
+        )
+        #creacion del producto
+        product = stripe.Product.create(
+
+        )
+
+ # Crear un PaymentIntent para manejar el pago
+            # Crear PaymentIntent sin confirmarlo
+        payment_intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency='usd',
+            payment_method_types=['card'],  # Puedes agregar otros métodos de pago aquí
+        )
+
+
+        # Devolver la respuesta como JSON
+        return JsonResponse({
+            'success': True,
+            'message': 'Gracias por tu donación!',
+            'payment_intent': payment_intent.id
+        })
+    
+    # Si es GET, renderiza el formulario de donación
+    return render(request, 'donativo.html')
+
+
+
 def product_page(request):
-    stripe.api_key = "sk_test_51Q5b4iP8KIphw2lwjcmTKTdk8aZFJyCbtlspd7Po4TQMDMt6h0HVBB0xuHZGm1U3u5pnM4Y2X22BIoZPz2YEJDHH00Ec49KdAI"
     
     if request.method == 'POST':
         checkout_session = stripe.checkout.Session.create(
@@ -210,7 +152,7 @@ def product_page(request):
         
         ),
         return redirect(checkout_session.url, code =303)
-    return Jso
+    return JsonResponse()
 
 def a():
     session = stripe.checkout.Session.create(

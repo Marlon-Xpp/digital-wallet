@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import Account, Send
+from .views import Account
 from wallet import views
 urlpatterns = [
 #    path('', views.), #agregas las rutas desde el archivo views y la funcion que creaste
@@ -13,7 +13,7 @@ urlpatterns = [
 
      path('wallet/PersonWallet',Account.PersonWallet,name="wallet_PersonWallet"),
     
-     path('wallet/sendUser',Send.sendUser, name="send_User"),
+     #path('wallet/sendUser',Send.sendUser, name="send_User"),
     
      #path('wallet/get',)
 

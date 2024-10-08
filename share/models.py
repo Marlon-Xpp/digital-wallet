@@ -1,4 +1,3 @@
-from wallet import views as wv
 from user_auth.models import CustomUser 
 from transactions.models import Transference
 from wallet.models import Wallet

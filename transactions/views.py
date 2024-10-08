@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from share import models as ShareMD
 
 from share.models import Wallet, Transference
+
 # Create your views here.
 # Enviar Dinero
 # Solicitar Dinero
@@ -30,7 +32,7 @@ class Activity():
             if not history_send.exists() and not history_request.exists():
                 message = "No tiene ni una transferencia"
 
-        except wallet.DoesNotExist:
+        except Wallet.DoesNotExist:
             message = "No se encontró la billetera del usuario."
 
        # print(history_request)
@@ -45,3 +47,112 @@ class Activity():
     def NotificationUser(UserSend):
         #Mostrar la ultima transferencia realizada al usuario
         NotifyPush = Transference.objects.get(user=UserSend)
+
+
+
+class Send():
+    
+    def __init__(self,):
+        pass
+        
+    #Metodo para verificar si el usuario existe, no puede ser el mismo usuario
+    @classmethod
+    def VerifyUser(cls,usernameUser, requestuser):
+        #username = ShareMD.user_query(username=usernameUser,"get_query_username")
+        #print(username)
+        try:
+             if requestuser != usernameUser:
+                user = ShareMD.user_query(usernameUser,"get_exits_user")
+                return user
+            
+        except: 
+            print("EL USUARIO NO EXISTE")
+            return False
+    
+    @classmethod       
+    def VerifyAmount(cls, user , amount):
+        try:
+            balance = Wallet.objects.get(user=user)
+            print(balance)
+            
+            if balance.get_balance() > 0 and balance.get_balance() >= amount :
+                print("Monto suficiente")
+                return True
+            else :
+                print("no hay saldo sufiente")
+                return False
+        except:
+            print("Error al ejecutar")
+            return False
+
+
+    @login_required 
+    def send_receive(request):
+        if request.method == 'POST':
+            
+            usernameUser = request.POST.get("recipient","").strip()
+            send_money = float(request.POST.get("amount","").strip())
+            message = request.POST.get("message","".strip())
+
+            if Send.VerifyUser(usernameUser,request.user.username) and Send.VerifyAmount(request.user,send_money):
+
+                try:
+                
+                    user_wallet_send = ShareMD.user_query(usernameUser,"get_query_username")
+                    print(user_wallet_send)
+                    wallet_send = Wallet.objects.get(user=user_wallet_send)
+                    wallet_user = Wallet.objects.get(user=request.user)
+                    print(wallet_send)
+
+                    #Funcion de deposito
+                    Transference.objects.create(
+                        idWallet=wallet_user,
+                        name=request.user.name,
+                        lastname=request.user.last_name,
+                        phone=request.user.phone,
+                        username=request.user.username,
+                        amount=send_money,
+                        type_transference='SEND',
+                        description = message
+
+                    )
+
+                    Transference.objects.create(
+                        idWallet=wallet_send,
+                        name=user_wallet_send.name,
+                        lastname=user_wallet_send.last_name,
+                        phone=user_wallet_send.phone,
+                        username=user_wallet_send.username,
+                        amount=send_money,
+                        type_transference='REQUEST',
+                        description = message
+)
+
+                    print("Deposito realizado")
+                except:
+                    print("Error al realizar deposito")
+
+                    
+
+        return render(request,'send_receive.html',{})
+
+
+
+
+#Send
+class SendMoney():
+    def get_username(self,name):
+            pass
+            #Users = User.objects.get(username = name)
+            
+    def form_valid(self, form):
+        pass
+       # return HttpResponseRedirect(reverse_lazy('send_success'))
+
+class SendSuccess():
+    def get(self, request):
+        return render(request, 'app/send_success_page.html', {'nbar': 'send'})
+
+class SendError():
+    def get(self, request):
+        return render(request, '',{'nbar':'error'})
