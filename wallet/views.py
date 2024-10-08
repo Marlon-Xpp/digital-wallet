@@ -34,7 +34,7 @@ class Account():
     def new_wallet_create(request):
         if request.method == "POST":
             currency = request.POST.get('currency')  # Obtener la moneda del formulario
-          #  user_instance = connectionModel.user_instance(request.user.username) # Cambia por el nombre de usuario adecuado
+        #  user_instance = connectionModel.user_instance(request.user.username) # Cambia por el nombre de usuario adecuado
           #  wallet = models.Wallet(user = user_instance,currency=currency)
          #  wallet.save()
         return render(request,"wallet.html",{})

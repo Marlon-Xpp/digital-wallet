@@ -37,11 +37,14 @@ def transfer_qr(request):
 
 # from .models import CustomUser
 
-def send_receive(request):
-    user = request.user  # Obtener el usuario autenticado de la bd
-    qr_code_url = user.qr_code.url if user.qr_code else None  # Obtener la URL del QR si existe
+
+#funciona improtante para mostrar el codigo qr generado
+
+# def send_receive(request):
+#     user = request.user  # Obtener el usuario autenticado de la bd
+#     qr_code_url = user.qr_code.url if user.qr_code else None  # Obtener la URL del QR si existe
     
-    return render(request, "send_receive.html", {"qr_code_url": qr_code_url})
+#     return render(request, "send_receive.html", {"qr_code_url": qr_code_url})
 
 
 
@@ -117,6 +120,10 @@ class Send():
 
     @login_required 
     def send_receive(request):
+        
+        user = request.user  # Obtener el usuario autenticado de la bd
+        qr_code_url = user.qr_code.url if user.qr_code else None  # Obtener la URL del QR si existe
+        
         if request.method == 'POST':
             
             usernameUser = request.POST.get("recipient","").strip()
@@ -163,7 +170,7 @@ class Send():
 
                     
 
-        return render(request,'send_receive.html',{})
+        return render(request, "send_receive.html", {"qr_code_url": qr_code_url})
 
 
 
