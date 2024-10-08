@@ -8,4 +8,4 @@ admin.site.register(Wallet)
 
 admin.site.register(models.CustomUser)
 
-admin.site.register(Transference)
+

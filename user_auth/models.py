@@ -14,7 +14,7 @@ class CustomUser(AbstractUser):
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
 
     def __str__(self):
-        return self.username
+        return f"Mi username: {self.username}" 
     
 class LoginAttempt(models.Model):
     username = models.CharField(max_length=10)

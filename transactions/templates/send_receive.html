@@ -37,6 +37,7 @@
         </div>
         
         <div class="card send-money-card">
+            {% csrf_token  %}
             <h2 class="card-title">Enviar Dinero</h2>
             <form id="sendMoneyForm" class="money-form">
                 <label class="form-label" for="recipient">Destinatario:</label>
@@ -73,24 +74,26 @@
             <table class="history-table">
                 <thead>
                     <tr>
-                        <th class="table-header">Fecha</th>
-                        <th class="table-header">Tipo</th>
-                        <th class="table-header">Monto</th>
-                        <th class="table-header">Estado</th>
+                        <th class="table-header" id="">Fecha</th>
+                        <th class="table-header" id="">Tipo</th>
+                        <th class="table-header" id="">Monto</th>
+                        <th class="table-header" id="">Estado</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for transaction in transactions %}
                     <tr class="table-row">
-                        <td class="table-data">2024-09-29</td>
-                        <td class="table-data">Envío</td>
-                        <td class="table-data">$50.00</td>
-                        <td class="table-data">Completado</td>
+                        <td class="table-data">{{ transaction.created_at }}</td>
+                        <td class="table-data">{{ transaction.type }}</td>
+                        <td class="table-data">${{ transaction.amount }}</td>
+                        <td class="table-data">{{ transaction.status }}</td>
                     </tr>
+                    {% endfor %}
                     <tr class="table-row">
-                        <td class="table-data">2024-09-28</td>
-                        <td class="table-data">Recepción</td>
-                        <td class="table-data">$75.00</td>
-                        <td class="table-data">Completado</td>
+                        <td class="table-data" id="">2024-09-28</td>
+                        <td class="table-data" id="">Recepción</td>
+                        <td class="table-data" id="">$75.00</td>
+                        <td class="table-data" id="">Completado</td>
                     </tr>
                     <!-- Más filas de historial pueden ser añadidas aquí -->
                 </tbody>

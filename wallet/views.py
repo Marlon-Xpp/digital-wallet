@@ -1,182 +1,217 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from wallet import models
+from django.db import transaction
+from django.http import JsonResponse
+
+import stripe.webhook
+from django.conf import settings
+
+from wallet.models import Wallet 
+from django.core.exceptions import ObjectDoesNotExist
+from transactions.models import Transference
+
+from share import models as ShareMD
+import stripe
+
+
 
 # Create your views here.
 
 #AQUI VA LA LOGICA  DE LA APLICACION WALLET
 
 #Gestion del saldo
-#Mostrar saldo
-#pasarela de pago (marlon)
-#recargar dinero
-#crear tarjeta virtuales(marlon)
-
-
 class Account():
-
-    @login_required
-    def __init__(self,request):
-        self.user = request.user.name
+    def __init__(self):
+        self.user = ""
         
-
-    def first_wallet_create(self,currency):
-        print(self.user)
+    def first_wallet(user):
     
-        #wallet.save()
+        wallet = Wallet(user = user)
+        wallet.save()
+
         return True
 
-    def first_wallet_create(request):
+    def new_wallet_create(request):
         if request.method == "POST":
             currency = request.POST.get('currency')  # Obtener la moneda del formulario
- 
-            user_instance = connectionModel.user_instance(request.user.username) # Cambia por el nombre de usuario adecuado
-            
-            wallet = models.Wallet(user = user_instance,currency=currency)
-
-            wallet.save()
-
-        
+          #  user_instance = connectionModel.user_instance(request.user.username) # Cambia por el nombre de usuario adecuado
+          #  wallet = models.Wallet(user = user_instance,currency=currency)
+         #  wallet.save()
         return render(request,"wallet.html",{})
         
-   # def change_type_cell    
-
-    def recharge_sldo():
-        pass
-    
-    
+    @login_required 
     #Informacion sobre la Wallet
-    def PersonWallet(Request):
+    def PersonWallet(request):
+    # Obtener el usuario actual
+        usuario_actual = request.user
     
-        return render(Request,'app/Account.html')
+        # Filtrar las wallets que pertenecen al usuario actual
+        wallet_currency = Wallet.objects.filter(user=usuario_actual)
+        
 
-    #Informacion sobre el balance
-    def ViewBalance(Request):
-        data= {"Nuevo": "hola"}
-
-        return render(Request,'viewBalance  .html',data)
-        pass
+        return render(request,'wallet.html',{'wallet_currency' : wallet_currency })
 
 
 #Envío de dinero:
 
-class SendSearchUser():
-    #Busca al usuario
-    def getQueryUsername():
-        pass
-    #Obtiene al usuario
-    def get_context_data():
-        pass
-
-
-
-#Send
-class SendMoney():
-    def get_username(self,name):
-            pass
-            #Users = User.objects.get(username = name)
-            
-    def form_valid(self, form):
-        pass
-       # return HttpResponseRedirect(reverse_lazy('send_success'))
-
-class SendSuccess():
-    def get(self, request):
-        return render(request, 'app/send_success_page.html', {'nbar': 'send'})
-
-class SendError():
-    def get(self, request):
-        return render(request, '',{'nbar':'error'})
     
 
-
-#Recepción de dinero:
-
-
-#Request
-
-#class RequestSearchUser():
-
-    def get_context_data(self, **kwargs):
-       pass
-
-#class RequestMoney():
-
-    def get_context_data(self, **kwargs):
-
-        pass
-    def form_valid(self, form):
-
-
-       pass #return HttpResponseRedirect(reverse_lazy('request_success'))
-
-
-class RequestSuccess():
-    def get(self, request):
-        pass
-        #return render(request, 'app/request_success_page.html', {'nbar': 'request'})
-
-
-#Recieve
- 
-class Recieve():
-
-    def get(self):
-
+class paymethod():
+    def __init__(self) -> None:
         pass
 
+    def get_api():
+        #Utilizancion del api de metodo pago, para obtener el pago directo a la app
+        pass
+
+    def get_method():
+        pass
+
+
+class Recharge():    
+    def get_recharge_view(request):
+        #api
+
+        render(request,"",{})
+
+    def get_api(self,amount):
+
+
+        customer = stripe.Customer.create()
+        try:
+            event = stripe.Webhook.construct_event()
+        except:
+            print("exit")
+        return amount
+        pass
+
+
+
+
+
+
+@login_required(login_url='login')
+def donation(request):
+    stripe.api_key = settings.STRIPE_TEST_API_KEY
+    
+    user = request.user
+
+    if request.method == 'POST':
+        #daots del usuario lgueado
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        amount = int(request.POST.get('amount'))  # Convertir a entero (centavos)
+        payment_method_id = request.POST.get('payment_method_id')
+
+        #creacion del customer
+        customer = stripe.Customer.create(
+            name=name,
+            email=email
+        )
+        #creacion del producto
+        product = stripe.Product.create(
+
+        )
+
+ # Crear un PaymentIntent para manejar el pago
+            # Crear PaymentIntent sin confirmarlo
+        payment_intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency='usd',
+            payment_method_types=['card'],  # Puedes agregar otros métodos de pago aquí
+        )
+
+
+        # Devolver la respuesta como JSON
+        return JsonResponse({
+            'success': True,
+            'message': 'Gracias por tu donación!',
+            'payment_intent': payment_intent.id
+        })
+    
+    # Si es GET, renderiza el formulario de donación
+    return render(request, 'donativo.html')
+
+
+
+def product_page(request):
+    
+    if request.method == 'POST':
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': 2.00,
+                    'quantity': 1,
+                }
+            ],
+            mode='payment',
+            customer_creation= 'always',
+            success_url='/paymente_successful?session_id={}',
+            cancel_url='/payment_cancelled',
+        
+        ),
+        return redirect(checkout_session.url, code =303)
+    return JsonResponse()
+
+def a():
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[{
+            'price': 'precio_id',  # Reemplaza con el ID del precio creado
+            'quantity': 1,
+        }],
+        mode='payment',
+        success_url='https://tu_sitio.com/exito?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url='https://tu_sitio.com/cancelar',
+    )
+    return redirect(session.url, code=303)
 
 
 
 
 #Historial de transacciones:
-class Transference():
-    #Historial de transferencias Envio
-    def HistoryTransferSend():
-        pass
+class Activity(Account):
+    @login_required
+    @transaction.atomic
 
-    def HistoryTransferRecive():
-        pass
+    def getHistory(request):
+        message = ""
+        wallet_user  = Wallet.objects.get(user = request.user)
+        try:
+            # Usamos filter() en lugar de get() para obtener todas las transferencias
+            history_send = Transference.objects.filter(idWallet=wallet_user, type_transference="SEND")
+            history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="REQUEST")
 
+            # Si no hay resultados, mostramos el mensaje
+            if not history_send.exists() and not history_request.exists():
+                message = "No tiene ni una transferencia"
 
-#Seguridad de las transacciones:
+        except Wallet.DoesNotExist:
+            message = "No se encontró la billetera del usuario."
 
+       # print(history_request)
+        print(history_send)
+        return render(request, "activity.html", {
+            'history_send': history_send,
+            'history_request': history_request,
+            'message': message,
+            'username': request.user.username})
         
-        
-#Integraciones con servicios de pago externos (opcional):
-
-class IncompletePayment():
-
-    def get(self, request, pk):
-        pass
-
-class IncompletePaymentConfirm():
     
-    def get_context_data(self, **kwargs):
-        pass
-
-    def form_valid(self, form):
-       pass
-
-class PaymentComplete():
-    def get(self, request):
-        return render(request, 'app/payment_success.html', {'nbar': 'incomplete'})
-
-class IncompleteRequest():
-    permission_required = 'app.view_transaction'
-
-    def get(self, request):
-        pass
+    def NotificationUser(UserSend):
+        #Mostrar la ultima transferencia realizada al usuario
+        NotifyPush = Transference.objects.get(user=UserSend)
         
-class IncompleteRequestDelete():
-    #model = Transaction
-    #template_name = 'app/request_delete.html'
-    #success_url = reverse_lazy('incomplete')
-    #permission_required = 'app.delete_transaction'
+        
+        
+#Integraciones con servicios de pago externos (opcional) Api:
 
-    def get_context_data(self,):
+
+class ValidationError():
+    def __init__(self) -> None:
         pass
-    
+
     
 
 #FUNCIONALIDADES
@@ -189,4 +224,3 @@ class IncompleteRequestDelete():
 @login_required
 def activity(request):
     return render(request, "activity.html", {"username": request.user.username})
-

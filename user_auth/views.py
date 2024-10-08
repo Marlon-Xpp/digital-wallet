@@ -21,6 +21,10 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 
 
+
+from share.views import *
+
+#clases importadas
 # Importaciones de tu aplicación
 from user_auth.models import CustomUser
 from .models import LoginAttempt
@@ -42,6 +46,7 @@ from django.core.files import File
 #Edición de perfil:
 #Cambio de contraseña(opcional)
 #Seguridad del perfil:
+
 
 
 def validate_email(email):
@@ -303,6 +308,17 @@ def signup(request):
             generate_emvco_qr_code(user)
             
             #imprimimos un msj de exito
+
+            #creamos el wallet principal del usuario
+
+            if (first_wallet_created(user)):
+                print("Billetera creada correctamente")
+
+
+            
+
+
+            print("Usuario guardado correctamente.")
             print("Usuario guardado correctamente. pero esta inactivo")
             
             #generamos el codigo de verificacion
