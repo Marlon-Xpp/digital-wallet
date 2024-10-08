@@ -7,6 +7,9 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=15, blank=True, null=True)
     #code_pais
     country_code = models.CharField(max_length=4,blank= True,null=True)
+    #
+    qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
+
     def __str__(self):
         return f"Mi username: {self.username}" 
     

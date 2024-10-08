@@ -13,80 +13,59 @@ from transactions.models import Transference
 from share import models as ShareMD
 import stripe
 
-
-
-# Create your views here.
-
-#AQUI VA LA LOGICA  DE LA APLICACION WALLET
-
 #Gestion del saldo
 class Account():
     def __init__(self):
         self.user = ""
-        
-    def first_wallet(user):
-    
-        wallet = Wallet(user = user)
-        wallet.save()
-
-        return True
-
-    def new_wallet_create(request):
-        if request.method == "POST":
-            currency = request.POST.get('currency')  # Obtener la moneda del formulario
-          #  user_instance = connectionModel.user_instance(request.user.username) # Cambia por el nombre de usuario adecuado
-          #  wallet = models.Wallet(user = user_instance,currency=currency)
-         #  wallet.save()
-        return render(request,"wallet.html",{})
         
     @login_required 
     #Informacion sobre la Wallet
     def PersonWallet(request):
     # Obtener el usuario actual
         usuario_actual = request.user
-    
         # Filtrar las wallets que pertenecen al usuario actual
         wallet_currency = Wallet.objects.filter(user=usuario_actual)
-        
-
         return render(request,'wallet.html',{'wallet_currency' : wallet_currency })
-
-
-#Envío de dinero:
+        
 
     
 
-class paymethod():
-    def __init__(self) -> None:
-        pass
+class Reload_money():    
 
-    def get_api():
-        #Utilizancion del api de metodo pago, para obtener el pago directo a la app
-        pass
-
-    def get_method():
-        pass
-
-
-class Recharge():    
     def get_recharge_view(request):
+
         #api
+        customer = stripe.Customer.create(
+            name=user.get_full_name(),  # Usar el nombre completo del usuario
+            email=user.email,           # Usar el email del usuario
+            description="Cliente de la billetera"  # Descripción opcional 
+            )
 
-        render(request,"",{})
+        producto = stripe.Product.create(
+            name="Recarga de saldo",  # Nombre del producto
+            description="Recarga de saldo en la billetera",  # Descripción del producto
+            )
 
+        payment = stripe.PaymentIntent.create(
+            amount = request.POST.get("amount"),  # Monto en la moneda más pequeña, 5000 equivale a $50.00
+            currency="PEN",  # Moneda en la que se realizará el pago
+            customer=customer.id,  # Asocia este intento de pago con el cliente creado
+            description="Recarga de saldo en la billetera",
+            payment_method_types=["card"]  # Método de pago, puedes añadir más métodos
+            )
+        
+        render(request,"reload_money.html",{})
+    
     def get_api(self,amount):
+        settings.STRIPE_TEST_API_KEY
 
-
-        customer = stripe.Customer.create()
+        
         try:
             event = stripe.Webhook.construct_event()
         except:
             print("exit")
         return amount
         pass
-
-
-
 
 
 
@@ -132,8 +111,6 @@ def donation(request):
     # Si es GET, renderiza el formulario de donación
     return render(request, 'donativo.html')
 
-
-
 def product_page(request):
     
     if request.method == 'POST':
@@ -166,9 +143,6 @@ def a():
         cancel_url='https://tu_sitio.com/cancelar',
     )
     return redirect(session.url, code=303)
-
-
-
 
 #Historial de transacciones:
 class Activity(Account):

@@ -1,4 +1,8 @@
 from django.shortcuts import render
+import qrcode
+
+
+
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from share import models as ShareMD
@@ -11,15 +15,39 @@ from share.models import Wallet, Transference
 # Historial de trasacciones
 # Código QR para Enviar/Recibir (marlon)
 
-def send_receive(request):
+# def scan_qr_code():
     
-    return render(request, "send_receive.html")
+# print("se escaneara el cdogio qr")
 
+def transfer_qr(request):
+    return render(request, "transfer_qr.html" )  
+
+# def trantransfer_qr(request, username):
+#     # Obtenemos el usuario al que se le va a hacer el pago usando el username
+#     user_to_pay = get_object_or_404(CustomUser, username=username)
+#     
+#     if request.method == "POST":
+#         amount = request.POST.get('amount')
+#         # Aquí puedes agregar la lógica para realizar la transferencia de dinero
+        
+#         # Luego de la transferencia puedes redirigir a una página de éxito o dashboard
+#         return redirect('success_page')  # Cambiar esto según tu lógica de flujo
+    
+#     return render(request, "transfer_qr.html", {"user_to_pay": user_to_pay})
+
+    
+
+# from .models import CustomUser
+
+def send_receive(request):
+    user = request.user  # Obtener el usuario autenticado de la bd
+    qr_code_url = user.qr_code.url if user.qr_code else None  # Obtener la URL del QR si existe
+    
+    return render(request, "send_receive.html", {"qr_code_url": qr_code_url})
 
 class Activity():
     @login_required
     @transaction.atomic
-
     def getHistory(request):
         message = ""
         wallet_user  = Wallet.objects.get(user = request.user)
@@ -42,8 +70,7 @@ class Activity():
             'history_request': history_request,
             'message': message,
             'username': request.user.username})
-        
-    
+
     def NotificationUser(UserSend):
         #Mostrar la ultima transferencia realizada al usuario
         NotifyPush = Transference.objects.get(user=UserSend)
@@ -115,7 +142,7 @@ class Send():
                         type_transference='SEND',
                         description = message
 
-                    )
+                     )
 
                     Transference.objects.create(
                         idWallet=wallet_send,
@@ -126,7 +153,7 @@ class Send():
                         amount=send_money,
                         type_transference='REQUEST',
                         description = message
-)
+                        )
 
                     print("Deposito realizado")
                 except:

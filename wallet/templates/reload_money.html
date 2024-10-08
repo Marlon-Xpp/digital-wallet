@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2>Formulario de Recarga</h2>
+        <form action="/reload" method="POST">
+            <label for="amount">Monto a Recargar</label>
+            <input type="number" name="amount" id="amount" placeholder="Ingrese el monto" required>
+            
+            <label for="payment-method">Método de Pago</label>
+            
+            <select name="payment_method" id="payment-method" required>
+                <option value="">Seleccione el método de pago</option>
+                <option value="credit_card">Tarjeta de Crédito</option>
+                <option value="paypal">PayPal</option>
+                <option value="bank_transfer">Transferencia Bancaria</option>
+            </select>
+            
+            <button type="submit">Recargar</button>
+        </form>
+    </div>
+<div>
+{% endblock %}
