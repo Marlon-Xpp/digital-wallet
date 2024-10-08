@@ -1,8 +1,6 @@
 from django.shortcuts import render
 import qrcode
 
-
-
 # Create your views here.
 # Enviar Dinero
 # Solicitar Dinero

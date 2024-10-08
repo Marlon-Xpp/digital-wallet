@@ -10,8 +10,6 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=15, blank=True, null=True)
     # Código del país
     country_code = models.CharField(max_length=4, blank=True, null=True)
-    
-    # -------------------FALTA CORREGIR ESTE CODIGO -------------------
     # Código QR
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
 
