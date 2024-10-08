@@ -3,7 +3,7 @@ import random
 import re
 import requests
 import json
-
+from django.utils.crypto import get_random_string
 # Importaciones de terceros
 from email_validator import validate_email as email_validator, EmailNotValidError
 
@@ -25,6 +25,10 @@ from django.utils import timezone
 from user_auth.models import CustomUser
 from .models import LoginAttempt
 
+
+import qrcode
+import io
+from django.core.files import File
 
 
 # Create your views here.
@@ -184,6 +188,30 @@ def phone_lookup_view(request):
     return render(request, 'prueba.html')
 
 
+#CODIGO EN REVISION FALTA CORREGIR Y MODIFICAR COSAS
+def generate_user_qr_code(user):
+    # Crear datos para el código QR (puedes incluir información sensible aquí)
+    qr_data = f"user_id:{user.id}"
+
+    
+    # Generar el código QR
+    qr = qrcode.QRCode(
+        version=5,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(qr_data)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    buffer = io.BytesIO()
+    img.save(buffer, format="PNG")
+    
+    # Guardar la imagen en el campo qr_code del usuario
+    user.qr_code.save(f"user_{user.username}_qr.png", File(buffer), save=False)
+    user.save()
+
 
 #funcion para registrar a los usuarios
 def signup(request):
@@ -227,6 +255,14 @@ def signup(request):
             )
             #aqui se guardara los datos obtenidos ala base de datos
             user.save()
+            
+            # # Generar y guardar la clave de encriptación
+            # user.encryption_key = get_random_string(32).encode()  # Generar una clave aleatoria
+            # user.save()
+            
+            # #generamos el código QR para el usuario
+            # generate_user_qr_code(user)
+            
             #imprimimos un msj de exito
             print("Usuario guardado correctamente. pero esta inactivo")
             
