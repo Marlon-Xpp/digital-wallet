@@ -31,7 +31,7 @@ class Account():
 
     def operations(request):
         wallet_currency = Wallet.objects.get(user= request.user)
-        return render(request,'operations.html',{'wallet_balance' : wallet_currency.get_balance(),'stripe_public_key' : settings.STRIPE_TEST_API_KEY})    
+        return render(request,'operations.html', {'wallet_balance' : wallet_currency.get_balance(),'stripe_public_key' : settings.STRIPE_TEST_API_KEY})    
 
     
 
@@ -183,6 +183,3 @@ class ValidationError():
 #Historial de transacciones:
 #Seguridad de las transacciones:
 #Integraciones con servicios de pago externos (opcional):
-@login_required
-def activity(request):
-    return render(request, "activity.html", {"username": request.user.username})
