@@ -19,6 +19,12 @@ class Account():
     def __init__(self):
         self.user = ""
         
+    def first_wallet(user):
+        #wallet.save()
+        wallet = Wallet(user = user)
+        wallet.save()
+        return True
+    
     @login_required(login_url='login')
     #Informacion sobre la Wallet
     def PersonWallet(request):
@@ -34,6 +40,8 @@ class Account():
         return render(request,'operations.html',{'wallet_balance' : wallet_currency.get_balance(),'stripe_public_key' : settings.STRIPE_TEST_API_KEY})    
 
     
+
+
 
 class Reload_money():    
     @login_required(login_url='login')
@@ -54,19 +62,17 @@ class Reload_money():
             price_data = stripe.Price.create(
                 currency= "PEN",
                 product= product.id,
-                unit_amount= amount
+                unit_amount= transform.transform_amount(amount,True)
 
             )
 
 
-
             check_sesion = stripe.checkout.Session.create(
                 payment_method_types=['card'],  # Solo habilitar pagos con tarjeta
-                
+    
                 line_items=[
                     {
                         'price': price_data.id,
-
                         'quantity': 1,
                     }
                 ],
@@ -76,27 +82,61 @@ class Reload_money():
                 cancel_url= request.build_absolute_uri(reverse('failure_payment')),
             )
 
+            request.session['amount'] = float(amount)  # Store the amount as a float in the session
+
+
             return redirect(check_sesion.url)
 
         return render(request,"reload_money.html",{})
     
-    def get_api(self,amount):
-        settings.STRIPE_TEST_API_KEY
-
-        
-        try:
-            event = stripe.Webhook.construct_event()
-        except:
-            print("exit")
-        return amount
-        pass
 
 
+    @login_required(login_url='login')
     def payment_success(request):
+        
+        user = request.user
+        amount_reload = request.session.get('amount',None)
+        
+        wallet_reload = Wallet.objects.get(user = user)
+
+        wallet_reload.add_funds(amount_reload)
+
+        #Eliminar monto de session
+        del request.session['amount']
+
         return render(request, 'verify_payment/success.html')
 
     def payment_failure(request):
         return render(request, 'verify_payment/failure.html')
+
+
+class transform():
+    def transform_amount(amount, to_cents=True):
+
+        if to_cents:
+            # Convert from decimal to cents
+            return int(float(amount) * 100)
+        else:
+            # Convert from cents to decimal
+            return float(amount) / 100
+
+
+
+
+class recieve_money():
+    payout = stripe.Payout.create
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def product_page(request):
