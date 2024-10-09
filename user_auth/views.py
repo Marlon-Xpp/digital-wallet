@@ -299,26 +299,14 @@ def signup(request):
             )
             #aqui se guardara los datos obtenidos ala base de datos
             user.save()
-            
-            # # Generar y guardar la clave de encriptación
-            # user.encryption_key = get_random_string(32).encode()  # Generar una clave aleatoria
-            # user.save()
-            
-            # #generamos el código QR para el usuario
+            # generamos el código QR para el usuario
             generate_emvco_qr_code(user)
-            
-            #imprimimos un msj de exito
 
             #creamos el wallet principal del usuario
+            # if (first_wallet_created(user)):
+            #     print("Billetera creada correctamente")
 
-            if (first_wallet_created(user)):
-                print("Billetera creada correctamente")
-
-
-            
-
-
-            print("Usuario guardado correctamente.")
+            #imprimimos un msj de exito
             print("Usuario guardado correctamente. pero esta inactivo")
             
             #generamos el codigo de verificacion
