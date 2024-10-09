@@ -78,9 +78,6 @@ class PaymentMethod(models.Model):
         self.save()
 
 
-
-
-
 class UserPayment(models.Model):
     app_user = models.ForeignKey(Wallet,on_delete=models.CASCADE)
     payment_bool = models.BooleanField(default=False)

@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static "css/footer.css" %} ">
+    
     <title>Transaction Success</title>
 </head>
 <body>
+    {% include "header.html" %}
+
+    
     <div class="container">
         <div class="success-message">
             <h1>Payment Successful!</h1>
             <p>Thank you! Your payment was processed successfully.</p>
         </div>  
     </div>
+
+    {% include "footer.html" %}
+
 </body>
 </html>

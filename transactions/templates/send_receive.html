@@ -10,66 +10,63 @@
     <title>Document</title>
 </head>
 <body>
+
+    <img src="https://static.vecteezy.com/system/resources/previews/004/941/962/non_2x/abstract-technology-with-global-world-network-and-telecommunication-on-earth-digital-data-visualization-illustration-design-vector.jpg" alt="" class="imagen-propia">
+
     {% include "header.html" %}
 
 
     <main class="send-receive">
 
-        <div class="card qr-code-card">
-            <h2 class="card-title">Código QR para Enviar/Recibir</h2>
-            <p class="qr-description">Genera tu código QR para facilitar las transacciones. Escanea el código QR de otros usuarios para enviarles dinero rápidamente.</p>
-            <button id="generateQRCode" class="form-button qr-button">Generar Código QR</button>
-            <button id="scanQRCode" class="form-button qr-button">Escanear Código QR</button>
-            
-
-            <div id="qrCodeContainer" class="qr-code-container">
-                <span>TU CODIGO QR</span>
-                <div>
-                    <!-- Aquí se mostrará el código QR generado -->
-                    {% if qr_code_url %}
-                        <img src="{{ qr_code_url }}" alt="Código QR" style="max-width: 200px; max-height: 200px;"/>
-                    {% else %}
-                        <p>No se ha generado un código QR aún.</p>
-                    {% endif %}
+        <div class="container-flex">
+            <div class="container-secundary-flex">
+                <div class="qr-code-card">
+                    <h2 class="card-title">Código QR para Enviar/Recibir</h2>
+                    <p class="qr-description">Escanea el código QR de otros usuarios para enviarles dinero rápidamente.</p>
                     
+                    <div class="container-button-flex">
+                        <button id="generateQRCode" class="form-button qr-button">Generar Código QR</button>
+                        <button id="scanQRCode" class="form-button qr-button">Escanear Código QR</button>
+                    </div>
+                    
+        
+                    <div id="qrCodeContainer" class="qr-code-container">
+                        <span>TU CODIGO QR</span>
+                        <div>
+                            <!-- Aquí se mostrará el código QR generado -->
+                            {% if qr_code_url %}
+                                <img src="{{ qr_code_url }}" alt="Código QR" style="max-width: 200px; max-height: 200px;"/>
+                            {% else %}
+                                <p>No se ha generado un código QR aún.</p>
+                            {% endif %}
+                            
+                        </div>
+                    </div> 
                 </div>
+            </div>
+            
+            
+            <div class="card send-money-card">
+                {% csrf_token  %}
+                <h2 class="card-title">Enviar Dinero</h2>
+                <form id="sendMoneyForm" class="money-form">
+                    <label class="form-label" for="recipient">Destinatario:</label>
+                    <input class="form-input" type="text" id="recipient" placeholder="Ingrese el correo o número de teléfono" required>
+                    
+                    <label class="form-label" for="amount">Monto:</label>
+                    <input class="form-input" type="number" id="amount" placeholder="Ingrese el monto" required>
+                    
+                    <label class="form-label" for="message">Mensaje (opcional):</label>
+                    <textarea class="form-textarea" id="message" placeholder="Escriba un mensaje..."></textarea>
+                    
+                    <button class="form-button send-button" type="submit">Enviar Dinero</button>
+                </form>
             </div>
         </div>
         
-        <div class="card send-money-card">
-            {% csrf_token  %}
-            <h2 class="card-title">Enviar Dinero</h2>
-            <form id="sendMoneyForm" class="money-form">
-                <label class="form-label" for="recipient">Destinatario:</label>
-                <input class="form-input" type="text" id="recipient" placeholder="Ingrese el correo o número de teléfono" required>
-                
-                <label class="form-label" for="amount">Monto:</label>
-                <input class="form-input" type="number" id="amount" placeholder="Ingrese el monto" required>
-                
-                <label class="form-label" for="message">Mensaje (opcional):</label>
-                <textarea class="form-textarea" id="message" placeholder="Escriba un mensaje..."></textarea>
-                
-                <button class="form-button send-button" type="submit">Enviar Dinero</button>
-            </form>
-        </div>
     
-        <div class="card request-money-card">
-            <h2 class="card-title">Solicitar Dinero</h2>
-            <form id="requestMoneyForm" class="money-form">
-                <label class="form-label" for="requester">Solicitante:</label>
-                <input class="form-input" type="text" id="requester" placeholder="Ingrese su correo o número de teléfono" required>
-                
-                <label class="form-label" for="requestAmount">Monto:</label>
-                <input class="form-input" type="number" id="requestAmount" placeholder="Ingrese el monto" required>
-                
-                <label class="form-label" for="requestMessage">Mensaje (opcional):</label>
-                <textarea class="form-textarea" id="requestMessage" placeholder="Escriba un mensaje..."></textarea>
-                
-                <button class="form-button request-button" type="submit">Solicitar Dinero</button>
-            </form>
-        </div>
     
-        <div class="card history-card">
+        <div class="history-card">
             <h2 class="card-title">Historial de Envíos y Recepciones</h2>
             <table class="history-table">
                 <thead>

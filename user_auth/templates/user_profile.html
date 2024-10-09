@@ -33,7 +33,6 @@
                     <p>
                         <strong>Username: </strong>
                         <span class="span-input" id="username">{{ user.username }}</span>
-                        <input type="text" id="username-input" value="{{ user.username }}" style="display:none;">
                     </p>
                 </div>
                 <hr>
@@ -91,8 +90,6 @@
             const saveButton = document.getElementById('save-profile');
             
             // Campos a editar
-            const usernameSpan = document.getElementById('username');
-            const usernameInput = document.getElementById('username-input');
             
             const emailSpan = document.getElementById('email');
             const emailInput = document.getElementById('email-input');
@@ -103,8 +100,6 @@
             // Habilitar edición
             editButton.addEventListener('click', function() {
                 // Mostrar inputs y ocultar spans
-                usernameSpan.style.display = 'none';
-                usernameInput.style.display = 'block';
                 
                 emailSpan.style.display = 'none';
                 emailInput.style.display = 'block';
@@ -120,7 +115,6 @@
             // Guardar cambios
             saveButton.addEventListener('click', function() {
                 const formData = new FormData();
-                formData.append('username', usernameInput.value);
                 formData.append('email', emailInput.value);
                 formData.append('phone', phoneInput.value);
         
@@ -135,13 +129,10 @@
                 .then(response => {
                     if (response.ok) {
                         // Actualizar los valores visibles
-                        usernameSpan.textContent = usernameInput.value;
                         emailSpan.textContent = emailInput.value;
                         phoneSpan.textContent = phoneInput.value;
         
                         // Ocultar inputs y mostrar los spans
-                        usernameInput.style.display = 'none';
-                        usernameSpan.style.display = 'block';
                         
                         emailInput.style.display = 'none';
                         emailSpan.style.display = 'block';

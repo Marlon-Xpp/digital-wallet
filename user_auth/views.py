@@ -289,9 +289,7 @@ def signup(request):
                 is_active = False,
             )
             
-            #creamos el wallet principal del usuario
-            if (first_wallet_created(user)):
-                print("Billetera creada correctamente")
+            
             
             #aqui se guardara los datos obtenidos ala base de datos
             user.save()
@@ -300,6 +298,10 @@ def signup(request):
             
             #imprimimos un msj de exito
             print("Usuario guardado correctamente y se genero su qr. pero esta inactivo")
+            
+            #creamos el wallet principal del usuario
+            if (first_wallet_created(user)):
+                print("Billetera creada correctamente")
             
             #generamos el codigo de verificacion
             verification_code = generate_verification_code()
@@ -449,9 +451,9 @@ def verify_password(request):
 def edit_profile(request):
     if request.method == 'POST':
         user = request.user
-        user.username = request.POST.get('username')
         user.email = request.POST.get('email')
         user.phone = request.POST.get('phone')
+        
         user.save()  # Guardamos los cambios
 
         return redirect('user_profile')  # Redirigimos al perfil una vez actualizado
