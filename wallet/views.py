@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import JsonResponse
+from django.urls import reverse
 
 import stripe.webhook
 from django.conf import settings
@@ -18,43 +19,66 @@ class Account():
     def __init__(self):
         self.user = ""
         
-    @login_required 
+    @login_required(login_url='login')
     #Informacion sobre la Wallet
     def PersonWallet(request):
     # Obtener el usuario actual
+        wallet_currency = Wallet.objects.get(user=usuario_actual)
         usuario_actual = request.user
         # Filtrar las wallets que pertenecen al usuario actual
-        wallet_currency = Wallet.objects.filter(user=usuario_actual)
-        return render(request,'wallet.html',{'wallet_currency' : wallet_currency })
-        
+        return render(request,'manager_money.html',{'wallet_balance' : wallet_currency.get_balance() })
+
+
+    def operations(request):
+        wallet_currency = Wallet.objects.get(user= request.user)
+        return render(request,'operations.html',{'wallet_balance' : wallet_currency.get_balance(),'stripe_public_key' : settings.STRIPE_TEST_API_KEY})    
 
     
 
 class Reload_money():    
-
+    @login_required(login_url='login')
     def get_recharge_view(request):
+        stripe.api_key = settings.STRIPE_TEST_API_KEY
+        user = request.user
+        amount = request.POST.get("amount")
 
-        #api
-        customer = stripe.Customer.create(
-            name=user.get_full_name(),  # Usar el nombre completo del usuario
-            email=user.email,           # Usar el email del usuario
-            description="Cliente de la billetera"  # Descripción opcional 
+        print("ejecutando - 1")
+        if request.method == "POST":
+
+            print("ejecutando - 2")
+
+            product = stripe.Product.create(
+                name=f"Recarga movil de {amount} al usuario { user.username}"
             )
 
-        producto = stripe.Product.create(
-            name="Recarga de saldo",  # Nombre del producto
-            description="Recarga de saldo en la billetera",  # Descripción del producto
+            price_data = stripe.Price.create(
+                currency= "PEN",
+                product= product.id,
+                unit_amount= amount
+
             )
 
-        payment = stripe.PaymentIntent.create(
-            amount = request.POST.get("amount"),  # Monto en la moneda más pequeña, 5000 equivale a $50.00
-            currency="PEN",  # Moneda en la que se realizará el pago
-            customer=customer.id,  # Asocia este intento de pago con el cliente creado
-            description="Recarga de saldo en la billetera",
-            payment_method_types=["card"]  # Método de pago, puedes añadir más métodos
+
+
+            check_sesion = stripe.checkout.Session.create(
+                payment_method_types=['card'],  # Solo habilitar pagos con tarjeta
+                
+                line_items=[
+                    {
+                        'price': price_data.id,
+
+                        'quantity': 1,
+                    }
+                ],
+
+                mode='payment',
+                success_url= request.build_absolute_uri(reverse('success_payment')),
+                cancel_url= request.build_absolute_uri(reverse('failure_payment')),
             )
-        
-        render(request,"reload_money.html",{})
+
+            return redirect(check_sesion.url)
+
+        return render(request,"reload_money.html",{})
     
     def get_api(self,amount):
         settings.STRIPE_TEST_API_KEY
@@ -68,48 +92,12 @@ class Reload_money():
         pass
 
 
+    def payment_success(request):
+        return render(request, 'verify_payment/success.html')
 
-@login_required(login_url='login')
-def donation(request):
-    stripe.api_key = settings.STRIPE_TEST_API_KEY
-    
-    user = request.user
+    def payment_failure(request):
+        return render(request, 'verify_payment/failure.html')
 
-    if request.method == 'POST':
-        #daots del usuario lgueado
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        amount = int(request.POST.get('amount'))  # Convertir a entero (centavos)
-        payment_method_id = request.POST.get('payment_method_id')
-
-        #creacion del customer
-        customer = stripe.Customer.create(
-            name=name,
-            email=email
-        )
-        #creacion del producto
-        product = stripe.Product.create(
-
-        )
-
- # Crear un PaymentIntent para manejar el pago
-            # Crear PaymentIntent sin confirmarlo
-        payment_intent = stripe.PaymentIntent.create(
-            amount=amount,
-            currency='usd',
-            payment_method_types=['card'],  # Puedes agregar otros métodos de pago aquí
-        )
-
-
-        # Devolver la respuesta como JSON
-        return JsonResponse({
-            'success': True,
-            'message': 'Gracias por tu donación!',
-            'payment_intent': payment_intent.id
-        })
-    
-    # Si es GET, renderiza el formulario de donación
-    return render(request, 'donativo.html')
 
 def product_page(request):
     
