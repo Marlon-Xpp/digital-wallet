@@ -60,7 +60,6 @@ class Activity():
             history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="REQUEST")
 
 
-            print(history_send)
 
             # Si no hay resultados, mostramos el mensaje
             #if not history_send.exists() or not history_request.exists():
@@ -71,7 +70,32 @@ class Activity():
 
        # print(history_request)
         print(history_send)
-        return render(request, "activity.html", {
+        return render(request, "transfer_history.html", {
+            'history_send': history_send,
+            'history_request': history_request,
+            'message': message,
+            'username': request.user.username})
+    
+    def transfer_widget(request):
+        message = ""
+        wallet_user  = Wallet.objects.get(user = request.user)
+        try:
+            # Usamos filter() en lugar de get() para obtener todas las transferencias
+            history_send = Transference.objects.filter(idWallet=wallet_user, type_transference="SEND")
+            history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="REQUEST")
+
+
+
+            # Si no hay resultados, mostramos el mensaje
+            #if not history_send.exists() or not history_request.exists():
+                #message = "No tiene ni una transferencia"
+
+        except Wallet.DoesNotExist:
+            message = "No se encontró la billetera del usuario."
+
+       # print(history_request)
+        print(history_send)
+        return render(request, "transfer.html", {
             'history_send': history_send,
             'history_request': history_request,
             'message': message,
@@ -120,7 +144,7 @@ class Send():
 
 
     @login_required 
-    def send_receive(request):
+    def transfer_send(request):
         
         user = request.user  # Obtener el usuario autenticado de la bd
         qr_code_url = user.qr_code.url if user.qr_code else None  # Obtener la URL del QR si existe
@@ -177,7 +201,7 @@ class Send():
 
                     
 
-        return render(request, "send_receive.html", {"qr_code_url": qr_code_url})
+        return render(request, "transfer_send.html", {"qr_code_url": qr_code_url})
 
 
 

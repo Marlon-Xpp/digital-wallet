@@ -6,7 +6,10 @@ from transactions.models import Transference
 urlpatterns = [
     # path("send/receive", views.send_receive, name="send_receive"),
     path("transfer/qr", views.transfer_qr, name="transfer_qr"),
-    path("send/receive", views.Send.send_receive, name="send_receive"),
+    path("transfer", views.Activity.transfer_widget, name="transfer_widget"),
+    path("transfer/send", views.Send.transfer_send, name="transfer_send"),
+    path("transfer/history", views.Activity.getHistory, name= "transfer_history"),
+    
     # path("send/receive", views.send_receive, name="send_receive"),
 
 ]
