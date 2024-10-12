@@ -39,15 +39,17 @@
         <div class="card send-money-card">
             {% csrf_token  %}
             <h2 class="card-title">Enviar Dinero</h2>
-            <form id="sendMoneyForm" class="money-form">
+            <form id="sendMoneyForm" class="money-form" method="POST" action={% url 'send_receive' %}>
+                {% csrf_token %}
+
                 <label class="form-label" for="recipient">Destinatario:</label>
-                <input class="form-input" type="text" id="recipient" placeholder="Ingrese el correo o número de teléfono" required>
+                <input class="form-input" type="text" id="recipient" name="recipient" placeholder="Ingrese el correo o número de teléfono" required>
                 
                 <label class="form-label" for="amount">Monto:</label>
-                <input class="form-input" type="number" id="amount" placeholder="Ingrese el monto" required>
+                <input class="form-input" type="number" id="amount" name="amount" placeholder="Ingrese el monto" required>
                 
                 <label class="form-label" for="message">Mensaje (opcional):</label>
-                <textarea class="form-textarea" id="message" placeholder="Escriba un mensaje..."></textarea>
+                <textarea class="form-textarea" id="message" name="message" placeholder="Escriba un mensaje..."></textarea>
                 
                 <button class="form-button send-button" type="submit">Enviar Dinero</button>
             </form>
@@ -81,20 +83,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for transaction in transactions %}
+                    {% for transaction in history_send %}
                     <tr class="table-row">
                         <td class="table-data">{{ transaction.created_at }}</td>
-                        <td class="table-data">{{ transaction.type }}</td>
+                        <td class="table-data">{{ transaction.type_transference }}</td>
                         <td class="table-data">${{ transaction.amount }}</td>
                         <td class="table-data">{{ transaction.status }}</td>
                     </tr>
                     {% endfor %}
-                    <tr class="table-row">
-                        <td class="table-data" id="">2024-09-28</td>
-                        <td class="table-data" id="">Recepción</td>
-                        <td class="table-data" id="">$75.00</td>
-                        <td class="table-data" id="">Completado</td>
-                    </tr>
+
                     <!-- Más filas de historial pueden ser añadidas aquí -->
                 </tbody>
             </table>

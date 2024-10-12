@@ -294,6 +294,7 @@ def signup(request):
                 email = email,
                 phone= phone_number,
                 country_code = country_code,
+                
                 password = make_password(password), # es mucho mas seguro q usar hash siempre y mas recomndable usar make_password para hacear contraseñas a nivel de seguridad
                 is_active = False,
             )

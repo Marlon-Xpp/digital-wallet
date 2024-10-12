@@ -24,7 +24,7 @@ class Account():
         wallet = Wallet(user = user)
         wallet.save()
         return True
-    
+
     @login_required(login_url='login')
     #Informacion sobre la Wallet
     def PersonWallet(request):
@@ -119,8 +119,6 @@ class transform():
         else:
             # Convert from cents to decimal
             return float(amount) / 100
-
-
 
 
 class recieve_money():
@@ -223,6 +221,17 @@ class ValidationError():
 #Historial de transacciones:
 #Seguridad de las transacciones:
 #Integraciones con servicios de pago externos (opcional):
+
+
+
+#conversion de moneda
+#asociar tarjeta
+#factura.
+
+#descargar en un pdf el historial
+
+#subir a la nube 
+
 @login_required
 def activity(request):
     return render(request, "activity.html", {"username": request.user.username})
