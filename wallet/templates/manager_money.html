@@ -1,11 +1,60 @@
 
 
 {% block content %}
-<div class="container">
-    <div class="wallet-header">
-        <h1>Gestor de Billetera</h1>
-        <p class="balance">Saldo actual: S/ {{ wallet_balance }}</p>
+<div class="wallet-container">
+    <div class="container-secundary-div">
+        <div class="wallet-header">
+            <h1>Gestor de Billetera</h1>
+            <div class="balance-container">
+                <p class="wallet-balance">Saldo actual:</p>
+                <p class="wallet-balance-amount">S/ {{ wallet_balance }}</p>
+            </div>
+        </div>
+        <div class="wallet-actions">
+            {% comment %} <a href="{% url 'reload_money' %}" class="btn-action">Recargar Dinero</a> {% endcomment %}
+            <a href="#" class="btn-action">
+                <img src="https://cdn-icons-png.flaticon.com/128/1751/1751700.png" alt="">Descargar Historial</a>
+        
+        </div>
+
+        <div id="qrCodeContainer" class="container-qr">
+            
+            <div class="qr-code-container">
+                <!-- Aquí se mostrará el código QR generado -->
+                {% if qr_code_url %}
+                    <img src="{{ qr_code_url }}" alt="Código QR" style="max-width: 200px; max-height: 200px;"/>
+                {% else %}
+                    <p>No se ha generado un código QR aún.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="wallet-actions">
+            {% comment %} <a href="{% url 'reload_money' %}" class="btn-action">Recargar Dinero</a> {% endcomment %}
+            <a href="#" class="btn-action">
+                <img src="https://cdn-icons-png.flaticon.com/128/1751/1751700.png" alt="">Descargar QR</a>
+            
+        </div>
+    </div>
+
+    <div class="virtual-card-section">
+        <h2 class="card-title">Generar Tarjeta Virtual</h2>
+        <p class="card-description">Crea una tarjeta virtual para realizar compras en línea de forma segura.</p>
+        <form id="generateVirtualCardForm" class="card-form">
+            <label class="form-label" for="cardholder-name">Nombre del Titular:</label>
+            <input class="form-input" type="text" id="cardholder-name" placeholder="Ingrese su nombre" required>
+    
+            <label class="form-label" for="expiry-date">Fecha de Vencimiento:</label>
+            <input class="form-input" type="month" id="expiry-date" required>
+    
+            <label class="form-label" for="cvv">CVV:</label>
+            <input class="form-input" type="text" id="cvv" placeholder="Ingrese CVV" required>
+            
+            <button class="form-button generate-button" type="submit">Generar Tarjeta</button>
+        </form>
     </div>
 </div>
 
+</div>
 {% endblock %}
+

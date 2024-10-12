@@ -6,8 +6,6 @@ import json
 from django.utils.crypto import get_random_string
 # Importaciones de terceros
 from email_validator import validate_email as email_validator, EmailNotValidError
-
-
 # Importaciones de Django
 from django.conf import settings
 from django.contrib import messages
@@ -19,21 +17,14 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
-
-
-
 from share.views import *
-
 #clases importadas
 # Importaciones de tu aplicación
 from user_auth.models import CustomUser
 from .models import LoginAttempt
-
-
 import qrcode
 import io
 from django.core.files import File
-
 
 # Create your views here.
 #AQUI VA LA LOGICA  DE LA APLICACION AUTH USER
@@ -298,29 +289,20 @@ def signup(request):
                 password = make_password(password), # es mucho mas seguro q usar hash siempre y mas recomndable usar make_password para hacear contraseñas a nivel de seguridad
                 is_active = False,
             )
+            
+            
+            
             #aqui se guardara los datos obtenidos ala base de datos
             user.save()
-            
-            # # Generar y guardar la clave de encriptación
-            # user.encryption_key = get_random_string(32).encode()  # Generar una clave aleatoria
-            # user.save()
-            
-            # #generamos el código QR para el usuario
+            # generamos el código QR para el usuario
             generate_emvco_qr_code(user)
             
             #imprimimos un msj de exito
-
+            print("Usuario guardado correctamente y se genero su qr. pero esta inactivo")
+            
             #creamos el wallet principal del usuario
-
             if (first_wallet_created(user)):
                 print("Billetera creada correctamente")
-
-
-            
-
-
-            print("Usuario guardado correctamente.")
-            print("Usuario guardado correctamente. pero esta inactivo")
             
             #generamos el codigo de verificacion
             verification_code = generate_verification_code()
@@ -470,9 +452,9 @@ def verify_password(request):
 def edit_profile(request):
     if request.method == 'POST':
         user = request.user
-        user.username = request.POST.get('username')
         user.email = request.POST.get('email')
         user.phone = request.POST.get('phone')
+        
         user.save()  # Guardamos los cambios
 
         return redirect('user_profile')  # Redirigimos al perfil una vez actualizado

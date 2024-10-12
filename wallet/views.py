@@ -14,6 +14,27 @@ from transactions.models import Transference
 from share import models as ShareMD
 import stripe
 
+
+
+#FUNCIONALIDADES
+#Gestión del saldo:
+#Envío de dinero:
+#Recepción de dinero:
+#Historial de transacciones:
+#Seguridad de las transacciones:
+#Integraciones con servicios de pago externos (opcional):
+
+#conversion de moneda
+#asociar terjeta real a nuestra wallet
+#retiro de dinerp
+
+#factura electronica
+#descaragr la infromacion del historial de trasacciones en pdf
+#comprar en linea con billetera digital
+
+
+
+
 #Gestion del saldo
 class Account():
     def __init__(self):
@@ -28,20 +49,28 @@ class Account():
     @login_required(login_url='login')
     #Informacion sobre la Wallet
     def PersonWallet(request):
-    # Obtener el usuario actual
+        
+        # Obtener el usuario actual
         wallet_currency = Wallet.objects.get(user=usuario_actual)
         usuario_actual = request.user
+        
         # Filtrar las wallets que pertenecen al usuario actual
-        return render(request,'manager_money.html',{'wallet_balance' : wallet_currency.get_balance() })
+        return render(request,'manager_money.html',{
+            'wallet_balance': wallet_currency.get_balance(),
+            
+        })
 
 
     def operations(request):
         wallet_currency = Wallet.objects.get(user= request.user)
-        return render(request,'operations.html',{'wallet_balance' : wallet_currency.get_balance(),'stripe_public_key' : settings.STRIPE_TEST_API_KEY})    
-
-    
-
-
+        user = request.user  # Obtener el usuario autenticado de la bd
+        qr_code_url = user.qr_code.url if user.qr_code else None  # Obtener la URL del QR si existe
+        return render(request,'operations.html', {
+            'wallet_balance' : wallet_currency.get_balance(),
+            'stripe_public_key' : settings.STRIPE_TEST_API_KEY,
+            #traer la imagen
+            'qr_code_url': qr_code_url,
+        })    
 
 class Reload_money():    
     @login_required(login_url='login')
@@ -89,8 +118,6 @@ class Reload_money():
 
         return render(request,"reload_money.html",{})
     
-
-
     @login_required(login_url='login')
     def payment_success(request):
         

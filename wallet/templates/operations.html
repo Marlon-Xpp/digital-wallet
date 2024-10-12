@@ -3,18 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Billetera digital </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static "css/footer.css" %} ">
+    <link rel="stylesheet" href="{% static "css/operations.css" %} ">
+
+    <title>Billetera digital</title>
 </head>
 <body>
-    <div style="background-color: red;"></div>
-
-
-    {% include "manager_money.html" %}
-
-
-
-    {% include "reload_money.html" %}
+    
+    
+    {% include "header.html" %}
+    <img src="https://static.vecteezy.com/system/resources/previews/004/941/962/non_2x/abstract-technology-with-global-world-network-and-telecommunication-on-earth-digital-data-visualization-illustration-design-vector.jpg" alt="" class="imagen-propia">
 
     
+
+    <main class="container">
+        {% include "manager_money.html" %}
+
+        {% include "reload_money.html" %}
+    </main>
+
+    
+
+    {% include "footer.html" %}
+
 </body>
 </html>

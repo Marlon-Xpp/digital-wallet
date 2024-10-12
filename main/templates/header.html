@@ -16,7 +16,6 @@
             <ul class="listado-navegacion">
                 <li class="lista"> <a href="{% url "index" %}">Inicio</a> </li>
                 {% if user.is_authenticated %}
-                <li class="lista"> <a href="{% url "activity" %}">Activity</a> </li>
                 <li class="lista"> <a href="{% url "send_receive" %}">Enviar & Recibir</a> </li>
                 <li class="lista"> <a href="{% url "operations" %}">Billetera</a> </li>
                 <li class="lista"> <a href="{% url "user_profile" %}">Perfil</a> </li>

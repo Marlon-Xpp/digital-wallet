@@ -5,9 +5,9 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
     #phone_number
     phone = models.CharField(max_length=15, blank=True, null=True)
-    #code_pais
-    country_code = models.CharField(max_length=4,blank= True,null=True)
-    #
+    # Código del país
+    country_code = models.CharField(max_length=4, blank=True, null=True)
+    # Código QR
     qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
 
     def __str__(self):

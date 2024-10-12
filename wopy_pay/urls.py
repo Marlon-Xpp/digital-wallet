@@ -24,8 +24,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("main.urls")),
     path("auth/", include("user_auth.urls"), name="auth"),
-    path("Account/", include("wallet.urls"), name="wallet"), 
+    path("account/", include("wallet.urls"), name="wallet"), 
     path("transactions/", include("transactions.urls"), name="transactions"), 
+    
     
 
     #path("wallet/", include("wallet.urls"), name="wallet"), #aqui incluimos todas las urls del archivo wallet

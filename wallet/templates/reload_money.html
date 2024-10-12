@@ -1,35 +1,49 @@
-
 {% block content %}
-<div class="container">
-    <div class="form-container">
-        <h2>Formulario de Recarga</h2>
-        <form action="{% url 'reload_money'  %}" method="POST">
-            {% csrf_token %}
-            <label for="amount">Monto a Recargar</label>
-            <input type="number" name="amount" id="amount" placeholder="Ingrese el monto" required>
-            
-            <p>recargar desde S/ 1.00</p>
-            
-            <label > mostrar precio equivalente a la cantidad </label>
-            
-
-            <br>
-            <label for="payment-method">Seleccionar el Método de Pago</label>
-            <select name="payment_method" id="payment-method" required>
-                <option value="">Seleccione el método de pago</option>
-                <option value="credit_card">Tarjeta de Crédito</option>
-                <option value="paypal">PayPal</option>
-                <option value="bank_transfer">Transferencia Bancaria</option>
-            </select>
-            
-            <button type="submit">Recargar</button>
-        </form>
-
-       
+{% load static %}
+<div class="reload-container">
     
-    
+    <div class="form-section">
+
+            <!-- Aquí puedes colocar una imagen o un icono -->
+        <img src="{% static 'img/fondo_index.png' %}" alt="Recargar Icono" class="img">
+
+
+        <div class="container-form">
+            <form action="{% url 'reload_money' %}" method="POST" class="reload-form">
+                {% csrf_token %}
+                <h2>Recargar Dinero</h2>
+
+                <div class="form-group">
+                    {% comment %} <label for="amount">Monto a Recargar</label> {% endcomment %}
+                    <input type="number" name="amount" id="amount" placeholder="Recargar desde S/ 1.00" required>
+                    {% comment %} <small>Recargar desde S/ 1.00</small> {% endcomment %}
+                </div>
+
+                {% comment %} <div class="form-group">
+                    <label>Mostrar precio equivalente a la cantidad</label>
+                    <!-- Aquí puedes implementar una funcionalidad JS para mostrar el precio equivalente -->
+                </div> {% endcomment %}
+
+                <div class="form-group">
+                    <label for="payment-method">Método de Pago</label>
+                    <select name="payment_method" id="payment-method" required>
+                        <option value="">Seleccione el método de pago</option>
+                        <option value="credit_card">Tarjeta de Crédito</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="bank_transfer">Transferencia Bancaria</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Recargar</button>
+                <div class="container-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/128/349/349221.png" alt="">
+                    <img src="https://cdn-icons-png.flaticon.com/128/893/893081.png" alt="">
+                    <img src="https://cdn-icons-png.flaticon.com/128/177/177025.png" alt="">
+                    <img src="https://cdn-icons-png.flaticon.com/128/609/609713.png" alt="">
+                </div>
+            </form>
+
+        </div>
         
-
     </div>
-    
+</div>
 {% endblock %}
