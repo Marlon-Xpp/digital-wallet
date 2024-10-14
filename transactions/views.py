@@ -1,7 +1,6 @@
 from django.shortcuts import render
 import qrcode
-
-
+from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -60,16 +59,43 @@ class Activity():
             history_send = Transference.objects.filter(idWallet=wallet_user, type_transference="SEND")
             history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="REQUEST")
 
+
+
             # Si no hay resultados, mostramos el mensaje
-            if not history_send.exists() and not history_request.exists():
-                message = "No tiene ni una transferencia"
+            #if not history_send.exists() or not history_request.exists():
+                #message = "No tiene ni una transferencia"
 
         except Wallet.DoesNotExist:
             message = "No se encontró la billetera del usuario."
 
        # print(history_request)
         print(history_send)
-        return render(request, "activity.html", {
+        return render(request, "transfer_history.html", {
+            'history_send': history_send,
+            'history_request': history_request,
+            'message': message,
+            'username': request.user.username})
+    
+    def transfer_widget(request):
+        message = ""
+        wallet_user  = Wallet.objects.get(user = request.user)
+        try:
+            # Usamos filter() en lugar de get() para obtener todas las transferencias
+            history_send = Transference.objects.filter(idWallet=wallet_user, type_transference="SEND")
+            history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="REQUEST")
+
+
+
+            # Si no hay resultados, mostramos el mensaje
+            #if not history_send.exists() or not history_request.exists():
+                #message = "No tiene ni una transferencia"
+
+        except Wallet.DoesNotExist:
+            message = "No se encontró la billetera del usuario."
+
+       # print(history_request)
+        print(history_send)
+        return render(request, "transfer.html", {
             'history_send': history_send,
             'history_request': history_request,
             'message': message,
@@ -118,7 +144,7 @@ class Send():
 
 
     @login_required 
-    def send_receive(request):
+    def transfer_send(request):
         
         user = request.user  # Obtener el usuario autenticado de la bd
         qr_code_url = user.qr_code.url if user.qr_code else None  # Obtener la URL del QR si existe
@@ -130,19 +156,23 @@ class Send():
             message = request.POST.get("message","".strip())
 
             if Send.VerifyUser(usernameUser,request.user.username) and Send.VerifyAmount(request.user,send_money):
-
-                try:
                 
+                
+                try:
                     user_wallet_send = ShareMD.user_query(usernameUser,"get_query_username")
                     print(user_wallet_send)
                     wallet_send = Wallet.objects.get(user=user_wallet_send)
                     wallet_user = Wallet.objects.get(user=request.user)
                     print(wallet_send)
 
+                    wallet_send.add_funds(send_money)
+                    
+                    wallet_user.transference_funds(send_money)
+
                     #Funcion de deposito
                     Transference.objects.create(
                         idWallet=wallet_user,
-                        name=request.user.name,
+                        name=request.user.first_name,
                         lastname=request.user.last_name,
                         phone=request.user.phone,
                         username=request.user.username,
@@ -150,11 +180,11 @@ class Send():
                         type_transference='SEND',
                         description = message
 
-                     )
+                        )
 
                     Transference.objects.create(
                         idWallet=wallet_send,
-                        name=user_wallet_send.name,
+                        name=user_wallet_send.first_name,
                         lastname=user_wallet_send.last_name,
                         phone=user_wallet_send.phone,
                         username=user_wallet_send.username,
@@ -163,13 +193,15 @@ class Send():
                         description = message
                         )
 
+
+
                     print("Deposito realizado")
                 except:
                     print("Error al realizar deposito")
 
                     
 
-        return render(request, "send_receive.html", {"qr_code_url": qr_code_url})
+        return render(request, "transfer_send.html", {"qr_code_url": qr_code_url})
 
 
 

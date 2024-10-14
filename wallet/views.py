@@ -45,7 +45,7 @@ class Account():
         wallet = Wallet(user = user)
         wallet.save()
         return True
-    
+
     @login_required(login_url='login')
     #Informacion sobre la Wallet
     def PersonWallet(request):
@@ -241,3 +241,20 @@ class ValidationError():
 
     
 
+#FUNCIONALIDADES
+#Gestión del saldo:
+#Envío de dinero:
+#Recepción de dinero:
+#Historial de transacciones:
+#Seguridad de las transacciones:
+#Integraciones con servicios de pago externos (opcional):
+
+
+
+#conversion de moneda
+#asociar tarjeta
+#factura.
+
+#descargar en un pdf el historial
+
+#subir a la nube 

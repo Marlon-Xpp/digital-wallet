@@ -14,7 +14,6 @@ class Wallet(models.Model):
     updated_at = models.DateTimeField(auto_now=True)  # Fecha de última actualización
 
     #codigo QR    
-
     def __str__(self):
         return f'Wallet for {self.user.username} - Balance: {self.balance} {self.currency}'
     def get_balance(self):
@@ -60,14 +59,11 @@ class Wallet(models.Model):
         self.status = 'inactive'
         self.save()
 
-
 class PaymentMethod(models.Model):
     description = models.CharField(max_length=250, default="")
     payment = models.OneToOneField(Wallet, on_delete=models.CASCADE)
     MethodName = models.CharField(max_length=100,default= "YAPE")
     created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
-
-
 
     def __str__(self):
         return f'Method: {self.MethodName} for Wallet {self.payment.user.username}'
@@ -76,7 +72,6 @@ class PaymentMethod(models.Model):
     def change_method(self, new_method_name):
         self.MethodName = new_method_name
         self.save()
-
 
 class UserPayment(models.Model):
     app_user = models.ForeignKey(Wallet,on_delete=models.CASCADE)
@@ -90,6 +85,24 @@ def create_user_payment(sender, instance,created, **kwargs):
     pass
 
 
+
+
+
+
+
+
+
+
+
+#user_Car real
+
+#user_car virtual
+#estandar de asociar tarjetas, encriptados
+
+
+
+
+#user_Care retiro;
 #numero usuario
 #nombre
 #descripcion

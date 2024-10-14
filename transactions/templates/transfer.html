@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/send_receive.css" %}">
+    <link rel="stylesheet" href="{% static "css/footer.css" %}">
+    <link rel="stylesheet" href="{% static "css/header.css" %}">
+    <title>Document</title>
+</head>
+<body>
+
+    <img src="https://static.vecteezy.com/system/resources/previews/004/941/962/non_2x/abstract-technology-with-global-world-network-and-telecommunication-on-earth-digital-data-visualization-illustration-design-vector.jpg" alt="" class="imagen-propia">
+
+    {% include "header.html" %}
+
+
+    <main class="send-receive">
+
+
+        <div class="container-flex">
+            <div class="container-secundary-flex">
+                <div class="qr-code-card">
+                    <h2 class="card-title">Código QR para Enviar/Recibir</h2>
+                    <p class="qr-description">Escanea el código QR de otros usuarios para enviarles dinero rápidamente.</p>
+                    
+                    <div class="container-button-flex">
+                        <button id="generateQRCode" class="form-button qr-button">Generar Código QR</button>
+                        <button id="scanQRCode" class="form-button qr-button">Escanear Código QR</button>
+                    </div>
+                    
+        
+                    <div id="qrCodeContainer" class="qr-code-container">
+                        <span>TU CODIGO QR</span>
+                        <div>
+                            <!-- Aquí se mostrará el código QR generado -->
+                            {% if qr_code_url %}
+                                <img src="{{ qr_code_url }}" alt="Código QR" style="max-width: 200px; max-height: 200px;"/>
+                            {% else %}
+                                <p>No se ha generado un código QR aún.</p>
+                            {% endif %}
+                            
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            
+            
+            {% include "transfer_send.html" %}
+        </div>
+
+        {% include "transfer_history.html" %}
+
+    
+        
+    </main>
+
+    {% include "footer.html" %}
+
+</body>
+</html>
