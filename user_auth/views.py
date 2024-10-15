@@ -248,6 +248,7 @@ def calculate_crc(data):
     return format(crc, '04X')
 
 
+
 #funcion para registrar a los usuarios
 def signup(request):
     if request.method == "POST":
@@ -289,8 +290,6 @@ def signup(request):
                 password = make_password(password), # es mucho mas seguro q usar hash siempre y mas recomndable usar make_password para hacear contraseñas a nivel de seguridad
                 is_active = False,
             )
-            
-            
             
             #aqui se guardara los datos obtenidos ala base de datos
             user.save()

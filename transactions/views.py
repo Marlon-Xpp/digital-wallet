@@ -88,8 +88,6 @@ class Activity():
             history_send = Transference.objects.filter(idWallet=wallet_user, type_transference="SEND")
             history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="REQUEST")
 
-
-
             # Si no hay resultados, mostramos el mensaje
             #if not history_send.exists() or not history_request.exists():
                 #message = "No tiene ni una transferencia"

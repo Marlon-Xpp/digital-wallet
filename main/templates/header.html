@@ -24,17 +24,19 @@
         </nav>
         <section class="seccion-boton-navegacion">
             {% if user.is_authenticated %}
-            <p class="saludar-usuario"> Hola, <span class="nombre-usuario"> {{ user.username }} </span> </p>
-            <button class= "boton-navegacion-logearse" onclick="exit()">
-                Salir
-            </button>
+                <p class="saludar-usuario"> Hola, <span class="nombre-usuario"> {{ user.username }} </span> </p>
+                
+                <button class= "boton-navegacion-logearse" onclick="exit()">
+                    Salir
+                </button>
+                
             {% else %}
-            <button class= "boton-navegacion-logearse" onclick="redirectLogin()">
-                Iniciar Sesion
-            </button>
-            <button class= "boton-navegacion-registrarse" onclick="redirectSignup()">
-                Registrarse
-            </button>
+                <button class= "boton-navegacion-logearse" onclick="redirectLogin()">
+                    Iniciar Sesion
+                </button>
+                <button class= "boton-navegacion-registrarse" onclick="redirectSignup()">
+                    Registrarse
+                </button>
             {% endif %}
         </section>
     </div>
