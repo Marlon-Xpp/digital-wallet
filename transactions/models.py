@@ -15,6 +15,7 @@ class Transference(models.Model):
 
     TRANSFERENCE_CHOICES = [
         ('SEND', 'send'),
+        ('RELOAD', 'reload'),
         ('REQUEST', 'request'),
 
     ]

@@ -56,10 +56,9 @@ class Activity():
         wallet_user  = Wallet.objects.get(user = request.user)
         try:
             # Usamos filter() en lugar de get() para obtener todas las transferencias
-            history_send = Transference.objects.filter(idWallet=wallet_user, type_transference="SEND")
-            history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="REQUEST")
-
-
+            history_reload = Transference.objects.filter(idWallet=wallet_user, type_transference="reload")
+            history_send = Transference.objects.filter(idWallet=wallet_user, type_transference="send"),
+            history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="request"),
 
             # Si no hay resultados, mostramos el mensaje
             #if not history_send.exists() or not history_request.exists():
@@ -70,17 +69,23 @@ class Activity():
 
        # print(history_request)
         print(history_send)
+        print(history_reload)
         return render(request, "transfer_history.html", {
             'history_send': history_send,
             'history_request': history_request,
+            'history_reload': history_reload,
             'message': message,
             'username': request.user.username})
     
+
+
+
     def transfer_widget(request):
         message = ""
         wallet_user  = Wallet.objects.get(user = request.user)
         try:
             # Usamos filter() en lugar de get() para obtener todas las transferencias
+            history_reload = Transference.objects.filter(idWallet=wallet_user, type_transference="RELOAD")
             history_send = Transference.objects.filter(idWallet=wallet_user, type_transference="SEND")
             history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="REQUEST")
 
@@ -94,12 +99,19 @@ class Activity():
             message = "No se encontró la billetera del usuario."
 
        # print(history_request)
+        print(history_reload)
+
         print(history_send)
         return render(request, "transfer.html", {
-            'history_send': history_send,
+            'history_reload': history_reload,
             'history_request': history_request,
+            'history_send': history_send,
+
             'message': message,
             'username': request.user.username})
+
+
+
 
     def NotificationUser(UserSend):
         #Mostrar la ultima transferencia realizada al usuario
@@ -172,10 +184,10 @@ class Send():
                     #Funcion de deposito
                     Transference.objects.create(
                         idWallet=wallet_user,
-                        name=request.user.first_name,
-                        lastname=request.user.last_name,
-                        phone=request.user.phone,
-                        username=request.user.username,
+                        name=user_wallet_send.first_name,
+                        lastname=user_wallet_send.last_name,
+                        phone=user_wallet_send.phone,
+                        username=user_wallet_send.username,
                         amount=send_money,
                         type_transference='SEND',
                         description = message
@@ -184,14 +196,17 @@ class Send():
 
                     Transference.objects.create(
                         idWallet=wallet_send,
-                        name=user_wallet_send.first_name,
-                        lastname=user_wallet_send.last_name,
-                        phone=user_wallet_send.phone,
-                        username=user_wallet_send.username,
+
+                        name=request.user.first_name,
+                        lastname=request.user.last_name,
+                        phone=request.user.phone,
+                        username=request.user.username,
                         amount=send_money,
                         type_transference='REQUEST',
                         description = message
                         )
+
+
 
 
 

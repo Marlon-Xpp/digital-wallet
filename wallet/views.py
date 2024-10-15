@@ -128,9 +128,24 @@ class Reload_money():
 
         wallet_reload.add_funds(amount_reload)
 
+
+
+        
+
+
+        Transference.objects.create(
+            idWallet= wallet_reload,
+            name=user.first_name,
+            lastname=user.last_name,
+            phone=user.phone,
+            username=user.username,
+            amount=amount_reload,
+            type_transference='RELOAD',
+            description = f"Recarga de {amount_reload}"
+            )
+        
         #Eliminar monto de session
         del request.session['amount']
-
         return render(request, 'verify_payment/success.html')
 
     def payment_failure(request):
