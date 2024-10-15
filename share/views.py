@@ -5,6 +5,5 @@ from wallet.views import Account
 
 def first_wallet_created(user):
     bool = Account.first_wallet(user)
-
     return bool
 

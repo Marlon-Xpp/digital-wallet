@@ -5,21 +5,48 @@
     <table class="history-table">
         <thead>
             <tr>
-                <th class="table-header" id="">Fecha</th>
-                <th class="table-header" id="">Tipo</th>
+                <th class="table-header" id="">Nombre</th>
+                <th class="table-header" id="">descripcion</th>
+                
                 <th class="table-header" id="">Monto</th>
+                <th class="table-header" id="">Tipo</th>
+                <th class="table-header" id="">Fecha</th>
             </tr>
         </thead>
         <tbody>
-            {% for transaction in history_send %}
-            <tr class="table-row">
-                <td class="table-data">{{ transaction.created_at }}</td>
-                <td class="table-data">{{ transaction.type_transference }}</td>
-                <td class="table-data">${{ transaction.amount }}</td>
-            </tr>
-            {% endfor %}
-
-            <!-- Más filas de historial pueden ser añadidas aquí -->
+            {% if history_send or history_request or history_reload %}
+                {% for transaction in history_send %}
+                <tr class="table-row">
+                    <th class="table-header">{{ transaction.name }}</th>
+                    <th class="table-header">{{ transaction.description }}</th>
+                    <td class="table-data">${{ transaction.amount }}</td>
+                    <td class="table-data">{{ transaction.type_transference }}</td>
+                    <td class="table-data">{{ transaction.created_at }}</td>
+                </tr>
+                {% endfor %}
+                {% for transaction in history_request %}
+                <tr class="table-row">
+                    <th class="table-header">{{ transaction.name }}</th>
+                    <th class="table-header">{{ transaction.description }}</th>
+                    <td class="table-data">${{ transaction.amount }}</td>
+                    <td class="table-data">{{ transaction.type_transference }}</td>
+                    <td class="table-data">{{ transaction.created_at }}</td>
+                </tr>
+                {% endfor %}
+                {% for transaction in history_reload %}
+                <tr class="table-row">
+                    <th class="table-header">{{ transaction.name }}</th>
+                    <th class="table-header">{{ transaction.description }}</th>
+                    <td class="table-data">${{ transaction.amount }}</td>
+                    <td class="table-data">{{ transaction.type_transference }}</td>
+                    <td class="table-data">{{ transaction.created_at }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5">No hay transacciones disponibles.</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 </div>
