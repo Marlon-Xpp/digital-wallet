@@ -67,7 +67,7 @@ class Activity():
         except Wallet.DoesNotExist:
             message = "No se encontró la billetera del usuario."
 
-       # print(history_request)
+        # print(history_request)
         print(history_send)
         print(history_reload)
         return render(request, "transfer_history.html", {
@@ -100,7 +100,7 @@ class Activity():
         except Wallet.DoesNotExist:
             message = "No se encontró la billetera del usuario."
 
-       # print(history_request)
+        # print(history_request)
         print(history_reload)
 
         print(history_send)
@@ -134,9 +134,13 @@ class Send():
         #username = ShareMD.user_query(username=usernameUser,"get_query_username")
         #print(username)
         try:
-             if requestuser != usernameUser:
+            if requestuser != usernameUser:
+                print("entro a la condicional")
                 user = ShareMD.user_query(usernameUser,"get_exits_user")
+                print(f"Usuario encontrado: {user}")
                 return user
+            else:
+                print("No entro ala condicional")
             
         except: 
             print("EL USUARIO NO EXISTE")
@@ -209,11 +213,6 @@ class Send():
                         type_transference='REQUEST',
                         description = message
                         )
-
-
-
-
-
                     print("Deposito realizado")
                 except:
                     print("Error al realizar deposito")

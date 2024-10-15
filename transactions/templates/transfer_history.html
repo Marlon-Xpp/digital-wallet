@@ -5,9 +5,9 @@
     <table class="history-table">
         <thead>
             <tr>
-                <th class="table-header" id="">Nombre</th>
-                <th class="table-header" id="">descripcion</th>
-                
+                <th class="table-header" id="">Nombres</th>
+                <th class="table-header" id="">Apellidos</th>
+                <th class="table-header" id="">Descripcion</th>
                 <th class="table-header" id="">Monto</th>
                 <th class="table-header" id="">Tipo</th>
                 <th class="table-header" id="">Fecha</th>
@@ -17,29 +17,35 @@
             {% if history_send or history_request or history_reload %}
                 {% for transaction in history_send %}
                 <tr class="table-row">
-                    <th class="table-header">{{ transaction.name }}</th>
-                    <th class="table-header">{{ transaction.description }}</th>
-                    <td class="table-data">${{ transaction.amount }}</td>
-                    <td class="table-data">{{ transaction.type_transference }}</td>
-                    <td class="table-data">{{ transaction.created_at }}</td>
+                    <th class="table-data">{{ transaction.name }}</th>
+                    <th class="table-data">{{ transaction.lastname }}</th>
+
+                    <th class="table-data">{{ transaction.description }}</th>
+                    <th class="table-data">${{ transaction.amount }}</th>
+                    <th class="table-data">{{ transaction.type_transference }}</th>
+                    <th class="table-data">{{ transaction.created_at }}</th>
                 </tr>
                 {% endfor %}
                 {% for transaction in history_request %}
                 <tr class="table-row">
-                    <th class="table-header">{{ transaction.name }}</th>
-                    <th class="table-header">{{ transaction.description }}</th>
-                    <td class="table-data">${{ transaction.amount }}</td>
-                    <td class="table-data">{{ transaction.type_transference }}</td>
-                    <td class="table-data">{{ transaction.created_at }}</td>
+                    <th class="table-data">{{ transaction.name }}</th>
+                    <th class="table-data">{{ transaction.lastname }}</th>
+
+                    <th class="table-data">{{ transaction.description }}</th>
+                    <th class="table-data">${{ transaction.amount }}</th>
+                    <th class="table-data">{{ transaction.type_transference }}</th>
+                    <th class="table-data">{{ transaction.created_at }}</th>
                 </tr>
                 {% endfor %}
                 {% for transaction in history_reload %}
                 <tr class="table-row">
-                    <th class="table-header">{{ transaction.name }}</th>
-                    <th class="table-header">{{ transaction.description }}</th>
-                    <td class="table-data">${{ transaction.amount }}</td>
-                    <td class="table-data">{{ transaction.type_transference }}</td>
-                    <td class="table-data">{{ transaction.created_at }}</td>
+                    <th class="table-data">{{ transaction.name }}</th>
+                    <th class="table-data">{{ transaction.lastname }}</th>
+
+                    <th class="table-data">{{ transaction.description }}</th>
+                    <th class="table-data">${{ transaction.amount }}</th>
+                    <th class="table-data">{{ transaction.type_transference }}</th>
+                    <th class="table-data">{{ transaction.created_at }}</th>
                 </tr>
                 {% endfor %}
             {% else %}
