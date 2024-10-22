@@ -7,12 +7,13 @@ from django.urls import reverse
 import stripe.webhook
 from django.conf import settings
 
-from wallet.models import Wallet 
+from wallet.models import Wallet ,UserPayment
 from django.core.exceptions import ObjectDoesNotExist
 from transactions.models import Transference
 
 from share import models as ShareMD
 import stripe
+import json
 
 
 
@@ -163,12 +164,128 @@ class transform():
             return float(amount) / 100
 
 
-class recieve_money():
-    payout = stripe.Payout.create
+
+class Card():
+    stripe.api_key = settings.STRIPE_TEST_API_KEY
 
 
 
 
+    def view(request):
+
+        id_wallet = refuncion.getWalletInstance(request)
+
+        print(id_wallet)
+        stripe.api_key = settings.STRIPE_TEST_API_KEY
+
+        user_payment = UserPayment.objects.filter(id_wallet = id_wallet)
+
+
+
+        if user_payment.exists():  # Verifica si hay resultados
+            for payment in user_payment:
+                print(payment.stripe_checkout_id)
+
+                customer_id = str(payment.stripe_checkout_id)
+
+                if customer_id :
+                    try:       
+                        # Obtener el cliente de Stripe
+                        customer = stripe.Customer.retrieve(customer_id)
+
+                        # Imprimir datos del cliente
+                        print("Nombre:", customer.name)
+                        print("Email:", customer.email)
+                        print("Teléfono:", customer.phone)
+                        print("Descripción:", customer.description)
+                        print("Dirección:", customer.address)
+                              # Extraer datos de las tarjetas
+                        # Verifica si el cliente tiene fuentes de pago
+                                  # Verifica si el cliente tiene fuentes de pago
+                       
+                       # print(customer.sources)
+
+            # Lista las fuentes de pago del cliente
+                        sources = stripe.Customer.list_sources(customer_id)
+
+                        # Verifica si hay fuentes de pago
+                        if sources.data:
+                            card_data = []
+                            for card in sources.data:
+                                card_info = {
+                                    "id": card.id,
+                                    "brand": card.brand,
+                                    "last4": card.last4,
+                                    "exp_month": card.exp_month,
+                                    "exp_year": card.exp_year,
+                                    "funding": card.funding,
+                                    "country": card.country
+                                }
+                                card_data.append(card_info)
+                        
+                        print(card_data)
+                    
+                    except Exception as e:
+                        print("Error al recuperar el cliente de Stripe:", str(e))
+                
+                
+
+
+        else: 
+             print("no hay tarjetas")
+
+
+        if request.method == "POST":
+            try:
+                data = json.loads(request.body)
+                token = data.get('stripeToken')
+                name = data.get('name')
+                email = data.get('email')
+                country = data.get('country')
+                print("stop")
+                if token:
+                    # Crea un cliente en Stripe usando los datos recibidos
+                    customer = stripe.Customer.create(
+                        source=token,  # Usa el token generado en el frontend
+                        name=name,
+                        email=email,
+                        address={
+                            'country': country
+                        }
+                    )
+
+                    user = UserPayment.objects.create(
+                        id_wallet = id_wallet,
+                        stripe_checkout_id = customer.id
+                    )
+
+                    
+                    print(token)
+                    
+                    # Opcionalmente, guarda el ID del cliente en tu base de datos
+                    # user.stripe_customer_id = customer.id
+                    # user.save()
+
+                    return JsonResponse({'status': 'success', 'message': 'Tarjeta guardada exitosamente!'})
+                else:
+                    return JsonResponse({'status': 'error', 'message': 'Token no recibido'})
+
+            except Exception as e:
+                return JsonResponse({'status': 'error', 'message': str(e)})
+
+        return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY": settings.STRIPE_PUBLIC_API_KEY})
+
+
+
+class refuncion():
+
+    @staticmethod
+    def getWalletInstance(request):
+        
+        user = request.user
+        id_wallet = Wallet.objects.get(user = user)
+        
+        return id_wallet
 
 
 

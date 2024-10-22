@@ -74,9 +74,18 @@ class PaymentMethod(models.Model):
         self.save()
 
 class UserPayment(models.Model):
-    app_user = models.ForeignKey(Wallet,on_delete=models.CASCADE)
+    id_wallet = models.ForeignKey(Wallet,on_delete=models.CASCADE)
     payment_bool = models.BooleanField(default=False)
     stripe_checkout_id = models.CharField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
+
+    def getStripe_checkout_id(self):
+        return self.stripe_checkout_id
+
+    def __str__(self) -> str:
+        return f"Billetera {self.id_wallet} - id de stripe {self.stripe_checkout_id}"
+
+
 
 @receiver(post_save,sender=Wallet)
 def create_user_payment(sender, instance,created, **kwargs):

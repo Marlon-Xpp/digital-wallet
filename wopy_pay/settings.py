@@ -36,6 +36,8 @@ AUTH_USER_MODEL = 'user_auth.CustomUser'
 
 # API Key para el servicio de validación de números de teléfono
 NUMLOOKUP_API_KEY = 'num_live_EUGXAxGMNzGUyImA1Ck1OP6d9vEVzohR5vj3taIp'
+
+STRIPE_PUBLIC_API_KEY = "pk_test_51Q5b4iP8KIphw2lwlaEWh6GcliSSiFoirvalPzFxX7GKIyzC28fce19EFNALtf3dxeUYUIyN5OWeIMzfmtXAoHba00ANfwQR7T"
 STRIPE_TEST_API_KEY = 'sk_test_51Q5b4iP8KIphw2lwjcmTKTdk8aZFJyCbtlspd7Po4TQMDMt6h0HVBB0xuHZGm1U3u5pnM4Y2X22BIoZPz2YEJDHH00Ec49KdAI'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
