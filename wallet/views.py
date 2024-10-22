@@ -191,14 +191,14 @@ class Card():
                 if customer_id :
                     try:       
                         # Obtener el cliente de Stripe
-                        customer = stripe.Customer.retrieve(customer_id)
+                        customer_data = stripe.Customer.retrieve(customer_id)
 
                         # Imprimir datos del cliente
-                        print("Nombre:", customer.name)
-                        print("Email:", customer.email)
-                        print("Teléfono:", customer.phone)
-                        print("Descripción:", customer.description)
-                        print("Dirección:", customer.address)
+                        print("Nombre:", customer_data.name)
+                        print("Email:", customer_data.email)
+                        print("Teléfono:", customer_data.phone)
+                        print("Descripción:", customer_data.description)
+                        print("Dirección:", customer_data.address)
                               # Extraer datos de las tarjetas
                         # Verifica si el cliente tiene fuentes de pago
                                   # Verifica si el cliente tiene fuentes de pago
@@ -273,7 +273,11 @@ class Card():
             except Exception as e:
                 return JsonResponse({'status': 'error', 'message': str(e)})
 
-        return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY": settings.STRIPE_PUBLIC_API_KEY})
+
+        if not card_data:
+            return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY":settings.STRIPE_PUBLIC_API_KEY})
+
+        return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY": settings.STRIPE_PUBLIC_API_KEY , "STRIPE_CARD": card_data,"STRIPE_CUSTOMER": customer_data})
 
 
 

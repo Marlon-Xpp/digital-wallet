@@ -7,31 +7,59 @@
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
-    <h2>Ingresar Tarjeta</h2>
-    <form id="payment-form">
-        <div>
-            <label for="name">Nombre:</label>
-            <input type="text" id="name" name="name" value="" placeholder="Nombre..." required>
-        </div>
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="" placeholder="Email..." required>
-        </div>
-        <div>
-            <label for="country">País:</label>
-            <input type="text" id="country" name="country" value="" placeholder=""  required>
-        </div>
+    <div class="get_card_list">
+        <!-- Verificar si la lista tiene elementos -->
+        {% if STRIPE_CARD and STRIPE_CUSTOMER %}
+            <p>La lista tiene elementos:</p>
+            
+            
+            <ul>
+                <H1> {{STRIPE_CUSTOMER.name}}</H1>
 
-        <!-- Campo para la tarjeta generado por Stripe.js -->
-        <div id="card-element">
-            <!-- Stripe.js insertará aquí el formulario de tarjeta -->
-        </div>
-        
-        <button id="submit-button" type="submit">Guardar Tarjeta</button>
-        
-        <div id="card-errors" role="alert"></div>
-    </form>
+            </ul>
 
+            <ul>
+
+                {% for card in STRIPE_CARD %}
+                    <li>{{ card }}</li>               
+                    <h5>{{card.id}}</h5>
+
+                    
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>La lista está vacía.</p>
+        {% endif %}
+    </div>
+
+
+    <div class="add_card"></div>
+        <h2>Ingresar Tarjeta</h2>
+        <form id="payment-form">
+            <div>
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" value="" placeholder="Nombre..." required>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="" placeholder="Email..." required>
+            </div>
+            <div>
+                <label for="country">País:</label>
+                <input type="text" id="country" name="country" value="" placeholder=""  required>
+            </div>
+
+            <!-- Campo para la tarjeta generado por Stripe.js -->
+            <div id="card-element">
+                <!-- Stripe.js insertará aquí el formulario de tarjeta -->
+            </div>
+            
+            <button id="submit-button" type="submit">Guardar Tarjeta</button>
+            
+            <div id="card-errors" role="alert"></div>
+        </form>
+    </div>
+    
     <script>
         // Función para obtener el token CSRF desde las cookies
         function getCookie(name) {
