@@ -59,19 +59,6 @@ class Wallet(models.Model):
         self.status = 'inactive'
         self.save()
 
-class PaymentMethod(models.Model):
-    description = models.CharField(max_length=250, default="")
-    payment = models.OneToOneField(Wallet, on_delete=models.CASCADE)
-    MethodName = models.CharField(max_length=100,default= "YAPE")
-    created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
-
-    def __str__(self):
-        return f'Method: {self.MethodName} for Wallet {self.payment.user.username}'
-
-    # Método para cambiar el método de pago
-    def change_method(self, new_method_name):
-        self.MethodName = new_method_name
-        self.save()
 
 class UserPayment(models.Model):
     id_wallet = models.ForeignKey(Wallet,on_delete=models.CASCADE)
@@ -87,11 +74,6 @@ class UserPayment(models.Model):
 
 
 
-@receiver(post_save,sender=Wallet)
-def create_user_payment(sender, instance,created, **kwargs):
-    if created:
-        UserPayment.objects.create(app_user = instance)
-    pass
 
 
 

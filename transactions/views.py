@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 import qrcode
 from decimal import Decimal
 
@@ -52,30 +52,7 @@ class Activity():
     @login_required
     @transaction.atomic
     def getHistory(request):
-        message = ""
-        wallet_user  = Wallet.objects.get(user = request.user)
-        try:
-            # Usamos filter() en lugar de get() para obtener todas las transferencias
-            history_reload = Transference.objects.filter(idWallet=wallet_user, type_transference="reload")
-            history_send = Transference.objects.filter(idWallet=wallet_user, type_transference="send"),
-            history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="request"),
-
-            # Si no hay resultados, mostramos el mensaje
-            #if not history_send.exists() or not history_request.exists():
-                #message = "No tiene ni una transferencia"
-
-        except Wallet.DoesNotExist:
-            message = "No se encontró la billetera del usuario."
-
-       # print(history_request)
-        print(history_send)
-        print(history_reload)
-        return render(request, "transfer_history.html", {
-            'history_send': history_send,
-            'history_request': history_request,
-            'history_reload': history_reload,
-            'message': message,
-            'username': request.user.username})
+        pass
     
 
 
@@ -85,11 +62,12 @@ class Activity():
         wallet_user  = Wallet.objects.get(user = request.user)
         try:
             # Usamos filter() en lugar de get() para obtener todas las transferencias
-            history_reload = Transference.objects.filter(idWallet=wallet_user, type_transference="RELOAD")
-            history_send = Transference.objects.filter(idWallet=wallet_user, type_transference="SEND")
-            history_request = Transference.objects.filter(idWallet=wallet_user, type_transference="REQUEST")
+            history_user = Transference.objects.filter(idWallet = wallet_user.id)
 
+            for history in history_user:
+                history.type_transference == "reload"
 
+            print(history_user)
 
             # Si no hay resultados, mostramos el mensaje
             #if not history_send.exists() or not history_request.exists():
@@ -98,17 +76,9 @@ class Activity():
         except Wallet.DoesNotExist:
             message = "No se encontró la billetera del usuario."
 
-       # print(history_request)
-        print(history_reload)
-
-        print(history_send)
         return render(request, "transfer.html", {
-            'history_reload': history_reload,
-            'history_request': history_request,
-            'history_send': history_send,
-
-            'message': message,
-            'username': request.user.username})
+                        'history_user': history_user,
+                        'message': message,})
 
 
 
@@ -167,9 +137,10 @@ class Send():
             send_money = float(request.POST.get("amount","").strip())
             message = request.POST.get("message","".strip())
 
+            print("no")
             if Send.VerifyUser(usernameUser,request.user.username) and Send.VerifyAmount(request.user,send_money):
                 
-                
+                print("si")
                 try:
                     user_wallet_send = ShareMD.user_query(usernameUser,"get_query_username")
                     print(user_wallet_send)
@@ -211,12 +182,14 @@ class Send():
 
 
                     print("Deposito realizado")
+                    return redirect('transfer_widget')
+                    
                 except:
                     print("Error al realizar deposito")
 
                     
 
-        return render(request, "transfer_send.html", {"qr_code_url": qr_code_url})
+        return render(request, "transfer.html", {"qr_code_url": qr_code_url})
 
 
 

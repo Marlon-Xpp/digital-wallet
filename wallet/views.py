@@ -81,41 +81,44 @@ class Reload_money():
         amount = request.POST.get("amount")
 
         print("ejecutando - 1")
+        
         if request.method == "POST":
 
             print("ejecutando - 2")
 
-            product = stripe.Product.create(
-                name=f"Recarga movil de {amount} al usuario { user.username}"
-            )
+            if float(amount) > 1.00:
+                product = stripe.Product.create(
+                    name=f"Recarga movil de {amount} al usuario { user.username}"
+                )
 
-            price_data = stripe.Price.create(
-                currency= "PEN",
-                product= product.id,
-                unit_amount= transform.transform_amount(amount,True)
+                price_data = stripe.Price.create(
+                    currency= "PEN",
+                    product= product.id,
+                    unit_amount= transform.transform_amount(amount,True)
 
-            )
-
-
-            check_sesion = stripe.checkout.Session.create(
-                payment_method_types=['card'],  # Solo habilitar pagos con tarjeta
-    
-                line_items=[
-                    {
-                        'price': price_data.id,
-                        'quantity': 1,
-                    }
-                ],
-
-                mode='payment',
-                success_url= request.build_absolute_uri(reverse('success_payment')),
-                cancel_url= request.build_absolute_uri(reverse('failure_payment')),
-            )
-
-            request.session['amount'] = float(amount)  # Store the amount as a float in the session
+                )
 
 
-            return redirect(check_sesion.url)
+                check_sesion = stripe.checkout.Session.create(
+                    payment_method_types=['card'],  # Solo habilitar pagos con tarjeta
+
+                    line_items=[
+                        {
+                            'price': price_data.id,
+                            'quantity': 1,
+                        }
+                    ],
+
+                    mode='payment',
+                    success_url= request.build_absolute_uri(reverse('success_payment')),
+                    cancel_url= request.build_absolute_uri(reverse('failure_payment')),
+                )
+
+                request.session['amount'] = float(amount)  # Store the amount as a float in the session
+                return redirect(check_sesion.url)
+            else:
+                return render(request,"operations.html",{"error_message": "Monto minimo 1.00"})
+
 
         return render(request,"reload_money.html",{})
     
@@ -150,6 +153,11 @@ class Reload_money():
         return render(request, 'verify_payment/success.html')
 
     def payment_failure(request):
+        print(dir(request))
+        print(request.body)
+        print(dir(request))
+
+
         return render(request, 'verify_payment/failure.html')
 
 

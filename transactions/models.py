@@ -19,7 +19,7 @@ class Transference(models.Model):
         ('REQUEST', 'request'),
 
     ]
-    idWallet = models.ForeignKey( Wallet(),on_delete=models.CASCADE)
+    idWallet = models.ForeignKey(Wallet,on_delete=models.CASCADE)
 
     name = models.CharField(max_length=250,null=False,blank=False)
     lastname = models.CharField(max_length=250,null=False,blank=False)

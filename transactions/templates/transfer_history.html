@@ -14,31 +14,27 @@
             </tr>
         </thead>
         <tbody>
-            {% if history_send or history_request or history_reload %}
-                {% for transaction in history_send %}
+            {% if history_user %}
+                
+
+
+                {% for transaction in history_user %}
                 <tr class="table-row">
-                    <th class="table-header">{{ transaction.name }}</th>
-                    <th class="table-header">{{ transaction.description }}</th>
-                    <td class="table-data">${{ transaction.amount }}</td>
-                    <td class="table-data">{{ transaction.type_transference }}</td>
-                    <td class="table-data">{{ transaction.created_at }}</td>
-                </tr>
-                {% endfor %}
-                {% for transaction in history_request %}
-                <tr class="table-row">
-                    <th class="table-header">{{ transaction.name }}</th>
-                    <th class="table-header">{{ transaction.description }}</th>
-                    <td class="table-data">${{ transaction.amount }}</td>
-                    <td class="table-data">{{ transaction.type_transference }}</td>
-                    <td class="table-data">{{ transaction.created_at }}</td>
-                </tr>
-                {% endfor %}
-                {% for transaction in history_reload %}
-                <tr class="table-row">
-                    <th class="table-header">{{ transaction.name }}</th>
-                    <th class="table-header">{{ transaction.description }}</th>
-                    <td class="table-data">${{ transaction.amount }}</td>
-                    <td class="table-data">{{ transaction.type_transference }}</td>
+                    <td class="table-data">{{ transaction.name }}</td>
+                    <td class="table-data">{{ transaction.description }}</td>
+                    <td class="table-data">S/. {{ transaction.amount }}</td>
+                    
+                    
+                    {% if transaction.type_transference == "RELOAD" %}
+                           <td class="table-data"> Recarga</td>
+                    {% elif transaction.type_transference == "SEND" %}
+                           <td class="table-data"> Envio</td>
+                    {% elif transaction.type_transference == "REQUEST" %}
+                            <td class="table-data"> Recibido</td>
+                    {% else %}
+                        Desconocido
+                    {% endif %}
+
                     <td class="table-data">{{ transaction.created_at }}</td>
                 </tr>
                 {% endfor %}
