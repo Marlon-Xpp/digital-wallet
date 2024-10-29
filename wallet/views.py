@@ -14,6 +14,7 @@ from transactions.models import Transference
 from share import models as ShareMD
 import stripe
 import json
+import requests
 
 
 
@@ -295,9 +296,77 @@ class refuncion():
     def getWalletInstance(request):
         
         user = request.user
-        id_wallet = Wallet.objects.get(user = user)
+        wallet = Wallet.objects.get(user = user)
         
-        return id_wallet
+        return wallet
+
+
+class Convert():
+    def get_url_api():
+        api_url = "https://api.exchangerate-api.com/v4/latest/PEN"
+        if api_url:
+            return api_url
+        return ""
+
+    def get_rate():
+        
+        response = requests.get(Convert.get_url_api())
+        data = response.json()
+
+        print(data)
+
+        if 'USD' in data['rates']:
+            return data['rates']['USD']
+        return None
+
+    def convert_rate(amount):
+        usd_convert = Convert.get_rate()
+
+        if not usd_convert:
+            return None
+        
+        amount_usd = usd_convert * amount
+
+        return amount_usd
+
+    def get_pen_to_rate(amount):
+        print(Convert.convert_rate(amount))        
+        d = Convert.convert_rate(amount)        
+        
+        return  d
+
+    
+
+        
+
+    def view(request):
+        wallet = refuncion.getWalletInstance(request)
+        
+        usd_rate = Convert.get_rate()
+        if request.method == "POST":
+            #Realizar conversion
+            data = Convert.get_pen_to_rate(request.amount)
+
+            return redirect()
+
+        return render(request,"convert.html",{
+            "get_balance": wallet.get_balance,
+            "pen_amount" : 0,
+            "converted_usd" : usd_rate
+        })
+
+
+        
+
+
+
+
+
+
+
+
+
+
 
 
 

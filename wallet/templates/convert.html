@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversión de PEN a USD</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Obtener el elemento de entrada y el elemento donde se mostrará el total
+            const penAmountInput = document.getElementById("pen_amount");
+            const convertedUsdRate = "{{ converted_usd }}";  // Asumiendo que pasas el valor desde el backend
+            const totalDisplay = document.getElementById("total_display");
+
+            // Función para actualizar el total
+            function updateTotal() {
+                const penAmount = parseFloat(penAmountInput.value) || 0;  // Obtener el valor del input
+                const total = penAmount * convertedUsdRate;  // Calcular el total
+                totalDisplay.textContent = total.toFixed(2);  // Mostrar el total con 2 decimales
+            }
+
+            // Escuchar cambios en el input para actualizar el total
+            penAmountInput.addEventListener("input", updateTotal);
+        });
+    </script>
+</head>
+<body>
+    <h4>Monto actual Billetera: {{ get_balance }}</h4>
+
+    <h1>Conversión de PEN a USD</h1>
+    <p>Monto en PEN: <input type="number" name="pen_amount" id="pen_amount" placeholder="Escribe el monto en PEN"></p>
+    <p>Equivalente en USD: {{ converted_usd }}</p>
+    <h2>Total en USD: <span id="total_display">0.00</span></h2>
+</body>
+</html>
