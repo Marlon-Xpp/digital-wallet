@@ -6,6 +6,7 @@ from user_auth import models
 
 admin.site.register(Wallet)
 
+admin.site.register(UserPayment)
 admin.site.register(models.CustomUser)
 
 

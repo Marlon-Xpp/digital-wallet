@@ -59,30 +59,21 @@ class Wallet(models.Model):
         self.status = 'inactive'
         self.save()
 
-class PaymentMethod(models.Model):
-    description = models.CharField(max_length=250, default="")
-    payment = models.OneToOneField(Wallet, on_delete=models.CASCADE)
-    MethodName = models.CharField(max_length=100,default= "YAPE")
-    created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
-
-    def __str__(self):
-        return f'Method: {self.MethodName} for Wallet {self.payment.user.username}'
-
-    # Método para cambiar el método de pago
-    def change_method(self, new_method_name):
-        self.MethodName = new_method_name
-        self.save()
 
 class UserPayment(models.Model):
-    app_user = models.ForeignKey(Wallet,on_delete=models.CASCADE)
+    id_wallet = models.ForeignKey(Wallet,on_delete=models.CASCADE)
     payment_bool = models.BooleanField(default=False)
     stripe_checkout_id = models.CharField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)  # Fecha de creación
 
-@receiver(post_save,sender=Wallet)
-def create_user_payment(sender, instance,created, **kwargs):
-    if created:
-        UserPayment.objects.create(app_user = instance)
-    pass
+    def getStripe_checkout_id(self):
+        return self.stripe_checkout_id
+
+    def __str__(self) -> str:
+        return f"Billetera {self.id_wallet} - id de stripe {self.stripe_checkout_id}"
+
+
+
 
 
 

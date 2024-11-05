@@ -7,12 +7,14 @@ from django.urls import reverse
 import stripe.webhook
 from django.conf import settings
 
-from wallet.models import Wallet 
+from wallet.models import Wallet ,UserPayment
 from django.core.exceptions import ObjectDoesNotExist
 from transactions.models import Transference
 
 from share import models as ShareMD
 import stripe
+import json
+import requests
 
 
 
@@ -80,41 +82,44 @@ class Reload_money():
         amount = request.POST.get("amount")
 
         print("ejecutando - 1")
+        
         if request.method == "POST":
 
             print("ejecutando - 2")
 
-            product = stripe.Product.create(
-                name=f"Recarga movil de {amount} al usuario { user.username}"
-            )
+            if float(amount) > 1.00:
+                product = stripe.Product.create(
+                    name=f"Recarga movil de {amount} al usuario { user.username}"
+                )
 
-            price_data = stripe.Price.create(
-                currency= "PEN",
-                product= product.id,
-                unit_amount= transform.transform_amount(amount,True)
+                price_data = stripe.Price.create(
+                    currency= "PEN",
+                    product= product.id,
+                    unit_amount= transform.transform_amount(amount,True)
 
-            )
-
-
-            check_sesion = stripe.checkout.Session.create(
-                payment_method_types=['card'],  # Solo habilitar pagos con tarjeta
-    
-                line_items=[
-                    {
-                        'price': price_data.id,
-                        'quantity': 1,
-                    }
-                ],
-
-                mode='payment',
-                success_url= request.build_absolute_uri(reverse('success_payment')),
-                cancel_url= request.build_absolute_uri(reverse('failure_payment')),
-            )
-
-            request.session['amount'] = float(amount)  # Store the amount as a float in the session
+                )
 
 
-            return redirect(check_sesion.url)
+                check_sesion = stripe.checkout.Session.create(
+                    payment_method_types=['card'],  # Solo habilitar pagos con tarjeta
+
+                    line_items=[
+                        {
+                            'price': price_data.id,
+                            'quantity': 1,
+                        }
+                    ],
+
+                    mode='payment',
+                    success_url= request.build_absolute_uri(reverse('success_payment')),
+                    cancel_url= request.build_absolute_uri(reverse('failure_payment')),
+                )
+
+                request.session['amount'] = float(amount)  # Store the amount as a float in the session
+                return redirect(check_sesion.url)
+            else:
+                return render(request,"operations.html",{"error_message": "Monto minimo 1.00"})
+
 
         return render(request,"reload_money.html",{})
     
@@ -149,6 +154,11 @@ class Reload_money():
         return render(request, 'verify_payment/success.html')
 
     def payment_failure(request):
+        print(dir(request))
+        print(request.body)
+        print(dir(request))
+
+
         return render(request, 'verify_payment/failure.html')
 
 
@@ -163,8 +173,196 @@ class transform():
             return float(amount) / 100
 
 
-class recieve_money():
-    payout = stripe.Payout.create
+
+class Card():
+    stripe.api_key = settings.STRIPE_TEST_API_KEY
+
+
+
+
+    def view(request):
+
+        id_wallet = refuncion.getWalletInstance(request)
+
+        print(id_wallet)
+        stripe.api_key = settings.STRIPE_TEST_API_KEY
+
+        user_payment = UserPayment.objects.filter(id_wallet = id_wallet)
+
+
+
+        if user_payment.exists():  # Verifica si hay resultados
+            for payment in user_payment:
+                print(payment.stripe_checkout_id)
+
+                customer_id = str(payment.stripe_checkout_id)
+
+                if customer_id :
+                    try:       
+                        # Obtener el cliente de Stripe
+                        customer_data = stripe.Customer.retrieve(customer_id)
+
+                        # Imprimir datos del cliente
+                        print("Nombre:", customer_data.name)
+                        print("Email:", customer_data.email)
+                        print("Teléfono:", customer_data.phone)
+                        print("Descripción:", customer_data.description)
+                        print("Dirección:", customer_data.address)
+                              # Extraer datos de las tarjetas
+                        # Verifica si el cliente tiene fuentes de pago
+                                  # Verifica si el cliente tiene fuentes de pago
+                       
+                       # print(customer.sources)
+
+            # Lista las fuentes de pago del cliente
+                        sources = stripe.Customer.list_sources(customer_id)
+
+                        # Verifica si hay fuentes de pago
+                        if sources.data:
+                            card_data = []
+                            for card in sources.data:
+                                card_info = {
+                                    "id": card.id,
+                                    "brand": card.brand,
+                                    "last4": card.last4,
+                                    "exp_month": card.exp_month,
+                                    "exp_year": card.exp_year,
+                                    "funding": card.funding,
+                                    "country": card.country
+                                }
+                                card_data.append(card_info)
+                        
+                        print(card_data)
+                    
+                    except Exception as e:
+                        print("Error al recuperar el cliente de Stripe:", str(e))
+                
+                
+
+
+        else: 
+             print("no hay tarjetas")
+
+
+        if request.method == "POST":
+            try:
+                data = json.loads(request.body)
+                token = data.get('stripeToken')
+                name = data.get('name')
+                email = data.get('email')
+                country = data.get('country')
+                print("stop")
+                if token:
+                    # Crea un cliente en Stripe usando los datos recibidos
+                    customer = stripe.Customer.create(
+                        source=token,  # Usa el token generado en el frontend
+                        name=name,
+                        email=email,
+                        address={
+                            'country': country
+                        }
+                    )
+
+                    user = UserPayment.objects.create(
+                        id_wallet = id_wallet,
+                        stripe_checkout_id = customer.id
+                    )
+
+                    
+                    print(token)
+                    
+                    # Opcionalmente, guarda el ID del cliente en tu base de datos
+                    # user.stripe_customer_id = customer.id
+                    # user.save()
+
+                    return JsonResponse({'status': 'success', 'message': 'Tarjeta guardada exitosamente!'})
+                else:
+                    return JsonResponse({'status': 'error', 'message': 'Token no recibido'})
+
+            except Exception as e:
+                return JsonResponse({'status': 'error', 'message': str(e)})
+
+
+        if not card_data:
+            return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY":settings.STRIPE_PUBLIC_API_KEY})
+
+        return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY": settings.STRIPE_PUBLIC_API_KEY , "STRIPE_CARD": card_data,"STRIPE_CUSTOMER": customer_data})
+
+
+
+class refuncion():
+
+    @staticmethod
+    def getWalletInstance(request):
+        
+        user = request.user
+        wallet = Wallet.objects.get(user = user)
+        
+        return wallet
+
+
+class Convert():
+    def get_url_api():
+        api_url = "https://api.exchangerate-api.com/v4/latest/PEN"
+        if api_url:
+            return api_url
+        return ""
+
+    def get_rate():
+        
+        response = requests.get(Convert.get_url_api())
+        data = response.json()
+
+        print(data)
+
+        if 'USD' in data['rates']:
+            return data['rates']['USD']
+        return None
+
+    def convert_rate(amount):
+        usd_convert = Convert.get_rate()
+
+        if not usd_convert:
+            return None
+        
+        amount_usd = usd_convert * amount
+
+        return amount_usd
+
+    def get_pen_to_rate(amount):
+        print(Convert.convert_rate(amount))        
+        d = Convert.convert_rate(amount)        
+        
+        return  d
+
+    
+
+        
+
+    def view(request):
+        wallet = refuncion.getWalletInstance(request)
+        
+        usd_rate = Convert.get_rate()
+        if request.method == "POST":
+            #Realizar conversion
+            data = Convert.get_pen_to_rate(request.amount)
+
+            return redirect()
+
+        return render(request,"convert.html",{
+            "get_balance": wallet.get_balance,
+            "pen_amount" : 0,
+            "converted_usd" : usd_rate
+        })
+
+
+        
+
+
+
+
+
+
 
 
 

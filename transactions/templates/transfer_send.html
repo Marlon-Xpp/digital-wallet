@@ -4,7 +4,7 @@
 <div class="card send-money-card">
     {% csrf_token  %}
     <h2 class="card-title">Enviar Dinero</h2>
-    <form id="sendMoneyForm" class="money-form" method="POST" action={% url 'transfer_widget' %}>
+    <form id="sendMoneyForm" class="money-form" method="POST" action={% url 'transfer_send' %}>
         {% csrf_token %}
 
         <label class="form-label" for="recipient">Destinatario:</label>

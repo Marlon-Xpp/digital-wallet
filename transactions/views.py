@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 import qrcode
 from decimal import Decimal
 
@@ -175,9 +175,10 @@ class Send():
             send_money = float(request.POST.get("amount","").strip())
             message = request.POST.get("message","".strip())
 
+            print("no")
             if Send.VerifyUser(usernameUser,request.user.username) and Send.VerifyAmount(request.user,send_money):
                 
-                
+                print("si")
                 try:
                     user_wallet_send = ShareMD.user_query(usernameUser,"get_query_username")
                     print(user_wallet_send)
@@ -214,12 +215,14 @@ class Send():
                         description = message
                         )
                     print("Deposito realizado")
+                    return redirect('transfer_widget')
+                    
                 except:
                     print("Error al realizar deposito")
 
                     
 
-        return render(request, "transfer_send.html", {"qr_code_url": qr_code_url})
+        return render(request, "transfer.html", {"qr_code_url": qr_code_url})
 
 
 
