@@ -8,6 +8,15 @@ from share import models as ShareMD
 
 from share.models import Wallet, Transference
 
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.units import inch
+from reportlab.platypus import Table, TableStyle
+
+from django.http import HttpResponse
+
+
 # Create your views here.
 # Enviar Dinero
 # Solicitar Dinero
@@ -187,9 +196,70 @@ class Send():
                 except:
                     print("Error al realizar deposito")
 
-                    
-
         return render(request, "transfer.html", {"qr_code_url": qr_code_url})
+
+
+
+# Create PDF
+
+class Report():
+
+
+
+    def generate_report_transference(request):
+        wallet_user= Wallet.objects.get(user=request.user)
+        history_user = Transference.objects.filter(idWallet = wallet_user.id)
+        
+        print(history_user)
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="archivo.pdf"'
+
+    # Configura el lienzo del PDF
+        pdf = canvas.Canvas(response, pagesize=A4)
+        width, height = A4  # Tamaño de página A4
+
+        # Añade el título
+        pdf.setFont("Helvetica-Bold", 14)
+        pdf.drawString(width / 2 - 80, height - 100, "Historial de Transacciones")  # Centrado
+
+        # Datos en formato vertical
+        data = [
+            ["Nombre", "Descripcion", "Monto","Tipo de transferencia","Fecha"],
+            ["maria","nuevo pago","20.00","envio","2024-10-01"],
+            # Agrega más filas según sea necesario
+        ]
+        for i in history_user:
+            data.append([i.username,i.description,i.amount,i.type_transference,i.created_at])
+
+
+        # Crea la tabla
+        col_widths = [1.5 * inch] * len(data[0])  # 1.5 pulgadas para cada columna
+        table = Table(data, colWidths=col_widths)
+
+        # Estilo de la tabla
+        style = TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),  # Fondo gris para la primera fila
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Color de texto blanco para la primera fila
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),  # Alineación centrada
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Fuente en negrita para el encabezado
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),  # Espaciado para la primera fila
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),  # Fondo beige para las demás filas
+            ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Bordes de celda en negro
+        ])
+        table.setStyle(style)
+
+        # Calcula la posición de la tabla en el centro
+        x = (width - table.wrap(0, 0)[0]) / 2  # Centrado horizontalmente
+        y = height - 150       # Debajo del título
+            # Dibuja la tabla en el PDF
+        table.wrapOn(pdf, width, height)
+        table.drawOn(pdf, x, y)
+
+        pdf.showPage()
+        pdf.save()
+
+        return response 
 
 
 
