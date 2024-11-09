@@ -5,35 +5,185 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guardar Tarjeta con Stripe</title>
     <script src="https://js.stripe.com/v3/"></script>
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/operations.css'%}">    
+
+
+
+
+
+
+
+    <style>
+        /* Estilo para centrar el contenido */
+        .get_card_list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Estilo para las cajas de tarjetas */
+        .card-box {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card-box:hover {
+            transform: scale(1.05);
+        }
+
+        .card-box h5 {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .card-box p {
+            color: #555;
+            font-size: 1em;
+        }
+
+        /* Estilo para los encabezados */
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            color: #333;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /* Contenedor principal */
+        .add_card {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* Título del formulario */
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Estilo para las etiquetas */
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Estilo para los inputs */
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        /* Estilo para el campo de tarjeta Stripe */
+        #card-element {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        /* Botón de envío */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilo para los mensajes de error */
+        #card-errors {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+    </style>
+
 </head>
 <body>
+    {% include "header.html" %}
+    <img src="https://static.vecteezy.com/system/resources/previews/004/941/962/non_2x/abstract-technology-with-global-world-network-and-telecommunication-on-earth-digital-data-visualization-illustration-design-vector.jpg" alt="" class="imagen-propia">
+
+
     <div class="get_card_list">
         <!-- Verificar si la lista tiene elementos -->
         {% if STRIPE_CARD and STRIPE_CUSTOMER %}
+            <h1>{{ STRIPE_CUSTOMER.name }}</h1>
             <p>La lista tiene elementos:</p>
-            
-            
-            <ul>
-                <H1> {{STRIPE_CUSTOMER.name}}</H1>
-
-            </ul>
-
-            <ul>
-
+    
+            <div>
                 {% for card in STRIPE_CARD %}
-                    <li>{{ card }}</li>               
-                    <h5>{{card.id}}</h5>
-
-                    
+                    <div class="card-box">
+                        <h5>{{ card.id }}</h5>
+                        <p>Marca: {{ card.brand }}</p>
+                        <p>Últimos 4 dígitos: {{ card.last4 }}</p>
+                        <p>Expira en: {{ card.exp_month }}/{{ card.exp_year }}</p>
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
+    
         {% else %}
             <p>La lista está vacía.</p>
         {% endif %}
     </div>
+    
 
-
-    <div class="add_card"></div>
+    <div class="add_card">
         <h2>Ingresar Tarjeta</h2>
         <form id="payment-form">
             <div>
@@ -46,16 +196,16 @@
             </div>
             <div>
                 <label for="country">País:</label>
-                <input type="text" id="country" name="country" value="" placeholder=""  required>
+                <input type="text" id="country" name="country" value="" placeholder="País..." required>
             </div>
-
+    
             <!-- Campo para la tarjeta generado por Stripe.js -->
             <div id="card-element">
                 <!-- Stripe.js insertará aquí el formulario de tarjeta -->
             </div>
-            
+    
             <button id="submit-button" type="submit">Guardar Tarjeta</button>
-            
+    
             <div id="card-errors" role="alert"></div>
         </form>
     </div>

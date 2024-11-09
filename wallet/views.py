@@ -231,9 +231,13 @@ class Card():
                                     "country": card.country
                                 }
                                 card_data.append(card_info)
-                        
+                            
                         print(card_data)
-                    
+                        if not card_data:
+                            return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY":settings.STRIPE_PUBLIC_API_KEY})
+
+                        return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY": settings.STRIPE_PUBLIC_API_KEY , "STRIPE_CARD": card_data,"STRIPE_CUSTOMER": customer_data})
+
                     except Exception as e:
                         print("Error al recuperar el cliente de Stripe:", str(e))
                 
@@ -280,13 +284,11 @@ class Card():
                     return JsonResponse({'status': 'error', 'message': 'Token no recibido'})
 
             except Exception as e:
-                return JsonResponse({'status': 'error', 'message': str(e)})
+                    return render(request,"add_card.html")
 
+        return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY": settings.STRIPE_PUBLIC_API_KEY })
 
-        if not card_data:
-            return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY":settings.STRIPE_PUBLIC_API_KEY})
-
-        return render(request,"add_card.html",{"STRIPE_PUBLIC_API_KEY": settings.STRIPE_PUBLIC_API_KEY , "STRIPE_CARD": card_data,"STRIPE_CUSTOMER": customer_data})
+        
 
 
 
