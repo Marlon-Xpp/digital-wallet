@@ -16,8 +16,6 @@
         <tbody>
             {% if history_user %}
                 
-
-
                 {% for transaction in history_user %}
                 <tr class="table-row">
                     <th class="table-data">{{ transaction.name }}</th>
@@ -29,6 +27,7 @@
                     <th class="table-data">{{ transaction.created_at }}</th>
                 </tr>
                 {% endfor %}
+
                 {% for transaction in history_request %}
                 <tr class="table-row">
                     <th class="table-data">{{ transaction.name }}</th>
@@ -40,6 +39,7 @@
                     <th class="table-data">{{ transaction.created_at }}</th>
                 </tr>
                 {% endfor %}
+
                 {% for transaction in history_reload %}
                 <tr class="table-row">
                     <th class="table-data">{{ transaction.name }}</th>
@@ -55,9 +55,9 @@
                     
                     
                     {% if transaction.type_transference == "RELOAD" %}
-                           <td class="table-data"> Recarga</td>
+                            <td class="table-data"> Recarga</td>
                     {% elif transaction.type_transference == "SEND" %}
-                           <td class="table-data"> Envio</td>
+                            <td class="table-data"> Envio</td>
                     {% elif transaction.type_transference == "REQUEST" %}
                             <td class="table-data"> Recibido</td>
                     {% else %}
