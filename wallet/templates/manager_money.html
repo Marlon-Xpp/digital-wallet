@@ -38,23 +38,10 @@
     </div>
 
     <div class="virtual-card-section">
-        <h2 class="card-title">Generar Tarjeta Virtual</h2>
-        <p class="card-description">Crea una tarjeta virtual para realizar compras en línea de forma segura.</p>
+        <h2 class="card-title">Agregar tarjeta virtual</h2>
+        <p class="card-description">Agregar tarjeta virtuales para realizar compras en linea.</p>
 
-        <!-- Formulario para generar tarjeta virtual -->
-        <form id="generateVirtualCardForm" class="card-form">
-            {% csrf_token %}
-            <label class="form-label" for="cardholder-name">Nombre del Titular:</label>
-            <input class="form-input" type="text" id="cardholder-name" name="cardholder_name" placeholder="Ingrese su nombre" required>
-            
-            <label class="form-label" for="expiry-date">Fecha de Vencimiento:</label>
-            <input class="form-input" type="month" id="expiry-date" name="expiry_date" required>
-            
-            <label class="form-label" for="cvv">CVV:</label>
-            <input class="form-input" type="text" id="cvv" name="cvv" placeholder="Ingrese CVV" required>
-            
-            <button class="form-button generate-button" type="submit">Generar Tarjeta</button>
-        </form>
+
 
         <!-- Formulario para visualizar tarjetas -->
         <form id="viewVirtualCardsForm" class="card-form" action="{% url 'card_add' %}" method="post">

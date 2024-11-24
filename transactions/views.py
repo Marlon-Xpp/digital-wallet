@@ -69,6 +69,9 @@ class Activity():
     def transfer_widget(request):
         message = ""
         wallet_user  = Wallet.objects.get(user = request.user)
+
+        user = request.user  # Obtener el usuario autenticado de la bd
+        qr_code_url = user.qr_code.url if user.qr_code else None  # Obtener la URL del QR si existe
         try:
             # Usamos filter() en lugar de get() para obtener todas las transferencias
             history_user = Transference.objects.filter(idWallet = wallet_user.id)
@@ -87,7 +90,9 @@ class Activity():
 
         return render(request, "transfer.html", {
                         'history_user': history_user,
-                        'message': message,})
+                        'message': message,
+                        'qr_code_url' : qr_code_url
+                        })
 
 
 
