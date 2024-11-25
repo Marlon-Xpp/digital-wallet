@@ -1,7 +1,14 @@
 {% block content %}
 
 <div class="history-card">
-    <h2 class="card-title">Historial de Envíos y Recepciones</h2>
+    <div class="card-title">
+        <h2>Historial de Envíos y Recepciones</h2>
+        <a href= {% url 'descargar_historial' %} >
+            <button>Descargar Historial</button>
+        </a>
+            
+    
+    </div>
     <table class="history-table">
         <thead>
             <tr>

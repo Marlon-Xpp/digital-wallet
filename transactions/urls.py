@@ -10,7 +10,7 @@ urlpatterns = [
     path("transfer/send", views.Send.transfer_send, name="transfer_send"),
     path("transfer/history", views.Activity.getHistory, name= "transfer_history"),
     
-    path("transfer/pdf",views.Report.generate_report_transference, name="createPDF")
+    path("transfer/pdf",views.Report.generate_report_transference, name="descargar_historial")
     # path("send/receive", views.send_receive, name="send_receive"),
 
 ]

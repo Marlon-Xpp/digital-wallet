@@ -1,6 +1,7 @@
 from django.shortcuts import render , redirect
 import qrcode
 from decimal import Decimal
+from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -218,7 +219,7 @@ class Report():
         print(history_user)
 
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="archivo.pdf"'
+        response['Content-Disposition'] = 'attachment; filename="Historial de transacciones.pdf"'
 
     # Configura el lienzo del PDF
         pdf = canvas.Canvas(response, pagesize=A4)
@@ -226,16 +227,23 @@ class Report():
 
         # Añade el título
         pdf.setFont("Helvetica-Bold", 14)
-        pdf.drawString(width / 2 - 80, height - 100, "Historial de Transacciones")  # Centrado
+        pdf.drawString(width / 2 - 80, height - 150, "Historial de Transacciones")  # Centrado
 
         # Datos en formato vertical
         data = [
             ["Nombre", "Descripcion", "Monto","Tipo de transferencia","Fecha"],
-            ["maria","nuevo pago","20.00","envio","2024-10-01"],
             # Agrega más filas según sea necesario
         ]
         for i in history_user:
-            data.append([i.username,i.description,i.amount,i.type_transference,i.created_at])
+            print(type(i.created_at))
+            
+            # Convertir la cadena a un objeto datetime
+          #  created_at = datetime.fromisoformat(i.created_at)
+            
+            # Formatear la fecha al estilo deseado
+            formatted_date = i.created_at.strftime("%b. %d, %Y, %#I:%M %p")
+
+            data.append([i.username,i.description,i.amount,i.type_transference,formatted_date])
 
 
         # Crea la tabla
@@ -256,7 +264,7 @@ class Report():
 
         # Calcula la posición de la tabla en el centro
         x = (width - table.wrap(0, 0)[0]) / 2  # Centrado horizontalmente
-        y = height - 150       # Debajo del título
+        y = height - 300       # Debajo del título
             # Dibuja la tabla en el PDF
         table.wrapOn(pdf, width, height)
         table.drawOn(pdf, x, y)

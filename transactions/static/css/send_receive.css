@@ -77,8 +77,17 @@ body{
 }
 
 .card-title {
-    font-size: 22px;
+    display: grid;
+    grid-template-columns: 80% 50%;
 }
+
+.card-title h2{
+    font-size: 22px;
+
+}
+
+
+
 
 .money-form {
     display: flex;
