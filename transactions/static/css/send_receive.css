@@ -77,15 +77,8 @@ body{
 }
 
 .card-title {
-    display: grid;
-    grid-template-columns: 80% 50%;
-}
-
-.card-title h2{
     font-size: 22px;
-
 }
-
 
 
 
